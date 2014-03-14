@@ -1,0 +1,142 @@
+﻿body {
+    font-family: Verdana, sans-serif;
+    font-size: 80%;
+    background-color: #FFF;
+    margin: 0;
+}
+
+body#upload {
+    background-color: transparent;
+}
+
+h1 {
+    margin: 0.6em 0 0.8em;
+    font-size: 1.5em;
+    color: #FFF;
+}
+
+form {
+    margin: 0;
+    padding: 0;
+}
+
+form label {
+    display: block;
+    font-size: 90%;
+}
+
+form fieldset {
+    margin: 5px 0 15px;
+    padding: 8px;
+}
+
+form legend {
+    font-weight: bold;
+}
+
+form .field {
+    margin: 4px 0 6px;
+}
+
+form input[type=text],
+form input[type=password],
+form textarea {
+    /*width: 250px;*/
+    width: 97%;
+    font-family: sans-serif;
+    font-size: 1em;
+}
+
+#setup-panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 360px;
+    height: 100%;
+    padding: 0 5px;
+    /*overflow: auto;*/
+    background-color: #555;
+    /*border-right: 1px solid #555;*/
+}
+
+#menu {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    top: 50px;
+}
+
+#setup-panel h2 {
+    padding-left: 8px;
+    margin: 0.8em 0 0;
+    font-size: 1.4em;
+}
+
+#menu li {
+    display: inline;
+}
+
+#menu li a {
+    background-color: #BBB;
+    color: #000;
+    text-decoration: none;
+    padding: 5px 5px;
+    line-height: 24px;
+    font-size: 11px;
+}
+
+#menu li a:hover,
+#menu li a.selected {
+    background-color: #EEE;
+}
+
+#menu li a:hover {
+    text-decoration: underline;
+}
+
+#menu li a:focus {
+    outline: none;
+}
+
+#tabs {
+}
+
+.tab {
+    background-color: #EEE;
+    padding: 5px;
+    display: none;
+    overflow: auto;
+    position: absolute;
+    bottom: 5px;
+    top: 74px;
+    left: 5px;
+    right: 5px;
+}
+
+#log-panel {
+    margin-left: 390px;
+}
+
+#log-panel ul {
+    list-style: none;
+    margin: 0 0 15px 0;
+    padding: 0;
+}
+
+#log-panel ul li {
+    border-top: 1px solid #EEE;
+    padding: 1px;
+}
+
+#log-panel ul li.debug {
+    color: #888;
+}
+
+#log-panel ul li.error {
+    color: #D00;
+}
+
+#log-panel ul li.streaming {
+    color: #0D0;
+}

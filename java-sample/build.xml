@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Foundation API sample bot" default="jar" basedir=".">
+    <description>Builds the Java Foundation API sample bot.</description>
+
+    <property name="src.dir" location="src"/>
+    <property name="build.dir" location="build"/>
+    <property name="dist.dir" location="dist"/>
+
+    <target name="-init-compile">
+       <mkdir dir="${build.dir}"/>
+    </target>
+
+    <target name="-init-jar">
+       <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <target name="compile" depends="-init-compile">
+       <javac srcdir="${src.dir}" destdir="${build.dir}"
+              includeantruntime="false" debug="true"/>
+    </target>
+
+    <target name="jar" depends="compile,-init-jar">
+       <jar destfile="${dist.dir}/foundationapi.jar" basedir="${build.dir}">
+          <manifest>
+             <section name="im.fcg.foundationapi.demo">
+				<attribute name="Main-Class" value="im.fcg.foundationapi.demo.DemoBot"/>
+                <attribute name="Implementation-Title" value="Foundation API example bot"/>
+                <attribute name="Implementation-Version" value="1.0"/>
+             </section>
+          </manifest>
+       </jar>
+    </target>
+
+    <target name="clean">
+       <delete dir="${build.dir}"/>
+       <delete dir="${dist.dir}"/>
+    </target>
+	
+	<target name="run" depends="compile">
+		<java classpath="${build.dir}" classname="im.fcg.foundationapi.demo.DemoBot"/>
+	</target>
+</project>
