@@ -4,7 +4,7 @@
     <title>Public API Test</title>
     <script type="text/javascript" src="Scripts/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="Scripts/json2.js"></script>
-    <script type="text/javascript" src="Scripts/Formicary.FoundationApi.V1.Bot.js"></script>
+    <script type="text/javascript" src="Scripts/MindLink.FoundationApi.V1.Bot.js"></script>
     <link rel="stylesheet" type="text/css" href="default.css" />
     
     <script type="text/javascript" src="Scripts/app.js"></script>
@@ -25,7 +25,7 @@
                     <legend>Configure</legend>
                     <div class="field">
                         <label for="server-address">Server</label>
-                        <input type="text" id="server-address" value="https://fd-mi5-03-fcg.th.formicary.net:8081" />
+                        <input type="text" id="server-address" value="https://api.company.com" />
                     </div>
                 </fieldset>
             </form>
@@ -36,15 +36,15 @@
             <legend>Authenticate</legend>
             <div class="field">
                 <label for="authenticate-username">Username</label>
-                <input type="text" id="authenticate-username" value="devaccounts\osborneb" />
+                <input type="text" id="authenticate-username" value="company\user" />
             </div>
             <div class="field">
                 <label for="authenticate-password">Password</label>
-                <input type="password" id="authenticate-password" value="Password1" />
+                <input type="password" id="authenticate-password" value="password" />
             </div>
             <div class="field">
                 <label for="authenticate-agent">Agent</label>
-                <input type="text" id="authenticate-agent" value="agent_3" />
+                <input type="text" id="authenticate-agent" value="agentId" />
             </div>
             <div class="submit">
                 <input type="submit" value="Authenticate" />
@@ -88,7 +88,7 @@
             <div class="field">
                 <label for="message-channel-id">
                     Channel ID</label>
-                <input type="text" id="message-channel-id" value="chat-room:43489ecf-0d8a-48ec-9d00-0eb9264a07fa"
+                <input type="text" id="message-channel-id" value="chat-room:guid"
                     disabled="disabled" />
             </div>
             <div class="field">
@@ -112,7 +112,7 @@
                 <div class="field">
                     <label for="story-channel-id">
                         Channel ID</label>
-                    <input type="text" id="story-channel-id" value="chat-room:43489ecf-0d8a-48ec-9d00-0eb9264a07fa"
+                    <input type="text" id="story-channel-id" value="chat-room:guid"
                             disabled="disabled" />
                 </div>
                 <div class="field">
@@ -141,7 +141,7 @@
             <div class="field">
                 <label for="upload-file-channel-id">
                     Channel ID</label>
-                <input type="text" id="upload-file-channel-id" value="chat-room:43489ecf-0d8a-48ec-9d00-0eb9264a07fa" disabled="disabled" />
+                <input type="text" id="upload-file-channel-id" value="chat-room:guid" disabled="disabled" />
             </div>
             <div class="field">
                 <label for="upload-file-file-name">
@@ -172,7 +172,7 @@
             <div class="field">
                 <label for="search-channel-id">
                    Channel ID</label>
-                <input type="text" id="search-channel-id" value="chat-room:43489ecf-0d8a-48ec-9d00-0eb9264a07fa"
+                <input type="text" id="search-channel-id" value="chat-room:guid"
                     disabled="disabled" />
             </div>
             <div class="field">
@@ -218,7 +218,7 @@
             <div class="field">
                 <label for="info-channel-id">
                     ID</label>
-                <input type="text" id="info-channel-id" value="chat-room:43489ecf-0d8a-48ec-9d00-0eb9264a07fa"
+                <input type="text" id="info-channel-id" value="chat-room:guid"
                     disabled="disabled" />
             </div>
             <div class="submit">
@@ -232,7 +232,7 @@
             <div class="field">
                 <label for="history-channel-id">
                     Channel ID</label>
-                <input type="text" id="history-channel-id" value="chat-room:43489ecf-0d8a-48ec-9d00-0eb9264a07fa"
+                <input type="text" id="history-channel-id" value="chat-room:guid"
                     disabled="disabled" />
             </div>
             <div class="field">
@@ -256,14 +256,13 @@
             <div class="field">
                 <label for="state-channel-id">
                     Channel ID</label>
-                <input type="text" id="state-channel-id" value="chat-room:43489ecf-0d8a-48ec-9d00-0eb9264a07fa"
+                <input type="text" id="state-channel-id" value="chat-room:guid"
                     disabled="disabled" />
             </div>
             <div class="submit">
                 <input type="submit" value="Request" disabled="disabled" />
             </div>
         </fieldset>
-        </form>
         </form>
         <form id="request-metadata">
         <fieldset>
@@ -273,24 +272,6 @@
             </div>
         </fieldset>
         </form>
-        <!--<form id="download-file">
-        <fieldset>
-            <legend>Download File</legend>
-            <div class="field">
-                <label for="download-chat-room-name">
-                    Chat Room Name</label>
-                <input type="text" id="download-chat-room-name" value="F_Test_2" disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="download-link">
-                    Link</label>
-                <input type="text" id="download-link" value="" disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Download" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>-->
         </div>
         <div class="tab" id="provisioning">
         <h2>Users</h2>
@@ -328,7 +309,7 @@
             <div class="field">
                 <label for="provision-update-username">
                     Username</label>
-                <input type="text" id="provision-update-username" value="formicary_lon\ocstest4"
+                <input type="text" id="provision-update-username" value="company\user"
                     disabled="disabled" />
             </div>          
             <div class="submit">
@@ -385,13 +366,13 @@
             <div class="field">
                 <label for="provision-create-agent-username">
                     Username</label>
-                <input type="text" id="provision-create-agent-username" value="sip:ocstest5@formicary.net"
+                <input type="text" id="provision-create-agent-username" value="sip:agent@company.com"
                     disabled="disabled" />
             </div>
             <div class="field">
                 <label for="provision-create-agent-channels">
                     Channels (e.g. channel1;channel2 etc.)</label>
-                <input type="text" id="provision-create-agent-channels" value="chat-room:43489ecf-0d8a-48ec-9d00-0eb9264a07fa;contact:kyprous@dev.formicary.net"
+                <input type="text" id="provision-create-agent-channels" value="chat-room:guid;contact:userId"
                     disabled="disabled" />
             </div>
             <div class="field">
@@ -459,7 +440,7 @@
             <div class="field">
                 <label for="provision-channel-channel-id">
                     Channel id</label>
-                <input type="text" id="provision-channel-channel-id" value="contact:kyprous@dev.formicary.net"
+                <input type="text" id="provision-channel-channel-id" value="contact:contactId"
                     disabled="disabled" />
             </div>          
             <div class="submit">
@@ -479,7 +460,7 @@
             <div class="field">
                 <label for="provision-delete-channel-channel-id">
                     Channel ID</label>
-                <input type="text" id="provision-delete-channel-channel-id" value="chat-room:43489ecf-0d8a-48ec-9d00-0eb9264a07fa"
+                <input type="text" id="provision-delete-channel-channel-id" value="chat-room:guid"
                     disabled="disabled" />
             </div>
             <div class="submit">
@@ -592,7 +573,8 @@
             <fieldset>
                 <legend>Request throttles</legend>
                 <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
+                    <input type="submit" value="Request" disabled="disabled" />
+                </div>
             </fieldset>
         </form>
         <form id="request-throttle-by-id">

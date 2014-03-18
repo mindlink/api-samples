@@ -22,8 +22,8 @@
     <target name="jar" depends="compile,-init-jar">
        <jar destfile="${dist.dir}/foundationapi.jar" basedir="${build.dir}">
           <manifest>
-             <section name="im.fcg.foundationapi.demo">
-				<attribute name="Main-Class" value="im.fcg.foundationapi.demo.DemoBot"/>
+             <section name="com.mindlinksoft.foundationapi.demo">
+				<attribute name="Main-Class" value="com.mindlinksoft.foundationapi.demo.DemoBot"/>
                 <attribute name="Implementation-Title" value="Foundation API example bot"/>
                 <attribute name="Implementation-Version" value="1.0"/>
              </section>
@@ -37,6 +37,6 @@
     </target>
 	
 	<target name="run" depends="compile">
-		<java classpath="${build.dir}" classname="im.fcg.foundationapi.demo.DemoBot"/>
+		<java classpath="${build.dir}" classname="com.mindlinksoft.foundationapi.demo.DemoBot"/>
 	</target>
 </project>

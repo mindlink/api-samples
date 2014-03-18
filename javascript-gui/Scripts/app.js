@@ -1,4 +1,4 @@
-var baseUrl = 'https://fd-t5400-16.th.formicary.net:8081';
+var baseUrl = 'https://api.company.com';
 
 var bot;
 
@@ -46,7 +46,7 @@ var formatTime = function(timestamp) {
 
 var setupBot = function(sipAddress, username, password) {
 
-    bot = new Formicary.FoundationApi.V1.Bot({
+    bot = new MindLink.FoundationApi.V1.Bot({
         baseUrl: baseUrl
     });
 

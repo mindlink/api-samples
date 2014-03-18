@@ -10,22 +10,22 @@
         /// <summary>
         /// The base URL of the foundation API.
         /// </summary>
-        private const string ApiUrl = "http://dappd.devresource.local:8081/";
+        private const string ApiUrl = "http://fapi.company.com";
 
         /// <summary>
         /// The username to use to connecto to the FAPI.
         /// </summary>
-        private const string Username = "devaccounts\\westa";
+        private const string Username = "company\\masterUser";
 
         /// <summary>
         /// The password to provide when connecting to the FAPI.
         /// </summary>
-        private const string Password = "Password1";
+        private const string Password = "password";
 
         /// <summary>
         /// The user to create using the provisioning service.
         /// </summary>
-        private const string ProvisioningUser = "devaccounts\\christoug";
+        private const string ProvisioningUser = "company\\provisionedUser";
 
         /// <summary>
         /// The ID of the user to create.
@@ -40,12 +40,12 @@
         /// <summary>
         /// The username of the agent to create.
         /// </summary>
-        private const string AgentUsername = "sip:test6@devresource.local";
+        private const string AgentUsername = "sip:agent@company.com";
 
         /// <summary>
         /// The channel to provision the agent in.
         /// </summary>
-        private const string ChannelId = "chat-room:b9a17b83-c6ef-4607-808e-d8aa65827976";
+        private const string ChannelId = "chat-room:guid";
 
         /// <summary>
         /// Program entry point.
