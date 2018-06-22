@@ -218,8 +218,8 @@ var setupBot = function(sipAddress, username, password) {
             $('form#streaming input[id=start-streaming]').attr('disabled', false);
             $('form#streaming input[id=stop-streaming]').attr('disabled', true);
         },
-        onMessageReceived: function(eventId, time, channelId, sender, content) {
-            logMessage('Message received to channel \'' + channelId + '\' from \'' + sender + '\': \'' + content + '\'', 'streaming');
+        onMessageReceived: function(eventId, time, channelId, sender, content, messageParts) {
+            logMessage('Message received to channel \'' + channelId + '\' from \'' + sender + '\', text: \'' + content + '\' and message parts: \'' + JSON.stringify(messageParts) + '\'.', 'streaming');
         },
         onChannelStateChanged: function(eventId, time, channelId, active) {
             logMessage('Channel state changed for channel \'' + channelId + '\': ' + (active ? 'active' : 'inactive'), 'streaming');
@@ -255,7 +255,8 @@ $(document).ready(function () {
         var channelId = $('form#send-message input[id=message-channel-id]').val();
         var message = $('form#send-message textarea[id=message-content]').val();
         var alert = $('form#send-message input[id=message-alert]').is(':checked');
-        bot.collaboration.sendChannelMessage(channelId, message, alert);
+        var sendAsPart = $('form#send-message input[id=message-send-as-part]').is(':checked');
+        bot.collaboration.sendChannelMessage(channelId, message, alert, sendAsPart);
     });
 
     $('form#send-story input[type=submit]').click(function (ev) {
@@ -264,8 +265,8 @@ $(document).ready(function () {
         var subject = $('form#send-story input[id=story-subject]').val();
         var content = $('form#send-story textarea[id=story-content]').val();
         var alert = $('form#send-story input[id=story-alert]').is(':checked');
-
-        bot.collaboration.sendChannelStory(channelId, subject, content, alert);
+        var sendAsPart = $('form#send-message input[id=story-send-as-part]').is(':checked');
+        bot.collaboration.sendChannelStory(channelId, subject, content, alert, sendAsPart);
     });
     
     $('form#upload-file input[type=submit]').click(function (ev) {
