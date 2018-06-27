@@ -57,7 +57,7 @@ var setupBot = function(sipAddress, username, password) {
         onChannelHistory: function(channelId, messages) {
             logMessage('Chat history received for ' + channelId + '. Contains ' + messages.length + ' message(s).');
             // display the messages
-            logMessage(listAsString(messages, messages.length, function(message) { return formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' \n'; }), '', true);
+            logMessage(listAsString(messages, messages.length, function(message) { return formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + '\n'; }), '', true);
 
             if (console && console.log) {
                 console.log('Chat history for ' + channelId + ':');
@@ -74,7 +74,7 @@ var setupBot = function(sipAddress, username, password) {
 
             logMessage('Chat history search results received for ' + channelResults.ChannelId + '. Contains ' + channelResults.Count + ' message(s).');
             // display the messages
-            logMessage(listAsString(channelResults.Messages, channelResults.Messages.length, function(message) { return formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' \n'; }), '', true);
+            logMessage(listAsString(channelResults.Messages, channelResults.Messages.length, function(message) { return formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + ' \n'; }), '', true);
 
             if (console && console.log) {
                 console.log('Chat history for ' + channelResults.ChannelId + ':');
