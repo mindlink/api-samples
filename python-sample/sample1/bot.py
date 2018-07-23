@@ -89,10 +89,10 @@ def get_events(host, token, channel_id, last_event_id):
 
 
 host = 'http://localhost:8081'
-user_name = 'devlync2013\\faddad'
-password = 'Password1'
+user_name = 'domain\\user'
+password = 'secret_password'
 agent = 'agent_1'
-chat = 'chat-room:d343ec64-c867-4edf-9daf-84f25a3c8ed4'
+chat = 'chat-room:guid'
 
 token = authenticate(host, user_name, password, agent)
 
