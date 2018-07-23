@@ -118,7 +118,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
                         self.onChannelStateChanged(ev.EventId, ev.Time, ev.ChannelId, ev.Active);
                         break;
                     case 'MessageEvent':
-                        self.onMessageReceived(ev.EventId, ev.Time, ev.ChannelId, ev.Sender, ev.Content);
+                        self.onMessageReceived(ev.EventId, ev.Time, ev.ChannelId, ev.Sender, ev.Content, ev.MessageParts);
                         break;
                     case 'MetaDataEvent':
                         self.onMetaDataUpdated(ev.EventId, ev.Time, ev.Key, ev.Value);
@@ -214,24 +214,51 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     };
 
-    self.collaboration.sendChannelMessage = function(channelId, text, alert, callbackFn, errorFn) {
+    self.collaboration.sendChannelMessage = function(channelId, text, alert, sendAsPart, callbackFn, errorFn) {
         log('Sending ' + (alert ? 'alert ' : '') + 'message to channel \'' + channelId + '\'...');
-        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', {
-            IsAlert: alert,
+        var messageParts = [{
+            __type: 'PlainTextMessagePart:http://schemas.fcg.im/foundation/v1/collaboration',
             Text: text
-        }, function(result) {
+        }];
+        var body;
+        if (sendAsPart) {
+            body = {
+                IsAlert: alert,
+                MessageParts: messageParts
+            };
+        } else {
+            body = {
+                IsAlert: alert,
+                Text: text
+            };
+        }
+        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
             self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Text);
             if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Text);
         }, errorFn);
     };
 
-    self.collaboration.sendChannelStory = function(channelId, subject, content, alert, callbackFn, errorFn) {
+    self.collaboration.sendChannelStory = function(channelId, subject, content, alert, sendAsPart, callbackFn, errorFn) {
         log('Sending ' + (alert ? 'alert ' : '') + 'story (with subject \'' + subject + '\') to channel \'' + channelId + '\'...');
-        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', {
-            IsAlert: alert,
-            Subject: subject,
+        var messageParts = [{
+            __type: 'PlainTextMessagePart:http://schemas.fcg.im/foundation/v1/collaboration',
             Text: content
-        }, function(result) {
+        }];
+        var body;
+        if (sendAsPart) {
+            body = {
+                IsAlert: alert,
+                Subject: subject,
+                MessageParts: messageParts
+            };
+        } else {
+            body = {
+                IsAlert: alert,
+                Subject: subject,
+                Text: content
+            };
+        }
+        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
             self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Subject, result.Text);
             if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Subject, result.Text);
         }, errorFn);
