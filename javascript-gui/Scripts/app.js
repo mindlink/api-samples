@@ -265,7 +265,7 @@ $(document).ready(function () {
         var subject = $('form#send-story input[id=story-subject]').val();
         var content = $('form#send-story textarea[id=story-content]').val();
         var alert = $('form#send-story input[id=story-alert]').is(':checked');
-        var sendAsPart = $('form#send-message input[id=story-send-as-part]').is(':checked');
+        var sendAsPart = $('form#send-story input[id=story-send-as-part]').is(':checked');
         bot.collaboration.sendChannelStory(channelId, subject, content, alert, sendAsPart);
     });
     
