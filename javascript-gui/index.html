@@ -101,10 +101,37 @@
                     Alert?</label>
                 <input type="checkbox" id="message-alert" disabled="disabled" />
             </div>
+            <div class="submit">
+                <input type="submit" value="Send" disabled="disabled" />
+            </div>
+        </fieldset>
+        </form>
+        <form id="send-message-parts">
+        <fieldset>
+            <legend>Send messages with parts</legend>
             <div class="field">
-                <label for="message-send-as-part">
-                    Send as Message Part?</label>
-                <input type="checkbox" id="message-send-as-part" disabled="disabled" />
+                <label for="message-channel-id">
+                    Channel ID</label>
+                <input type="text" id="message-channel-id" value="chat-room:guid"
+                    disabled="disabled" />
+            </div>
+            <div class="field">
+                <label for="message-content">
+                    Message</label>
+                <textarea id="message-content" disabled="disabled" rows="2">[]</textarea>
+            </div>
+            <div class="field">
+                <label for="message-alert">
+                    Alert?</label>
+                <input type="checkbox" id="message-alert" disabled="disabled" />
+            </div>
+            <div class="field">
+                <input type="button" value="Insert plain text" id="message-part-plaintext" disabled="disabled" />
+                <input type="button" value="Insert hyperlink" id="message-part-hyperlink" disabled="disabled" />
+                <input type="button" value="Insert user link" id="message-part-userlink" disabled="disabled" />
+                <input type="button" value="Insert group link" id="message-part-grouplink" disabled="disabled" />
+                <input type="button" value="Insert hashtag" id="message-part-hashtag" disabled="disabled" />
+                <input type="button" value="Clear message" id="message-part-clear" disabled="disabled" />
             </div>
             <div class="submit">
                 <input type="submit" value="Send" disabled="disabled" />
@@ -135,11 +162,43 @@
                         Alert?</label>
                     <input type="checkbox" id="story-alert" disabled="disabled" />
                 </div>
+                <div class="submit">
+                    <input type="submit" value="Send" disabled="disabled" />
+                </div>
+            </fieldset>
+        </form>
+        <form id="send-story-parts">
+            <fieldset>
+                <legend>Send story with parts</legend>
                 <div class="field">
-                <label for="story-send-as-part">
-                    Send as Message Part?</label>
-                <input type="checkbox" id="story-send-as-part" disabled="disabled" />
-            </div>
+                    <label for="story-channel-id">
+                        Channel ID</label>
+                    <input type="text" id="story-channel-id" value="chat-room:guid"
+                            disabled="disabled" />
+                </div>
+                <div class="field">
+                    <label for="story-subject">
+                        Subject</label>
+                    <input type="text" id="story-subject" value="Test story" disabled="disabled" />
+                </div>
+                <div class="field">
+                    <label for="story-content">
+                        Content</label>
+                    <textarea id="story-content" disabled="disabled" rows="2">[]</textarea>
+                </div>
+                <div class="field">
+                    <label for="story-alert">
+                        Alert?</label>
+                    <input type="checkbox" id="story-alert" disabled="disabled" />
+                </div>
+                <div class="field">
+                    <input type="button" value="Insert plain text" id="message-part-plaintext" disabled="disabled" />
+                    <input type="button" value="Insert hyperlink" id="message-part-hyperlink" disabled="disabled" />
+                    <input type="button" value="Insert user link" id="message-part-userlink" disabled="disabled" />
+                    <input type="button" value="Insert group link" id="message-part-grouplink" disabled="disabled" />
+                    <input type="button" value="Insert hashtag" id="message-part-hashtag" disabled="disabled" />
+                    <input type="button" value="Clear message" id="message-part-clear" disabled="disabled" />
+                </div>
                 <div class="submit">
                     <input type="submit" value="Send" disabled="disabled" />
                 </div>

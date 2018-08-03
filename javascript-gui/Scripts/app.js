@@ -255,8 +255,85 @@ $(document).ready(function () {
         var channelId = $('form#send-message input[id=message-channel-id]').val();
         var message = $('form#send-message textarea[id=message-content]').val();
         var alert = $('form#send-message input[id=message-alert]').is(':checked');
-        var sendAsPart = $('form#send-message input[id=message-send-as-part]').is(':checked');
-        bot.collaboration.sendChannelMessage(channelId, message, alert, sendAsPart);
+        bot.collaboration.sendChannelMessage(channelId, message, alert);
+    });
+    
+    $('form#send-message-parts input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+        var channelId = $('form#send-message-parts input[id=message-channel-id]').val();
+        var partsAsText = $('form#send-message-parts textarea[id=message-content]').val();
+        var alert = $('form#send-message-parts input[id=message-alert]').is(':checked');
+        bot.collaboration.sendChannelMessageAsParts(channelId, JSON.parse(partsAsText), alert);
+    });
+    
+    $('form#send-message-parts input[id=message-part-plaintext]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
+        if (existingParts.startsWith('[') && existingParts.endsWith(']')) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"PlainTextMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","Text":"This is a test"}'
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
+    });
+    
+    $('form#send-message-parts input[id=message-part-hyperlink]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
+        if (existingParts.startsWith('[') && existingParts.endsWith(']')) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"HyperlinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","Text":"Go here!","Url":"www.example.com"}'
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
+    });
+    
+    $('form#send-message-parts input[id=message-part-userlink]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
+        if (existingParts.startsWith('[') && existingParts.endsWith(']')) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"UserLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","DisplayName":"John Smith","UserId":"sip:john.smith@example.com"}'
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
+    });
+    
+    $('form#send-message-parts input[id=message-part-grouplink]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
+        if (existingParts.startsWith('[') && existingParts.endsWith(']')) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"GroupLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","GroupName":"Engineering","GroupId":"ma-chan://mydomain.com/12345678-aabb-ccdd-eeff-012345678910"}'
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
+    });
+    
+    $('form#send-message-parts input[id=message-part-hashtag]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
+        if (existingParts.startsWith('[') && existingParts.endsWith(']')) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"HashtagMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","Hashtag":"#API"}'
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
+    });
+    
+    $('form#send-message-parts input[id=message-part-clear]').click(function (ev) {
+        ev.preventDefault();
+        $('form#send-message-parts textarea[id=message-content]').val('[]');
     });
 
     $('form#send-story input[type=submit]').click(function (ev) {
@@ -265,8 +342,81 @@ $(document).ready(function () {
         var subject = $('form#send-story input[id=story-subject]').val();
         var content = $('form#send-story textarea[id=story-content]').val();
         var alert = $('form#send-story input[id=story-alert]').is(':checked');
-        var sendAsPart = $('form#send-story input[id=story-send-as-part]').is(':checked');
-        bot.collaboration.sendChannelStory(channelId, subject, content, alert, sendAsPart);
+        bot.collaboration.sendChannelStory(channelId, subject, content, alert);
+    });
+    
+    $('form#send-story-parts input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+        var channelId = $('form#send-story-parts input[id=story-channel-id]').val();
+        var subject = $('form#send-story-parts input[id=story-subject]').val();
+        var partsAsText = $('form#send-story-parts textarea[id=story-content]').val();
+        var alert = $('form#send-story-parts input[id=story-alert]').is(':checked');
+        bot.collaboration.sendChannelStoryAsParts(channelId, subject, JSON.parse(partsAsText), alert);
+    });
+    
+    $('form#send-story-parts input[id=message-part-plaintext]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
+        if (existingParts.startsWith('[') && existingParts.endsWith(']')) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"PlainTextMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","Text":"This is a test"}'
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
+    });
+    
+    $('form#send-story-parts input[id=message-part-hyperlink]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
+        if (existingParts.startsWith('[') && existingParts.endsWith(']')) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"HyperlinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","Text":"Go here!","Url":"www.example.com"}'
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
+    });
+    
+    $('form#send-story-parts input[id=message-part-userlink]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
+        if (existingParts.startsWith('[') && existingParts.endsWith(']')) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"UserLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","DisplayName":"John Smith","UserId":"sip:john.smith@example.com"}'
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
+    });
+    
+    $('form#send-story-parts input[id=message-part-grouplink]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
+        if (existingParts.startsWith('[') && existingParts.endsWith(']')) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"GroupLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","GroupName":"Engineering","GroupId":"ma-chan://mydomain.com/12345678-aabb-ccdd-eeff-012345678910"}'
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
+    });
+    
+    $('form#send-story-parts input[id=message-part-hashtag]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
+        if (existingParts.startsWith('[') && existingParts.endsWith(']')) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"HashtagMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","Hashtag":"#API"}'
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
     });
     
     $('form#upload-file input[type=submit]').click(function (ev) {
