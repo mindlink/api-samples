@@ -56,6 +56,7 @@
     <Compile Include="Demo5.cs" />
     <Compile Include="Demo6.cs" />
     <Compile Include="Demo7.cs" />
+    <Compile Include="Demo8.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
