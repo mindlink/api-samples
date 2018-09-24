@@ -137,3 +137,13 @@ form textarea {
 #log-panel ul li.streaming {
     color: #0D0;
 }
+
+#provisioning-mode-label {
+    margin-bottom: 5px;
+}
+
+#provisioning-mode-label li {
+    list-style: none;
+    margin-left: 5px;
+    color: #777;
+}

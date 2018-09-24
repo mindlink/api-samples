@@ -326,8 +326,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     self.provisioning.requestProvisionedAgentById = function(agentId, callbackFn, errorFn) {
         log('Requesting provisioned agents by ID...');
         sendRequest('Provisioning/V1/Agents/' + agentId, 'GET', '', function(result) {
-            self.onProvisionedAgent(result.CanProvision, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
-            if (callbackFn) callbackFn(result.CanProvision, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
+            self.onProvisionedAgent(result.ProvisioningMode, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
+            if (callbackFn) callbackFn(result.ProvisioningMode, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
         }, errorFn);
     };
 
@@ -453,7 +453,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     };
 
-    self.provisioning.createAgent = function(agentId, userName, channels, metaData, users, canProvision, callbackFn, errorFn) {
+    self.provisioning.createAgent = function(agentId, userName, channels, metaData, users, provisioningMode, callbackFn, errorFn) {
         log('Creating new agent...');
         var meta = [];
         var rawMeta = metaData.split(';'); // key1:value1;key2:value2;.....
@@ -477,7 +477,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             Channels: chnls,
             MetaData: meta,
             Users: usrs,
-            CanProvision: canProvision,
+            CanProvision: provisioningMode == 'system' || provisioningMode == 'self',
+            ProvisioningMode: provisioningMode,
             State: '0'
         }, function(result, status) {
             self.onCreateAgent(status);

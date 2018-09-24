@@ -457,11 +457,16 @@
                     disabled="disabled" />
             </div>
             <div class="field">
-                <label for="provision-create-agent-canProvision">
-                    Can provision (true or false)</label>
-                <select id="provision-create-agent-canProvision" disabled="disabled">
-                    <option value="false">False</option>                    
-                    <option value="true">True</option>
+                <label id="provisioning-mode-label" for="provision-create-agent-provisioningMode">
+                    Provisioning Mode
+                    <li>System: The agent can provision all agents</li>
+                    <li>Self: The agent can only provision themself</li>
+                    <li>None: The agent cannot provision</li>
+                </label>
+                <select id="provision-create-agent-provisioningMode" disabled="disabled">
+                    <option value="system">System</option>                    
+                    <option value="self">Self</option>                    
+                    <option value="none">None</option>
                 </select>
             </div>
             <div class="submit">
