@@ -72,6 +72,56 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
     }
 
     /**
+     * Sends a selection of predefined message parts to the specified channel.
+     * 
+     * Note: This feature only applies to API v18.6 and above. 
+     * 
+     * @param channelId The ID of the channel to send a message to
+     * @throws IOException If the request can't be constructed or transmitted
+     */
+    public void sendMessageParts(final String channelId) throws IOException {
+        try {
+            final JSONArray messageParts = new JSONArray();
+
+            final JSONOrderedObject plainTextMessagePart = new JSONOrderedObject();
+            plainTextMessagePart.put("__type", "PlainTextMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
+            plainTextMessagePart.put("Text", "This is a test message");
+            
+            final JSONOrderedObject hyperlinkMessagePart = new JSONOrderedObject();
+            hyperlinkMessagePart.put("__type", "HyperlinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
+            hyperlinkMessagePart.put("Text", "A Hyperlink");
+            hyperlinkMessagePart.put("Url", "http://www.example.com");
+
+            final JSONOrderedObject userLinkMessagePart = new JSONOrderedObject();
+            userLinkMessagePart.put("__type", "UserLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
+            userLinkMessagePart.put("DisplayName", "User Name");
+            userLinkMessagePart.put("UserId", "sip:someuser@someplace.cc");
+            
+            final JSONOrderedObject groupLinkMessagePart = new JSONOrderedObject();
+            groupLinkMessagePart.put("__type", "GroupLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
+            groupLinkMessagePart.put("GroupName", "Group Name");
+            groupLinkMessagePart.put("GroupId", channelId);
+            
+            final JSONOrderedObject hashtagMessagePart = new JSONOrderedObject();
+            hashtagMessagePart.put("__type", "HashtagMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
+            hashtagMessagePart.put("Hashtag", "#hashtag");
+            
+            messageParts.put(plainTextMessagePart);
+            messageParts.put(hyperlinkMessagePart);
+            messageParts.put(userLinkMessagePart);
+            messageParts.put(groupLinkMessagePart);
+            messageParts.put(hashtagMessagePart);
+
+            final JSONObject payload = new JSONObject();
+            payload.put("MessageParts", messageParts);
+
+            getResponse("/Collaboration/v1/Channels/" + channelId + "/Messages", "POST", payload.toString());
+        } catch (JSONException ex) {
+            throw new IOException("Unable to construct JSON payload", ex);
+        }
+    }
+    
+    /**
      * Sends a message to the specified channel.
      *
      * @param channelId The ID of the channel to send a message to

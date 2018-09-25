@@ -134,7 +134,7 @@ public class DemoBot {
     private static void doSend(final SimpleCollaborationAgent agent,
             final BufferedReader reader) throws IOException {
         System.out.println();
-        System.out.println("Send functions: message, alert, story");
+        System.out.println("Send functions: message, messageparts, alert, story");
         System.out.print("Select option: ");
 
         final String option = reader.readLine().toLowerCase();
@@ -148,6 +148,15 @@ public class DemoBot {
             agent.sendMessage(channel, message);
             System.out.println();
             System.out.println("Sent");
+        } else if ("messageparts".equals(option)) {
+        	System.out.println();
+        	System.out.println("(Note: This feature only applies to API v18.6 and above)");
+        	System.out.print("Enter channel ID: ");
+            final String channel = reader.readLine();
+
+            agent.sendMessageParts(channel);
+            System.out.println();
+            System.out.println("Sent");            
         } else if ("alert".equals(option)) {
             System.out.print("Enter channel ID: ");
             final String channel = reader.readLine();
