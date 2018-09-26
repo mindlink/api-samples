@@ -477,7 +477,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             Channels: chnls,
             MetaData: meta,
             Users: usrs,
-            CanProvision: provisioningMode == 'system' || provisioningMode == 'self',
+            CanProvision: provisioningMode == '3' || provisioningMode == '2',
             ProvisioningMode: provisioningMode,
             State: '0'
         }, function(result, status) {
