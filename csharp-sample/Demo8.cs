@@ -31,11 +31,10 @@
 
             var plainTextMessagePart = new { __type = "PlainTextMessagePart:http://schemas.fcg.im/foundation/v1/collaboration", Text = "This is a test"};
             var hyperlinkMessagePart = new { __type = "HyperlinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration", Text = "Go here!", Url = "www.example.com" };
-            var userLinkMessagePart = new { __type = "UserLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration", DisplayName = "Jo Do", UserId = "contact:jo.do@example.com" };
-            var groupLinkMessagePart = new { __type = "GroupLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration", GroupName = "This Group", GroupId = channelId };
+            var channelLinkMessagePart = new { __type = "ChannelLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration", ChannelName = "This Group", ChannelId = channelId };
             var hashtagMessagePart = new { __type = "HashtagMessagePart:http://schemas.fcg.im/foundation/v1/collaboration", Hashtag = "#hashtag" };
 
-            var messageParts = new dynamic[] { plainTextMessagePart, hyperlinkMessagePart, userLinkMessagePart, groupLinkMessagePart, hashtagMessagePart };
+            var messageParts = new dynamic[] { plainTextMessagePart, hyperlinkMessagePart, channelLinkMessagePart, hashtagMessagePart };
 
             GetResponse(baseUrl + "/Collaboration/v1/Channels/" + channelId + "/Messages", token, new { IsAlert = false, MessageParts = messageParts });
 

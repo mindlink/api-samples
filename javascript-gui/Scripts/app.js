@@ -292,26 +292,13 @@ $(document).ready(function () {
         $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
     });
     
-    $('form#send-message-parts input[id=message-part-userlink]').click(function (ev) {
+    $('form#send-message-parts input[id=message-part-channellink]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
         if (existingParts.indexOf('[') == 0 && existingParts.indexOf(']', this.length - 1) !== -1) {
             existingParts = existingParts.substring(1, existingParts.length - 1);
         }
-        var newPart = '{"__type":"UserLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","DisplayName":"John Smith","UserId":"contact:john.smith@example.com"}';
-        if (existingParts.length !== 0) {
-            newPart = ',' + newPart;
-        }
-        $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
-    });
-    
-    $('form#send-message-parts input[id=message-part-grouplink]').click(function (ev) {
-        ev.preventDefault();
-        var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
-        if (existingParts.indexOf('[') == 0 && existingParts.indexOf(']', this.length - 1) !== -1) {
-            existingParts = existingParts.substring(1, existingParts.length - 1);
-        }
-        var newPart = '{"__type":"GroupLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","GroupName":"Engineering","GroupId":"chat-room:12345678-aabb-ccdd-eeff-012345678910"}';
+        var newPart = '{"__type":"ChannelLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","ChannelName":"Engineering","ChannelId":"chat-room:12345678-aabb-ccdd-eeff-012345678910"}';
         if (existingParts.length !== 0) {
             newPart = ',' + newPart;
         }
@@ -393,13 +380,13 @@ $(document).ready(function () {
         $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
     });
     
-    $('form#send-story-parts input[id=message-part-grouplink]').click(function (ev) {
+    $('form#send-story-parts input[id=message-part-channellink]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
         if (existingParts.indexOf('[') == 0 && existingParts.indexOf(']', this.length - 1) !== -1) {
             existingParts = existingParts.substring(1, existingParts.length - 1);
         }
-        var newPart = '{"__type":"GroupLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","GroupName":"Engineering","GroupId":"chat-room:12345678-aabb-ccdd-eeff-012345678910"}';
+        var newPart = '{"__type":"ChannelLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","ChannelName":"Engineering","ChannelId":"chat-room:12345678-aabb-ccdd-eeff-012345678910"}';
         if (existingParts.length !== 0) {
             newPart = ',' + newPart;
         }

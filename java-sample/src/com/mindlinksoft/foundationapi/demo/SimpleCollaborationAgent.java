@@ -63,7 +63,6 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
      *
      * @param channelId The ID of the channel to send a message to
      * @param subject The subject of the message
-     * @param message The content of the message to send
      * @throws IOException If the request can't be constructed or transmitted
      */
     public void sendStory(final String channelId, final String subject,
@@ -91,16 +90,11 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
             hyperlinkMessagePart.put("__type", "HyperlinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
             hyperlinkMessagePart.put("Text", "A Hyperlink");
             hyperlinkMessagePart.put("Url", "http://www.example.com");
-
-            final JSONOrderedObject userLinkMessagePart = new JSONOrderedObject();
-            userLinkMessagePart.put("__type", "UserLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
-            userLinkMessagePart.put("DisplayName", "User Name");
-            userLinkMessagePart.put("UserId", "sip:someuser@someplace.cc");
             
-            final JSONOrderedObject groupLinkMessagePart = new JSONOrderedObject();
-            groupLinkMessagePart.put("__type", "GroupLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
-            groupLinkMessagePart.put("GroupName", "Group Name");
-            groupLinkMessagePart.put("GroupId", channelId);
+            final JSONOrderedObject channelLinkMessagePart = new JSONOrderedObject();
+            channelLinkMessagePart.put("__type", "ChannelLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
+            channelLinkMessagePart.put("ChannelName", "Channel Name");
+            channelLinkMessagePart.put("ChannelId", channelId);
             
             final JSONOrderedObject hashtagMessagePart = new JSONOrderedObject();
             hashtagMessagePart.put("__type", "HashtagMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
@@ -108,8 +102,7 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
             
             messageParts.put(plainTextMessagePart);
             messageParts.put(hyperlinkMessagePart);
-            messageParts.put(userLinkMessagePart);
-            messageParts.put(groupLinkMessagePart);
+            messageParts.put(channelLinkMessagePart);
             messageParts.put(hashtagMessagePart);
 
             final JSONObject payload = new JSONObject();
