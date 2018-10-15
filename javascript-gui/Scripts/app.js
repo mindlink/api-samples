@@ -405,6 +405,12 @@ $(document).ready(function () {
         }
         $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
     });
+
+    $('form#send-story-parts input[id=message-part-clear]').click(function (ev) {
+        ev.preventDefault();
+        $('form#send-story-parts textarea[id=story-content]').val('[]');
+    });
+
     
     $('form#upload-file input[type=submit]').click(function (ev) {
         ev.preventDefault();
