@@ -121,8 +121,8 @@ var setupBot = function(sipAddress, username, password) {
                 return 'Id: ' + agent.Id + ' state: ' + agent.State; 
             }), '', true);               
         },
-        onProvisionedAgent: function (provisioningMode, channels, id, metaData, state, userName, users) {
-            logMessage('Agent returned. ID: ' + id + ', user name: ' + userName + ', provisioning mode: ' + provisioningMode + ', state: ' + state);
+        onProvisionedAgent: function (provisioningMode, canProvision, channels, id, metaData, state, userName, users) {
+            logMessage('Agent returned. ID: ' + id + ', user name: ' + userName + ', provisioning mode: ' + provisioningMode + ', can provision: ' + canProvision + ', state: ' + state);
             logMessage(' - Channels:')
             logMessage(listAsString(channels, channels.length, function (channel) {
                 return '    - Id: ' + channel.Id + ', state: ' + channel.State; 
@@ -405,6 +405,12 @@ $(document).ready(function () {
         }
         $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
     });
+
+    $('form#send-story-parts input[id=message-part-clear]').click(function (ev) {
+        ev.preventDefault();
+        $('form#send-story-parts textarea[id=story-content]').val('[]');
+    });
+
     
     $('form#upload-file input[type=submit]').click(function (ev) {
         ev.preventDefault();
