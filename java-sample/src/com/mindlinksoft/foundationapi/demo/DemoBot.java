@@ -3,10 +3,14 @@ package com.mindlinksoft.foundationapi.demo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Map;
 
 import com.mindlinksoft.foundationapi.demo.provisioning.ProvisionedChannel;
 import com.mindlinksoft.foundationapi.demo.provisioning.ProvisioningAgent;
+import com.mindlinksoft.foundationapi.demo.streaming.Event;
+import com.mindlinksoft.foundationapi.demo.streaming.EventListener;
+import com.mindlinksoft.foundationapi.demo.streaming.EventType;
 import com.mindlinksoft.foundationapi.demo.streaming.StreamingCollaborationAgent;
 
 /**
@@ -64,7 +68,7 @@ public class DemoBot {
 
         while (true) {
             System.out.println();
-            System.out.println("Functions: channels, send, exit");
+            System.out.println("Functions: channels, send, history, events, exit");
             System.out.print("Select option: ");
 
             final String option = bufferedReader.readLine().toLowerCase();
@@ -73,6 +77,10 @@ public class DemoBot {
                 doChannels(collabAgent, provAgent, agent, bufferedReader);
             } else if ("send".equals(option)) {
                 doSend(collabAgent, bufferedReader);
+            } else if ("history".equals(option)) {
+            	doHistory(collabAgent, bufferedReader);
+            } else if ("events".equals(option)) {
+            	doEvents(collabAgent, bufferedReader);
             } else if ("exit".equals(option)) {
                 break;
             } else {
@@ -189,6 +197,54 @@ public class DemoBot {
             System.out.println("Sent");
         }
     }
+    
+    private static void doHistory(final SimpleCollaborationAgent agent,
+            final BufferedReader reader) throws IOException, NumberFormatException {
+        System.out.println();
+        System.out.print("Enter channel ID: ");
+        final String channelId = reader.readLine();
+        System.out.print("Number of messages: ");
+        final String messageCountString = reader.readLine();
+        
+        final int messageCount = Integer.parseInt(messageCountString);
 
+        List<Message> historyMessages = agent.getChannelHistory(channelId, messageCount);
+        
+        System.out.println();
+        System.out.println("Received Messages");
+        System.out.println("------------------");
+        
+        for (Message message : historyMessages) {
+        	System.out.println(message);
+        }
+    }
+
+    private static void doEvents(final StreamingCollaborationAgent agent,
+            final BufferedReader reader) throws IOException {
+        System.out.println();
+        System.out.print("Enter channel ID: ");
+        final String channelId = reader.readLine();
+        System.out.println("Waiting for events... (Press Enter to stop)");
+
+        class ChannelEventListener implements EventListener {
+        	public void eventReceived(StreamingCollaborationAgent agent, Event event) {
+        		System.out.println(event);
+        	}
+        }
+        
+        EventListener channelEventListener = new ChannelEventListener();
+        
+        System.out.println();
+        System.out.println("Received Events");
+        System.out.println("---------------");
+        
+        agent.addEventListener(channelEventListener);
+        agent.startStreaming(new String[] { channelId }, null, new EventType[] { EventType.MESSAGE });
+        
+        reader.readLine();
+        
+        agent.removeEventListener(channelEventListener);
+        agent.stopStreaming();
+    }
 }
 

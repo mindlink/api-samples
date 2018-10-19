@@ -11,6 +11,7 @@ public class Message {
     private final String channelId;
     private final String subject;
     private final String text;
+    private final String messageParts;
     private final long timestamp;
 
     /**
@@ -18,13 +19,14 @@ public class Message {
      */
     protected Message(final String id, final boolean isAlert,
             final String senderId, final String channelId, final String subject,
-            final String text, final long timestamp) {
+            final String text, final String messageParts, final long timestamp) {
         this.id = id;
         this.isAlert = isAlert;
         this.senderId = senderId;
         this.channelId = channelId;
         this.subject = subject;
         this.text = text;
+        this.messageParts = messageParts;
         this.timestamp = timestamp;
     }
 
@@ -87,6 +89,15 @@ public class Message {
     }
 
     /**
+     * Gets the message content as a collection of JSON message parts.
+     *
+     * @return The message parts JSON string.
+     */
+    public String getMessageParts() {
+    	return this.messageParts;
+    }
+    
+    /**
      * Gets the unix timestamp at which the story was sent.
      *
      * @return The message's timestamp
@@ -100,7 +111,8 @@ public class Message {
     public String toString() {
         return "Message{id=" + id + ", isAlert=" + isAlert + ", senderId="
                 + senderId + ", channelId=" + channelId + ", subject="
-                + subject + ", text=" + text + ", timestamp=" + timestamp + '}';
+                + subject + ", text=" + text + ", messageParts=" + messageParts
+                + ", timestamp=" + timestamp + '}';
     }
 
 }

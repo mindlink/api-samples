@@ -9,19 +9,21 @@ public class MessageEvent extends Event {
     private final String senderId;
     private final String subject;
     private final String content;
+    private final String messageParts;
 
     /**
      * Creates a new instance of {@link MessageEvent}.
      */
     public MessageEvent(final long eventId, final long time,
             final String channelId, final String senderId, final String subject,
-            final String content) {
+            final String content, final String messageParts) {
         super(eventId, time);
 
         this.channelId = channelId;
         this.senderId = senderId;
         this.subject = subject;
         this.content = content;
+        this.messageParts = messageParts;
     }
 
     /**
@@ -40,6 +42,15 @@ public class MessageEvent extends Event {
      */
     public String getContent() {
         return content;
+    }
+
+    /**
+     * Gets the message content as a collection of JSON message parts.
+     *
+     * @return The message parts JSON string.
+     */
+    public String getMessageParts() {
+    	return this.messageParts;
     }
 
     /**
@@ -66,7 +77,7 @@ public class MessageEvent extends Event {
     public String toString() {
         return "MessageEvent{super=" + super.toString() + ", channelId="
                 + channelId + ", senderId=" + senderId + ", subject=" + subject
-                + ", content=" + content + '}';
+                + ", content=" + content + ", messageParts=" + messageParts + '}';
     }
 
 }
