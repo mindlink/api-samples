@@ -351,7 +351,7 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
                 object.optString("ChannelId"),
                 object.optString("Subject"),
                 object.getString("Text"),
-                object.get("MessageParts").toString(),
+                object.optString("MessageParts"),
                 object.getLong("Timestamp"));
     }
 
