@@ -14,7 +14,7 @@ This module shows basic usages of the ApiConnection.
 from api_connection import ApiConnection
 
 def on_message_received(message_event):
-    print('got a message event!', message_event)
+    print('Got a message event!', message_event)
 
 host = 'http://localhost:8081'
 user_name = 'domain\\user'
@@ -22,6 +22,30 @@ password = 'secret_password'
 agent = 'agent_1'
 chat = 'chat-room:guid'
 message_content = 'hello world!'
+
+plainTextMessagePart = {
+    '__type': 'PlainTextMessagePart:http://schemas.fcg.im/foundation/v1/collaboration',
+    'Text': 'This is a test message'
+}
+
+hyperlinkMessagePart = {
+    '__type': 'HyperlinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration',
+    'Text': 'A Hyperlink',
+    'Url': 'http://wwww.example.com'
+}
+
+channelLinkMessagePart = {
+    '__type': 'ChannelLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration',
+    'ChannelName': 'Channel Name',
+    'ChannelId': chat
+}
+
+hashtagMessagePart = {
+    '__type': 'HashtagMessagePart:http://schemas.fcg.im/foundation/v1/collaboration',
+    'Hashtag': '#hashtag'
+}
+
+message_parts = [plainTextMessagePart, hyperlinkMessagePart, channelLinkMessagePart, hashtagMessagePart]
 
 connection = ApiConnection(host, user_name, password, agent)
 
@@ -37,6 +61,9 @@ for message in messages:
 
 print('sending a message')
 connection.send_message(chat, message_content, True)
+
+print('sending a message-part message')
+connection.send_message_parts(chat, message_parts, False)
 
 print('starting to stream')
 connection.start_streaming(chat, on_message_received)

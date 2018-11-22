@@ -62,6 +62,23 @@ def send_message(host, token, channel_id, content, is_alert):
     if response.status_code != 200:
         print ('Something went wrong!', response.status_code, response.reason)
 
+def send_message_parts(host, token, channel_id, messageParts, is_alert):
+    requestUrl = '{}/Collaboration/V1/Channels/{}/Messages'.format(host, channel_id)
+
+    response = requests.post(
+        requestUrl,
+        json = {
+            'MessageParts': messageParts,
+            'IsAlert': is_alert
+        },
+        headers = {
+            'Accept' : 'application/json',
+            'Authorization': 'FCF {}'.format(token)}
+        )
+
+    if response.status_code != 200:
+        print ('Something went wrong!', response.status_code, response.reason)
+
 def get_events(host, token, channel_id, last_event_id):
     request_url = '{}/Collaboration/V1/Events'.format(host)
 
