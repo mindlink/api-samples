@@ -77,7 +77,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             data: JSON.stringify(data),
             dataType: 'json',
             cache: false,
-            timeout: 20000,
+            timeout: 200000,
             processData: false,
             headers: headers,
             error: function(xhr, status, error) {
