@@ -13,6 +13,9 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     var getEventsJqXhr = null;
     var streaming = false;
 
+    // Credentials
+
+
     // Namespaces
     self.collaboration = {};
     self.provisioning = {};
@@ -105,14 +108,19 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }
     };
 
-    var getEvents = function(lastEventId, eventTypes, channels, regex) {
-        var url = 'Collaboration/V1/Events?last-event=' + lastEventId;
+    var getEvents = function(instanceId, lastEventId, eventTypes, channels, regex) {
+        var instance = instanceId ? "&instance=" + instanceId : "";
+        var url = 'Collaboration/V1/Events?last-event=' + lastEventId + instance;
         if (eventTypes) url += '&types=' + eventTypes;
         if (channels) url += '&channels=' + channels;
         if (regex) url += '&regex=' + regex;
         getEventsJqXhr = sendRequest(url, 'GET', '', function(result) {
+            var nextInstanceId;
             for (var i = 0; i < result.length; i++) {
-                var ev = result[i];
+                var ev = result[i]; 
+                if (!nextInstanceId) {
+                    nextInstanceId = ev.InstanceId;
+                }               
                 switch (ev.__type.split(':')[0]) {
                     case 'ChannelStateEvent':
                         self.onChannelStateChanged(ev.EventId, ev.Time, ev.ChannelId, ev.Active);
@@ -128,11 +136,14 @@ MindLink.FoundationApi.V1.Bot = function(config) {
                 }
                 lastEventId = ev.EventId;
             }
-            getEvents(lastEventId, eventTypes, channels, regex);
+            getEvents(nextInstanceId, lastEventId, eventTypes, channels, regex);
         }, function(errorCode, message) {
-            if (streaming) {
+            if (errorCode === 410) {
+                log('Error while listening for events. The API service has been restarted (' + errorCode + '). Re-initializing event stream...');
+                getEvents(null, 0, eventTypes, channels, regex);
+            } else if (streaming) {
                 log('Error while listening for events: (' + errorCode + ') \'' + message + '\'. Event polling will begin again in five seconds...');
-                setTimeout(function() { getEvents(lastEventId); }, 5000);
+                setTimeout(function() { getEvents(instanceId, lastEventId, eventTypes, channels, regex); }, 5000);
             } else {
                 log('Streaming stopped.');
             }
@@ -171,7 +182,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         log('Starting streaming...');
         stopGetEvents();
         streaming = true;
-        getEvents(0, eventTypes, channels, regex);
+        getEvents(null, 0, eventTypes, channels, regex);
         self.onStreamingStarted();
     };
 
