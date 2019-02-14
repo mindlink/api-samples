@@ -475,6 +475,20 @@ $(document).ready(function () {
         bot.collaboration.searchChatHistory(searchtext, matchcase, matchexact, false, null, null, 0, onDateValue, parseInt(limit), channelIds);
     });
 
+    $('form#channel-agent-state input[id=start-composing]').click(function (ev) {
+        ev.preventDefault();
+
+        var channelid = $('form#channel-agent-state input[id=channel-agent-state-channel-id]').val();
+        bot.collaboration.updateChannelAgentState(channelid, true);
+    });
+
+    $('form#channel-agent-state input[id=stop-composing]').click(function (ev) {
+        ev.preventDefault();
+
+        var channelid = $('form#channel-agent-state input[id=channel-agent-state-channel-id]').val();
+        bot.collaboration.updateChannelAgentState(channelid, false);
+    });
+
     $('form#request-provisioned-agents input[type=submit]').click(function (ev) {
         ev.preventDefault();
         bot.provisioning.requestProvisionedAgents();
