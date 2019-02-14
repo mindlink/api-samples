@@ -206,6 +206,19 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     }
 
+    self.collaboration.requestChannelHistory = function(channelId, limit, callbackFn, errorFn) {
+    self.collaboration.updateChannelAgentState = function(channelId, isComposing, callbackFn, errorFn) {
+        log('Updating channel agent state [IsComposing=' + isComposing + '] in channel \'' + channelId + '\'...');
+        var body = {
+            IsComposing: isComposing
+        };
+
+        sendRequest('Collaboration/V1/Channels/' + channelId + '/Me', 'POST', body, function(result) {
+            log('Successfully updated channel agent state in channel \'' + channelId + '\'...');
+            if (callbackFn) callbackFn(channelId, isComposing);
+        }, errorFn);
+    }
+
     self.collaboration.requestChannelHistory = function(channelId, limit, token, callbackFn, errorFn) {
         limit = limit || 50; // default
         log('Requesting channel history for \'' + channelId + '\'...');

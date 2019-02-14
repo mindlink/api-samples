@@ -14,7 +14,7 @@
 
 <body>
     <div id="setup-panel">
-        <h1>Foundation API Tests V2</h1>
+        <h1>Foundation API Tests</h1>
         <ul id="menu">
             <li><a href="#" id="configuration-tab">Configuration</a></li>
             <li><a href="#" id="authentication-tab">Authentication</a></li>
@@ -87,6 +87,20 @@
                         </div>
                     </fieldset>
                 </form>
+        <form id="channel-agent-state">
+            <fieldset>
+                <legend>Update channel agent state</legend>
+                <div class="field">
+                        <label for="channel-agent-state-channel-id">Channel ID</label>
+                        <input type="text" id="channel-agent-state-channel-id" value="chat-room:guid" disabled="disabled" />
+                    </div>
+                <div class="submit">
+                    <label>Composing State</label>
+                    <input type="submit" id="start-composing" value="Start Composing" disabled="disabled" />
+                    <input type="submit" id="stop-composing" value="Stop Composing" disabled="disabled" />
+                </div>
+            </fieldset>
+        </form>
                 <form id="send-message">
                     <fieldset>
                         <legend>Send messages</legend>
