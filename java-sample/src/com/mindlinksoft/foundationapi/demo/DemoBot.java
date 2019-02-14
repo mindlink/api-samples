@@ -142,7 +142,7 @@ public class DemoBot {
     private static void doSend(final SimpleCollaborationAgent agent,
             final BufferedReader reader) throws IOException {
         System.out.println();
-        System.out.println("Send functions: message, messageparts, alert, story");
+        System.out.println("Send functions: message, messageparts, alert, story, composing");
         System.out.print("Select option: ");
 
         final String option = reader.readLine().toLowerCase();
@@ -193,6 +193,20 @@ public class DemoBot {
             }
 
             agent.sendStory(channel, subject, builder.toString());
+            System.out.println();
+            System.out.println("Sent");
+        } else if ("composing".equals(option)) {
+            System.out.print("Enter channel ID: ");
+            final String channel = reader.readLine();
+            System.out.print("Composing (true/false): ");
+            final String message = reader.readLine().toLowerCase();
+
+            if (!message.equals("true") && !message.equals("false")) {
+            	System.out.print("Unrecognized input - Please type either 'true' or 'false'");
+            	return;
+            }
+            
+            agent.updateChannelAgentState(channel, message.equals("true") ? true : false);
             System.out.println();
             System.out.println("Sent");
         }

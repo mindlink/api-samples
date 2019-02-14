@@ -10,7 +10,7 @@ sample_bot.py
 This module shows basic usages of the ApiConnection.
 
 """
-
+import time
 from api_connection import ApiConnection
 
 def on_message_received(message_event):
@@ -51,16 +51,24 @@ connection = ApiConnection(host, user_name, password, agent)
 
 token = connection.authenticate()
 
-print('got a token', token)
+print('got a token', token, flush=True)
 
 messages = connection.get_messages(chat, 2)
 
-print('here are my messages')
+print('here are my messages', flush=True)
 for message in messages:
-    print('message ID: ', message['Id'], ' Alert? ', message['IsAlert'], ' Sender ', message['SenderId'], ' Text ', message['Text'])
+    print('message ID: ', message['Id'], ' Alert? ', message['IsAlert'], ' Sender ', message['SenderId'], ' Text ', message['Text'], flush=True)
 
-print('sending a message')
+print('sending a message', flush=True)
 connection.send_message(chat, message_content, True)
+
+print('starting composing', flush=True)
+connection.update_channel_agent_state(chat, True)
+
+time.sleep(3)
+
+print('stopping composing')
+connection.update_channel_agent_state(chat, False)
 
 print('sending a message-part message')
 connection.send_message_parts(chat, message_parts, False)

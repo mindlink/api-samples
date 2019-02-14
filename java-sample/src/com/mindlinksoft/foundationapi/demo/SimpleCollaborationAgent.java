@@ -285,6 +285,25 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
     }
 
     /**
+     * Updates the channel agent state.
+     * @param isComposing A value indicating whether the agent is composing.
+     * @throws IOException If the request could not be completed.
+     */
+    public void updateChannelAgentState(final String channelId, final Boolean isComposing) throws IOException {
+    	try {
+        	JSONOrderedObject channelAgentState = new JSONOrderedObject();
+        	channelAgentState.put("IsComposing", isComposing.toString());
+        	
+        	getResponse(
+                    "/Collaboration/v1/Channels/" + channelId
+                    + "/Me",
+                    "POST", channelAgentState.toString());	
+        } catch (JSONException ex) {
+            throw new IOException("Unable to construct JSON payload", ex);
+        }
+    }
+
+    /**
      * Constructs a collection of {@link Message}s from the given JSON array.
      *
      * @see #getMessage(org.json.JSONObject)

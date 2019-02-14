@@ -63,6 +63,7 @@
             Demo6.RunDemo6(ApiUrl, ProvisioningUser, Password, AgentId);
             Demo7.RunDemo7(ApiUrl, ProvisioningUser, Password, AgentId);
             Demo8.RunDemo8(ApiUrl, Password, ProvisioningUser, AgentId, ChannelId);
+            Demo9.RunDemo9(ApiUrl, ProvisioningUser, Password, AgentId);
 
             Console.ReadLine();
         }
