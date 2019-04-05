@@ -31,7 +31,7 @@ plainTextMessagePart = {
 hyperlinkMessagePart = {
     '__type': 'HyperlinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration',
     'Text': 'A Hyperlink',
-    'Url': 'http://wwww.example.com'
+    'Url': 'http://www.example.com'
 }
 
 channelLinkMessagePart = {
