@@ -57,7 +57,7 @@ messages = connection.get_messages(chat, 2)
 
 print('here are my messages', flush=True)
 for message in messages:
-    print('message ID: ', message['Id'], ' Alert? ', message['IsAlert'], ' Sender ', message['SenderId'], ' Text ', message['Text'], flush=True)
+    print('message ID: ', message['Id'], ' Alert? ', message['IsAlert'], ' Sender ', message['SenderId'], ' Alias ', message['SenderAlias'], ' Text ', message['Text'], flush=True)
 
 print('sending a message', flush=True)
 connection.send_message(chat, message_content, True)

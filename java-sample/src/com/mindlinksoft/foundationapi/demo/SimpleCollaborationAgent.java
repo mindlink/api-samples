@@ -367,6 +367,7 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
                 object.getString("Id"),
                 object.optBoolean("IsAlert"),
                 object.getString("SenderId"),
+                object.optString("SenderAlias"),
                 object.optString("ChannelId"),
                 object.optString("Subject"),
                 object.getString("Text"),

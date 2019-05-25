@@ -163,6 +163,7 @@ public class StreamingCollaborationAgent extends SimpleCollaborationAgent {
             return new MessageEvent(eventId, timestamp,
                     object.getString("ChannelId"),
                     object.getString("Sender"),
+                    object.optString("SenderAlias"),
                     object.optString("Subject"),
                     object.optString("Content"),
                     object.optString("MessageParts"));

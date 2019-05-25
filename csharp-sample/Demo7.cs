@@ -45,6 +45,7 @@
                         Console.WriteLine();
                         Console.WriteLine("Channel: {0}", evt.ChannelId);
                         Console.WriteLine(" Sender: {0}", evt.Sender);
+                        Console.WriteLine("  Alias: {0}", evt.SenderAlias);
                         Console.WriteLine("Content: {0}", evt.Content);
 
                         if (!evt.Content.ToString().StartsWith("You said: "))

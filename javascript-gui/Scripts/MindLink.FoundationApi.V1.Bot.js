@@ -126,7 +126,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
                         self.onChannelStateChanged(ev.EventId, ev.Time, ev.ChannelId, ev.Active);
                         break;
                     case 'MessageEvent':
-                        self.onMessageReceived(ev.EventId, ev.Time, ev.ChannelId, ev.Sender, ev.Content, ev.MessageParts);
+                        self.onMessageReceived(ev.EventId, ev.Time, ev.ChannelId, ev.Sender, ev.SenderAlias, ev.Content, ev.MessageParts);
                         break;
                     case 'MetaDataEvent':
                         self.onMetaDataUpdated(ev.EventId, ev.Time, ev.Key, ev.Value);

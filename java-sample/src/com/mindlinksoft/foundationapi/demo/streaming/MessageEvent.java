@@ -7,6 +7,7 @@ public class MessageEvent extends Event {
 
     private final String channelId;
     private final String senderId;
+    private final String senderAlias;
     private final String subject;
     private final String content;
     private final String messageParts;
@@ -15,12 +16,13 @@ public class MessageEvent extends Event {
      * Creates a new instance of {@link MessageEvent}.
      */
     public MessageEvent(final long eventId, final long time,
-            final String channelId, final String senderId, final String subject,
+            final String channelId, final String senderId, final String senderAlias, final String subject,
             final String content, final String messageParts) {
         super(eventId, time);
 
         this.channelId = channelId;
         this.senderId = senderId;
+        this.senderAlias = senderAlias;
         this.subject = subject;
         this.content = content;
         this.messageParts = messageParts;
@@ -56,12 +58,21 @@ public class MessageEvent extends Event {
     /**
      * Gets the ID of the sender of the message.
      *
-     * @return The message sender's ID
+     * @return The message sender's ID.
      */
     public String getSenderId() {
         return senderId;
     }
 
+    /**
+     * Gets the alias of the sender of the message.
+     *
+     * @return The message sender's alias.
+     */
+    public String getSenderAlias() {
+        return senderAlias;
+    }
+    
     /**
      * Gets the subject of the message, if it was sent as a 'story'.
      *
@@ -76,7 +87,7 @@ public class MessageEvent extends Event {
     @Override
     public String toString() {
         return "MessageEvent{super=" + super.toString() + ", channelId="
-                + channelId + ", senderId=" + senderId + ", subject=" + subject
+                + channelId + ", senderId=" + senderId + ", senderAlias=" + senderAlias + ", subject=" + subject
                 + ", content=" + content + ", messageParts=" + messageParts + '}';
     }
 

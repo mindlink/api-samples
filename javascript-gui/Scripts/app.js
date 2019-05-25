@@ -57,7 +57,16 @@ var setupBot = function(sipAddress, username, password) {
         onChannelHistory: function(channelId, messages) {
             logMessage('Chat history received for ' + channelId + '. Contains ' + messages.length + ' message(s).');
             // display the messages
-            logMessage(listAsString(messages, messages.length, function(message) { return formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + '\n'; }), '', true);
+            logMessage(
+                listAsString(
+                    messages,
+                    messages.length,
+                    function(message) {
+                        var messageSenderAlias = message.SenderAlias ? ' (' + message.SenderAlias + ')' : '';
+                        return formatTime(message.Timestamp) + ' ' + message.SenderId + messageSenderAlias + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + '\n'; 
+                    }),
+                '',
+                true);
 
             if (console && console.log) {
                 console.log('Chat history for ' + channelId + ':');
@@ -74,7 +83,16 @@ var setupBot = function(sipAddress, username, password) {
 
             logMessage('Chat history search results received for ' + channelResults.ChannelId + '. Contains ' + channelResults.Count + ' message(s).');
             // display the messages
-            logMessage(listAsString(channelResults.Messages, channelResults.Messages.length, function(message) { return formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + ' \n'; }), '', true);
+            logMessage(
+                listAsString(
+                    channelResults.Messages,
+                    channelResults.Messages.length,
+                    function(message) {
+                        var messageSenderAlias = message.SenderAlias ? ' (' + message.SenderAlias + ')' : '';
+                        return formatTime(message.Timestamp) + ' ' + message.SenderId + messageSenderAlias + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + ' \n';
+                    }),
+                '',
+                true);
 
             if (console && console.log) {
                 console.log('Chat history for ' + channelResults.ChannelId + ':');
@@ -218,8 +236,9 @@ var setupBot = function(sipAddress, username, password) {
             $('form#streaming input[id=start-streaming]').attr('disabled', false);
             $('form#streaming input[id=stop-streaming]').attr('disabled', true);
         },
-        onMessageReceived: function(eventId, time, channelId, sender, content, messageParts) {
-            logMessage('Message received to channel \'' + channelId + '\' from \'' + sender + '\', text: \'' + content + '\' and message parts: \'' + JSON.stringify(messageParts) + '\'.', 'streaming');
+        onMessageReceived: function(eventId, time, channelId, sender, senderAlias, content, messageParts) {
+            var aliasText = senderAlias ? ' with alias \'' + senderAlias + '\'' : '';
+            logMessage('Message received to channel \'' + channelId + '\' from \'' + sender + '\'' + aliasText + ', text: \'' + content + '\' and message parts: \'' + JSON.stringify(messageParts) + '\'.', 'streaming');
         },
         onChannelStateChanged: function(eventId, time, channelId, active) {
             logMessage('Channel state changed for channel \'' + channelId + '\': ' + (active ? 'active' : 'inactive'), 'streaming');

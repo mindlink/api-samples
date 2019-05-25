@@ -13,7 +13,7 @@
         private const string ApiUrl = "http://fapi.company.com";
 
         /// <summary>
-        /// The username to use to connecto to the FAPI.
+        /// The username to use to connect to to the FAPI.
         /// </summary>
         private const string Username = "company\\masterUser";
 

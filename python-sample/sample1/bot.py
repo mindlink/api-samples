@@ -119,7 +119,7 @@ messages = get_messages(host, token, chat, 2)
 
 print('here are my messages!')
 for message in messages:
-    print('message ID: ', message['Id'], ' Alert? ', message['IsAlert'], ' Sender ', message['SenderId'], ' Text ', message['Text'])
+    print('message ID: ', message['Id'], ' Alert? ', message['IsAlert'], ' Sender ', message['SenderId'], ' Alias ', message['SenderAlias'], ' Text ', message['Text'])
 
 send_message(host, token, chat, "hello world", True)
 
