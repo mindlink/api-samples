@@ -385,7 +385,7 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
     protected ChannelState getChannelState(final JSONObject object) throws JSONException {
         return new ChannelState(
                 object.optString("Subject"),
-                PresenceState.forValue(object.getInt("Presence")),
+                PresenceState.forValue(object.getInt("PresenceState")),
                 object.optString("PresenceText"));
     }
 

@@ -233,7 +233,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         log('Requesting state for \'' + channelId + '\'...');
         sendRequest('Collaboration/V1/Channels/' + channelId + '/State', 'GET', '', function(result) {
             self.onChannelState(channelId, result.Subject, result.PresenceState, result.PresenceText);
-            if (callbackFn) callbackFn(channelId, result.Subject, result.Presence, result.PresenceText);
+            if (callbackFn) callbackFn(channelId, result.Subject, result.PresenceState, result.PresenceText);
         }, errorFn);
     };
 
