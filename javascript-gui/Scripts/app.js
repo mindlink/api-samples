@@ -226,7 +226,10 @@ var setupBot = function(sipAddress, username, password) {
         },
         onMetaDataUpdated: function(eventId, time, key, value) {
             logMessage('Meta data key changed: \'' + key + '\' -> \'' + value + '\'.', 'streaming');
-        }
+        },
+        onManagementTestResultReceived: function (result) {
+            logMessage('Management test result OK');
+        },
     });
 };
 
@@ -627,6 +630,12 @@ $(document).ready(function () {
         bot.streaming.stop();
     });
 
+        
+    $('form#manage input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+        bot.management.test();
+    });
+
     var selectTab = function (name) {
         $('.tab').css('display', 'none');
         $('#' + name).css('display', 'block');
@@ -648,6 +657,10 @@ $(document).ready(function () {
 
     $('#provisioning-tab').click(function (ev) {
         selectTab('provisioning');
+    });
+
+    $('#management-tab').click(function (ev) {
+        selectTab('management');
     });
 
     selectTab('configuration');

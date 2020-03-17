@@ -17,6 +17,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     self.collaboration = {};
     self.provisioning = {};
     self.streaming = {};
+    self.management = {};
 
     // Event handlers
     self.onLogMessage = jQuery.noop; // message
@@ -58,6 +59,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     self.onMessageReceived = jQuery.noop; // event id, time, channel id, sender, content
     self.onChannelStateChanged = jQuery.noop; // event id, time, channel id, active
     self.onMetaDataUpdated = jQuery.noop; // event id, time, key, value
+    self.onManagementTestResultReceived = jQuery.noop // result
 
     var log = function(message) {
         self.onLogMessage(message);
@@ -525,4 +527,12 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             if (callbackFn) callbackFn(results);
         }, errorFn);
     };
+
+    self.management.test = function(callbackFn, errorFn) {
+        log('Test management API...')
+        sendRequest('Management/V1/Test', 'GET', '', function(result) {
+            self.onManagementTestResultReceived(result);
+            if (callbackFn) callbackFn(results);
+        }, errorFn);
+    }
 };

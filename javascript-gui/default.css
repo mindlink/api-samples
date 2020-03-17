@@ -51,7 +51,7 @@ form textarea {
     position: fixed;
     left: 0;
     top: 0;
-    width: 360px;
+    width: 435px;
     height: 100%;
     padding: 0 5px;
     /*overflow: auto;*/
@@ -112,7 +112,7 @@ form textarea {
 }
 
 #log-panel {
-    margin-left: 390px;
+    margin-left: 450px;
 }
 
 #log-panel ul {

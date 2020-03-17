@@ -1,722 +1,724 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title>Public API Test</title>
     <script type="text/javascript" src="Scripts/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="Scripts/json2.js"></script>
     <script type="text/javascript" src="Scripts/MindLink.FoundationApi.V1.Bot.js"></script>
     <link rel="stylesheet" type="text/css" href="default.css" />
-    
+
     <script type="text/javascript" src="Scripts/app.js"></script>
 </head>
+
 <body>
     <div id="setup-panel">
-        <h1>Foundation API Tests</h1>
+        <h1>Foundation API Tests V2</h1>
         <ul id="menu">
-        <li><a href="#" id="configuration-tab">Configuration</a></li>
-        <li><a href="#" id="authentication-tab">Authentication</a></li>
-        <li><a href="#" id="collaboration-tab">Collaboration</a></li>
-        <li><a href="#" id="provisioning-tab">Provisioning</a></li>
+            <li><a href="#" id="configuration-tab">Configuration</a></li>
+            <li><a href="#" id="authentication-tab">Authentication</a></li>
+            <li><a href="#" id="collaboration-tab">Collaboration</a></li>
+            <li><a href="#" id="provisioning-tab">Provisioning</a></li>
+            <li><a href="#" id="management-tab">Management</a></li>
         </ul>
         <div id="tabs">
-        <div class="tab" id="configuration">
-            <form id="configure">
+            <div class="tab" id="configuration">
+                <form id="configure">
+                    <fieldset>
+                        <legend>Configure</legend>
+                        <div class="field">
+                            <label for="server-address">Server</label>
+                            <input type="text" id="server-address" value="https://api.company.com:8081" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="tab" id="authentication">
+                <form id="authenticate">
+                    <fieldset>
+                        <legend>Authenticate</legend>
+                        <div class="field">
+                            <label for="authenticate-username">Username</label>
+                            <input type="text" id="authenticate-username" value="company\user" />
+                        </div>
+                        <div class="field">
+                            <label for="authenticate-password">Password</label>
+                            <input type="password" id="authenticate-password" value="password" />
+                        </div>
+                        <div class="field">
+                            <label for="authenticate-agent">Agent</label>
+                            <input type="text" id="authenticate-agent" value="agentId" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Authenticate" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="get-token">
+                    <fieldset>
+                        <legend>Get token</legend>
+                        <div class="submit">
+                            <input type="submit" value="Get Token" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="tab" id="collaboration">
+                <form id="streaming">
+                    <fieldset>
+                        <legend>Streaming</legend>
+                        <div class="field">
+                            <label for="streaming-event-types">Event types</label>
+                            <input type="text" id="streaming-event-types" value="channel-state,message,meta-data"
+                                disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="streaming-channels">Channels</label>
+                            <input type="text" id="streaming-channels" value="chat-room:111" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="streaming-regex">Message Regex</label>
+                            <input type="text" id="streaming-regex" value="^Test:(.*)" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" id="start-streaming" value="Start" disabled="disabled" />
+                            <input type="submit" id="stop-streaming" value="Stop" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="send-message">
+                    <fieldset>
+                        <legend>Send messages</legend>
+                        <div class="field">
+                            <label for="message-channel-id">
+                                Channel ID</label>
+                            <input type="text" id="message-channel-id" value="chat-room:guid" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="message-content">
+                                Message</label>
+                            <textarea id="message-content" disabled="disabled" rows="2">Test message</textarea>
+                        </div>
+                        <div class="field">
+                            <label for="message-alert">
+                                Alert?</label>
+                            <input type="checkbox" id="message-alert" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Send" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="send-message-parts">
+                    <fieldset>
+                        <legend>Send messages with parts</legend>
+                        <div class="field">
+                            <label for="message-channel-id">
+                                Channel ID</label>
+                            <input type="text" id="message-channel-id" value="chat-room:guid" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="message-content">
+                                Message</label>
+                            <textarea id="message-content" disabled="disabled" rows="2">[]</textarea>
+                        </div>
+                        <div class="field">
+                            <label for="message-alert">
+                                Alert?</label>
+                            <input type="checkbox" id="message-alert" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <input type="button" value="Insert plain text" id="message-part-plaintext"
+                                disabled="disabled" />
+                            <input type="button" value="Insert hyperlink" id="message-part-hyperlink"
+                                disabled="disabled" />
+                            <input type="button" value="Insert channel link" id="message-part-channellink"
+                                disabled="disabled" />
+                            <input type="button" value="Insert hashtag" id="message-part-hashtag" disabled="disabled" />
+                            <input type="button" value="Clear message" id="message-part-clear" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Send" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="send-story">
+                    <fieldset>
+                        <legend>Send story</legend>
+                        <div class="field">
+                            <label for="story-channel-id">
+                                Channel ID</label>
+                            <input type="text" id="story-channel-id" value="chat-room:guid" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="story-subject">
+                                Subject</label>
+                            <input type="text" id="story-subject" value="Test story" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="story-content">
+                                Content</label>
+                            <textarea id="story-content" disabled="disabled" rows="2">Story content...</textarea>
+                        </div>
+                        <div class="field">
+                            <label for="story-alert">
+                                Alert?</label>
+                            <input type="checkbox" id="story-alert" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Send" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="send-story-parts">
+                    <fieldset>
+                        <legend>Send story with parts</legend>
+                        <div class="field">
+                            <label for="story-channel-id">
+                                Channel ID</label>
+                            <input type="text" id="story-channel-id" value="chat-room:guid" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="story-subject">
+                                Subject</label>
+                            <input type="text" id="story-subject" value="Test story" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="story-content">
+                                Content</label>
+                            <textarea id="story-content" disabled="disabled" rows="2">[]</textarea>
+                        </div>
+                        <div class="field">
+                            <label for="story-alert">
+                                Alert?</label>
+                            <input type="checkbox" id="story-alert" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <input type="button" value="Insert plain text" id="message-part-plaintext"
+                                disabled="disabled" />
+                            <input type="button" value="Insert hyperlink" id="message-part-hyperlink"
+                                disabled="disabled" />
+                            <input type="button" value="Insert channel link" id="message-part-channellink"
+                                disabled="disabled" />
+                            <input type="button" value="Insert hashtag" id="message-part-hashtag" disabled="disabled" />
+                            <input type="button" value="Clear message" id="message-part-clear" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Send" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="upload-file">
+                    <fieldset>
+                        <legend>Upload File</legend>
+                        <div class="field">
+                            <label for="upload-file-channel-id">
+                                Channel ID</label>
+                            <input type="text" id="upload-file-channel-id" value="chat-room:guid" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="upload-file-file-name">
+                                File Name</label>
+                            <input type="text" id="upload-file-file-name" value="myfile.txt" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="upload-file-file-contents">
+                                File Contents</label>
+                            <input type="file" id="upload-file-file-contents" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Send" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="channels-list">
+                    <fieldset>
+                        <legend>Request channels list</legend>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="chat-search">
+                    <fieldset>
+                        <legend>Search chat</legend>
+                        <div class="field">
+                            <label for="search-channel-id">
+                                Channel ID</label>
+                            <input type="text" id="search-channel-id" value="chat-room:guid" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="search-text">
+                                Subject</label>
+                            <input type="text" id="search-text" value="Test" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <input type="checkbox" id="search-matchcase" disabled="disabled" />
+                            Match case
+                            <br />
+                            <input type="checkbox" id="search-matchexact" disabled="disabled" />
+                            Match exact phrase
+                        </div>
+                        <div class="field">
+                            <label for="search-limit">
+                                Limit</label>
+                            <select id="search-limit" disabled="disabled">
+                                <option value="10">10</option>
+                                <option value="50" selected="selected">50</option>
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <input type="radio" id="search-anyDate" name="drange" value="AnyDate" checked="checked"
+                                disabled="disabled" />
+                            Any date<br />
+                            <span>
+                                <input type="radio" id="search-onDate" name="drange" value="OnDate"
+                                    disabled="disabled" />
+                                On date
+                                <input type="text" id="search-onDateValue" value="mm/dd/yyyy" disabled="disabled" />
+                            </span>
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Search" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="channel-info">
+                    <fieldset>
+                        <legend>Request channel info</legend>
+                        <div class="field">
+                            <label for="info-channel-id">
+                                ID</label>
+                            <input type="text" id="info-channel-id" value="chat-room:guid" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="channel-history">
+                    <fieldset>
+                        <legend>Request channel history</legend>
+                        <div class="field">
+                            <label for="history-channel-id">
+                                Channel ID</label>
+                            <input type="text" id="history-channel-id" value="chat-room:guid" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="history-limit">
+                                Limit</label>
+                            <select id="history-limit" disabled="disabled">
+                                <option value="10">10</option>
+                                <option value="50" selected="selected">50</option>
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                            </select>
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="channel-state">
+                    <fieldset>
+                        <legend>Request channel state</legend>
+                        <div class="field">
+                            <label for="state-channel-id">
+                                Channel ID</label>
+                            <input type="text" id="state-channel-id" value="chat-room:guid" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="request-metadata">
+                    <fieldset>
+                        <legend>Request meta data</legend>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="tab" id="provisioning">
+                <h2>Users</h2>
+                <form id="request-provisioned-users">
+                    <fieldset>
+                        <legend>Request provisioned users</legend>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="request-provisioned-user-by-id">
+                    <fieldset>
+                        <legend>Request provisioned user by ID</legend>
+                        <div class="field">
+                            <label for="user-id">
+                                User id</label>
+                            <input type="text" id="user-id" value="user_1" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="provision-update-user">
+                    <fieldset>
+                        <legend>Update/create a user</legend>
+                        <div class="field">
+                            <label for="provision-update-user-id">
+                                User id</label>
+                            <input type="text" id="provision-update-user-id" value="user_2" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="provision-update-username">
+                                Username</label>
+                            <input type="text" id="provision-update-username" value="company\user"
+                                disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Update" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="provision-delete-user-by-Id">
+                    <fieldset>
+                        <legend>Delete a user by ID</legend>
+                        <div class="field">
+                            <label for="provision-delete-user-id">
+                                Agent ID</label>
+                            <input type="text" id="provision-delete-user-id" value="user_1" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Delete" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <h2>Agents</h2>
+                <form id="request-provisioned-agents">
+                    <fieldset>
+                        <legend>Request provisioned agents</legend>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="request-provisioned-agents-by-id">
+                    <fieldset>
+                        <legend>Request provisioned agents by ID</legend>
+                        <div class="field">
+                            <label for="agent-id">
+                                Agent ID</label>
+                            <input type="text" id="agent-id" value="agent_1" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="provision-create-agent">
+                    <fieldset>
+                        <legend>Create an agent</legend>
+                        <div class="field">
+                            <label for="provision-create-agent-id">
+                                Agent id</label>
+                            <input type="text" id="provision-create-agent-id" value="agent_3" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="provision-create-agent-username">
+                                Username</label>
+                            <input type="text" id="provision-create-agent-username" value="sip:agent@company.com"
+                                disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="provision-create-agent-channels">
+                                Channels (e.g. channel1;channel2 etc.)</label>
+                            <input type="text" id="provision-create-agent-channels"
+                                value="chat-room:guid;contact:userId" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="provision-create-agent-metadata">
+                                Meta data (e.g. key1:value1;key2:value2 etc.)</label>
+                            <input type="text" id="provision-create-agent-metadata" value="key1:value1;key2:value2"
+                                disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="provision-create-agent-users">
+                                Users (e.g. user_1;user_2 etc.)</label>
+                            <input type="text" id="provision-create-agent-users" value="user_1;user_2"
+                                disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label id="provisioning-mode-label" for="provision-create-agent-provisioningMode">
+                                Provisioning Mode
+                                <li>System: The agent can provision all agents</li>
+                                <li>Self: The agent can only provision themself</li>
+                                <li>None: The agent cannot provision</li>
+                            </label>
+                            <select id="provision-create-agent-provisioningMode" disabled="disabled">
+                                <option value="2">System</option>
+                                <option value="3">Self</option>
+                                <option value="1">None</option>
+                            </select>
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Create" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="provision-delete-agent">
+                    <fieldset>
+                        <legend>Delete agent by ID</legend>
+                        <div class="field">
+                            <label for="provision-delete-agent-id">
+                                Agent ID</label>
+                            <input type="text" id="provision-delete-agent-id" value="agent_2" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Delete" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="request-provisioned-agents-channels">
+                    <fieldset>
+                        <legend>Request provisioned agents<br />channels</legend>
+                        <div class="field">
+                            <label for="channels-agent-id">
+                                Agent ID</label>
+                            <input type="text" id="channels-agent-id" value="agent_1" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="provision-channel-for-agent">
+                    <fieldset>
+                        <legend>Provision channel for agent</legend>
+                        <div class="field">
+                            <label for="provision-channel-agent-id">
+                                Agent id</label>
+                            <input type="text" id="provision-channel-agent-id" value="agent_1" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="provision-channel-channel-id">
+                                Channel id</label>
+                            <input type="text" id="provision-channel-channel-id" value="contact:contactId"
+                                disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Update" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="provision-delete-channel-by-agentId">
+                    <fieldset>
+                        <legend>Delete a channel based on agent ID</legend>
+                        <div class="field">
+                            <label for="provision-delete-channel-agent-id">
+                                Agent id</label>
+                            <input type="text" id="provision-delete-channel-agent-id" value="agent_2"
+                                disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="provision-delete-channel-channel-id">
+                                Channel ID</label>
+                            <input type="text" id="provision-delete-channel-channel-id" value="chat-room:guid"
+                                disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Delete" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="request-provisioned-agent-metadata">
+                    <fieldset>
+                        <legend>Request provisioned agents meta<br />data</legend>
+                        <div class="field">
+                            <label for="metadata-agent-id">
+                                Agent ID</label>
+                            <input type="text" id="metadata-agent-id" value="agent_1" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="request-provisioned-agent-metadata-by-key">
+                    <fieldset>
+                        <legend>Request provisioned agents meta<br />data value by key</legend>
+                        <div class="field">
+                            <label for="metadata-key-agent-id">
+                                Agent ID</label>
+                            <input type="text" id="metadata-key-agent-id" value="agent_1" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="metadata-key">
+                                Metadata key</label>
+                            <input type="text" id="metadata-key" value="foo" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="provision-metadata-for-agent">
+                    <fieldset>
+                        <legend>Provision metadata for agent</legend>
+                        <div class="field">
+                            <label for="provision-metadata-agent-id">
+                                Agent id</label>
+                            <input type="text" id="provision-metadata-agent-id" value="agent_1" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="provision-metadata-metadataList">
+                                Metadata list (e.g. key1:value1;key2:value2 etc.)</label>
+                            <input type="text" id="provision-metadata-metadataList" value="key1:data1;key2:metadata2"
+                                disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Update" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="provision-update-metadata-for-agent">
+                    <fieldset>
+                        <legend>Update a metadata value</legend>
+                        <div class="field">
+                            <label for="provision-metadata-update-agent-id">
+                                Agent id</label>
+                            <input type="text" id="provision-metadata-update-agent-id" value="agent_1"
+                                disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="provision-metadata-update-key">
+                                Metadata Key</label>
+                            <input type="text" id="provision-metadata-update-key" value="key1" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="provision-metadata-update-value">
+                                New Metadata Value</label>
+                            <input type="text" id="provision-metadata-update-value" value="woooooow"
+                                disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Update" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="provision-delete-metadata-by-agentId">
+                    <fieldset>
+                        <legend>Delete a meta data key by agent ID</legend>
+                        <div class="field">
+                            <label for="provision-delete-metadata-agent-id">
+                                Agent ID</label>
+                            <input type="text" id="provision-delete-metadata-agent-id" value="agent_1"
+                                disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="provision-delete-metadata-metadataKey">
+                                Meta data key</label>
+                            <input type="text" id="provision-delete-metadata-metadataKey" value="foo"
+                                disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Delete" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <h2>Throttles</h2>
+                <form id="request-throttles">
+                    <fieldset>
+                        <legend>Request throttles</legend>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="request-throttle-by-id">
+                    <fieldset>
+                        <legend>Request provisioned throttle by ID</legend>
+                        <div class="field">
+                            <label for="throttle-id">Throttle ID</label>
+                            <input type="text" id="throttle-id" value="throttle_1" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Request" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="update-throttle">
+                    <fieldset>
+                        <legend>Update/create a throttle</legend>
+                        <div class="field">
+                            <label for="update-throttle-id">Throttle id</label>
+                            <input type="text" id="update-throttle-id" value="throttle_1" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="update-throttle-type">Throttle type</label>
+                            <select id="update-throttle-type" disabled="disabled">
+                                <option value="0">Messages Per Minute</option>
+                                <option value="1">Targeted Messages Per Minute</option>
+                                <option value="2">Concurrent Transfers</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="update-throttle-threshold">Throttle threshold</label>
+                            <input type="text" id="update-throttle-threshold" value="10" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="update-throttle-agents">Agents (e.g. agent_1;agent_2 etc.)</label>
+                            <input type="text" id="update-throttle-agents" value="agent_1;agent_2"
+                                disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Update" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <form id="delete-throttle-by-id">
+                    <fieldset>
+                        <legend>Delete a throttle by ID</legend>
+                        <div class="field">
+                            <label for="delete-throttle-id">Throttle id</label>
+                            <input type="text" id="delete-throttle-id" value="throttle_1" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Delete" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+                <h2>Channels</h2>
+                <form id="provision-find-channels">
+                    <fieldset>
+                        <legend>Find Channels</legend>
+                        <div class="field">
+                            <label for="provision-find-channels-search-text">
+                                Search criteria</label>
+                            <input type="text" id="provision-find-channels-search-text" value="test"
+                                disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Search" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="tab" id="management">
+                <form id="manage">
                 <fieldset>
-                    <legend>Configure</legend>
-                    <div class="field">
-                        <label for="server-address">Server</label>
-                        <input type="text" id="server-address" value="https://api.company.com" />
+                    <legend>Manage</legend>
+                    <div class="submit">
+                        <input type="submit" value="Test"/>
                     </div>
                 </fieldset>
-            </form>
-        </div>
-        <div class="tab" id="authentication">
-        <form id="authenticate">
-        <fieldset>
-            <legend>Authenticate</legend>
-            <div class="field">
-                <label for="authenticate-username">Username</label>
-                <input type="text" id="authenticate-username" value="company\user" />
+                </form>                
             </div>
-            <div class="field">
-                <label for="authenticate-password">Password</label>
-                <input type="password" id="authenticate-password" value="password" />
-            </div>
-            <div class="field">
-                <label for="authenticate-agent">Agent</label>
-                <input type="text" id="authenticate-agent" value="agentId" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Authenticate" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="get-token">
-        <fieldset>
-            <legend>Get token</legend>
-            <div class="submit">
-                <input type="submit" value="Get Token" />
-            </div>
-        </fieldset>
-        </form>
-        </div>
-        <div class="tab" id="collaboration">
-        <form id="streaming">
-        <fieldset>
-            <legend>Streaming</legend>
-            <div class="field">
-                <label for="streaming-event-types">Event types</label>
-                <input type="text" id="streaming-event-types" value="channel-state,message,meta-data" disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="streaming-channels">Channels</label>
-                <input type="text" id="streaming-channels" value="chat-room:111" disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="streaming-regex">Message Regex</label>
-                <input type="text" id="streaming-regex" value="^Test:(.*)" disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" id="start-streaming" value="Start" disabled="disabled" />
-                <input type="submit" id="stop-streaming" value="Stop" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="send-message">
-        <fieldset>
-            <legend>Send messages</legend>
-            <div class="field">
-                <label for="message-channel-id">
-                    Channel ID</label>
-                <input type="text" id="message-channel-id" value="chat-room:guid"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="message-content">
-                    Message</label>
-                <textarea id="message-content" disabled="disabled" rows="2">Test message</textarea>
-            </div>
-            <div class="field">
-                <label for="message-alert">
-                    Alert?</label>
-                <input type="checkbox" id="message-alert" disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Send" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="send-message-parts">
-        <fieldset>
-            <legend>Send messages with parts</legend>
-            <div class="field">
-                <label for="message-channel-id">
-                    Channel ID</label>
-                <input type="text" id="message-channel-id" value="chat-room:guid"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="message-content">
-                    Message</label>
-                <textarea id="message-content" disabled="disabled" rows="2">[]</textarea>
-            </div>
-            <div class="field">
-                <label for="message-alert">
-                    Alert?</label>
-                <input type="checkbox" id="message-alert" disabled="disabled" />
-            </div>
-            <div class="field">
-                <input type="button" value="Insert plain text" id="message-part-plaintext" disabled="disabled" />
-                <input type="button" value="Insert hyperlink" id="message-part-hyperlink" disabled="disabled" />
-                <input type="button" value="Insert channel link" id="message-part-channellink" disabled="disabled" />
-                <input type="button" value="Insert hashtag" id="message-part-hashtag" disabled="disabled" />
-                <input type="button" value="Clear message" id="message-part-clear" disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Send" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="send-story">
-            <fieldset>
-                <legend>Send story</legend>
-                <div class="field">
-                    <label for="story-channel-id">
-                        Channel ID</label>
-                    <input type="text" id="story-channel-id" value="chat-room:guid"
-                            disabled="disabled" />
-                </div>
-                <div class="field">
-                    <label for="story-subject">
-                        Subject</label>
-                    <input type="text" id="story-subject" value="Test story" disabled="disabled" />
-                </div>
-                <div class="field">
-                    <label for="story-content">
-                        Content</label>
-                    <textarea id="story-content" disabled="disabled" rows="2">Story content...</textarea>
-                </div>
-                <div class="field">
-                    <label for="story-alert">
-                        Alert?</label>
-                    <input type="checkbox" id="story-alert" disabled="disabled" />
-                </div>
-                <div class="submit">
-                    <input type="submit" value="Send" disabled="disabled" />
-                </div>
-            </fieldset>
-        </form>
-        <form id="send-story-parts">
-            <fieldset>
-                <legend>Send story with parts</legend>
-                <div class="field">
-                    <label for="story-channel-id">
-                        Channel ID</label>
-                    <input type="text" id="story-channel-id" value="chat-room:guid"
-                            disabled="disabled" />
-                </div>
-                <div class="field">
-                    <label for="story-subject">
-                        Subject</label>
-                    <input type="text" id="story-subject" value="Test story" disabled="disabled" />
-                </div>
-                <div class="field">
-                    <label for="story-content">
-                        Content</label>
-                    <textarea id="story-content" disabled="disabled" rows="2">[]</textarea>
-                </div>
-                <div class="field">
-                    <label for="story-alert">
-                        Alert?</label>
-                    <input type="checkbox" id="story-alert" disabled="disabled" />
-                </div>
-                <div class="field">
-                    <input type="button" value="Insert plain text" id="message-part-plaintext" disabled="disabled" />
-                    <input type="button" value="Insert hyperlink" id="message-part-hyperlink" disabled="disabled" />
-                    <input type="button" value="Insert channel link" id="message-part-channellink" disabled="disabled" />
-                    <input type="button" value="Insert hashtag" id="message-part-hashtag" disabled="disabled" />
-                    <input type="button" value="Clear message" id="message-part-clear" disabled="disabled" />
-                </div>
-                <div class="submit">
-                    <input type="submit" value="Send" disabled="disabled" />
-                </div>
-            </fieldset>
-        </form>
-        <form id="upload-file">
-        <fieldset>
-            <legend>Upload File</legend>
-            <div class="field">
-                <label for="upload-file-channel-id">
-                    Channel ID</label>
-                <input type="text" id="upload-file-channel-id" value="chat-room:guid" disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="upload-file-file-name">
-                    File Name</label>
-                <input type="text" id="upload-file-file-name" value="myfile.txt" disabled="disabled"/>
-            </div>
-            <div class="field">
-                <label for="upload-file-file-contents">
-                    File Contents</label>
-                <input type="file" id="upload-file-file-contents" disabled="disabled"/>
-            </div>
-            <div class="submit">
-                <input type="submit" value="Send" disabled="disabled"/>
-            </div>
-        </fieldset>
-        </form>
-        <form id="channels-list">
-        <fieldset>
-            <legend>Request channels list</legend>
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="chat-search">
-        <fieldset>
-            <legend>Search chat</legend>
-            <div class="field">
-                <label for="search-channel-id">
-                   Channel ID</label>
-                <input type="text" id="search-channel-id" value="chat-room:guid"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="search-text">
-                    Subject</label>
-                <input type="text" id="search-text" value="Test" disabled="disabled" />
-            </div>
-            <div class="field">
-                <input type="checkbox" id="search-matchcase" disabled="disabled" />
-                Match case
-                <br />
-                <input type="checkbox" id="search-matchexact" disabled="disabled" />
-                Match exact phrase
-            </div>
-            <div class="field">
-                <label for="search-limit">
-                    Limit</label>
-                <select id="search-limit" disabled="disabled">
-                    <option value="10">10</option>
-                    <option value="50" selected="selected">50</option>
-                    <option value="100">100</option>
-                    <option value="200">200</option>
-                </select>
-            </div>
-            <div class="field">
-                <input type="radio" id="search-anyDate" name="drange" value="AnyDate" checked="checked"
-                    disabled="disabled" />
-                Any date<br />
-                <span>
-                    <input type="radio" id="search-onDate" name="drange" value="OnDate" disabled="disabled" />
-                    On date
-                    <input type="text" id="search-onDateValue" value="mm/dd/yyyy" disabled="disabled" />
-                </span>
-            </div>
-            <div class="submit">
-                <input type="submit" value="Search" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="channel-info">
-        <fieldset>
-            <legend>Request channel info</legend>
-            <div class="field">
-                <label for="info-channel-id">
-                    ID</label>
-                <input type="text" id="info-channel-id" value="chat-room:guid"
-                    disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="channel-history">
-        <fieldset>
-            <legend>Request channel history</legend>
-            <div class="field">
-                <label for="history-channel-id">
-                    Channel ID</label>
-                <input type="text" id="history-channel-id" value="chat-room:guid"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="history-limit">
-                    Limit</label>
-                <select id="history-limit" disabled="disabled">
-                    <option value="10">10</option>
-                    <option value="50" selected="selected">50</option>
-                    <option value="100">100</option>
-                    <option value="200">200</option>
-                </select>
-            </div>
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="channel-state">
-        <fieldset>
-            <legend>Request channel state</legend>
-            <div class="field">
-                <label for="state-channel-id">
-                    Channel ID</label>
-                <input type="text" id="state-channel-id" value="chat-room:guid"
-                    disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="request-metadata">
-        <fieldset>
-            <legend>Request meta data</legend>
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        </div>
-        <div class="tab" id="provisioning">
-        <h2>Users</h2>
-        <form id="request-provisioned-users">
-        <fieldset>
-            <legend>Request provisioned users</legend>            
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="request-provisioned-user-by-id">
-        <fieldset>
-            <legend>Request provisioned user by ID</legend> 
-             <div class="field">
-                <label for="user-id">
-                    User id</label>
-                <input type="text" id="user-id" value="user_1"
-                    disabled="disabled" />
-            </div>           
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="provision-update-user">
-        <fieldset>
-            <legend>Update/create a user</legend>
-            <div class="field">
-                <label for="provision-update-user-id">
-                    User id</label>
-                <input type="text" id="provision-update-user-id" value="user_2"
-                    disabled="disabled" />
-            </div> 
-            <div class="field">
-                <label for="provision-update-username">
-                    Username</label>
-                <input type="text" id="provision-update-username" value="company\user"
-                    disabled="disabled" />
-            </div>          
-            <div class="submit">
-                <input type="submit" value="Update" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="provision-delete-user-by-Id">
-        <fieldset>
-            <legend>Delete a user by ID</legend> 
-             <div class="field">
-                <label for="provision-delete-user-id">
-                    Agent ID</label>
-                <input type="text" id="provision-delete-user-id" value="user_1"
-                    disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Delete" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <h2>Agents</h2>
-        <form id="request-provisioned-agents">
-        <fieldset>
-            <legend>Request provisioned agents</legend>
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="request-provisioned-agents-by-id">
-        <fieldset>
-            <legend>Request provisioned agents by ID</legend>
-            <div class="field">
-                <label for="agent-id">
-                    Agent ID</label>
-                <input type="text" id="agent-id" value="agent_1"
-                    disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="provision-create-agent">
-        <fieldset>
-            <legend>Create an agent</legend> 
-             <div class="field">
-                <label for="provision-create-agent-id">
-                    Agent id</label>
-                <input type="text" id="provision-create-agent-id" value="agent_3"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="provision-create-agent-username">
-                    Username</label>
-                <input type="text" id="provision-create-agent-username" value="sip:agent@company.com"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="provision-create-agent-channels">
-                    Channels (e.g. channel1;channel2 etc.)</label>
-                <input type="text" id="provision-create-agent-channels" value="chat-room:guid;contact:userId"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="provision-create-agent-metadata">
-                    Meta data (e.g. key1:value1;key2:value2 etc.)</label>
-                <input type="text" id="provision-create-agent-metadata" value="key1:value1;key2:value2"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="provision-create-agent-users">
-                    Users (e.g. user_1;user_2 etc.)</label>
-                <input type="text" id="provision-create-agent-users" value="user_1;user_2"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label id="provisioning-mode-label" for="provision-create-agent-provisioningMode">
-                    Provisioning Mode
-                    <li>System: The agent can provision all agents</li>
-                    <li>Self: The agent can only provision themself</li>
-                    <li>None: The agent cannot provision</li>
-                </label>
-                <select id="provision-create-agent-provisioningMode" disabled="disabled">
-                    <option value="2">System</option>
-                    <option value="3">Self</option>
-                    <option value="1">None</option>
-                </select>
-            </div>
-            <div class="submit">
-                <input type="submit" value="Create" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="provision-delete-agent">
-        <fieldset>
-            <legend>Delete agent by ID</legend> 
-             <div class="field">
-                <label for="provision-delete-agent-id">
-                    Agent ID</label>
-                <input type="text" id="provision-delete-agent-id" value="agent_2"
-                    disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Delete" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="request-provisioned-agents-channels">
-        <fieldset>
-            <legend>Request provisioned agents<br />channels</legend>
-            <div class="field">
-                <label for="channels-agent-id">
-                    Agent ID</label>
-                <input type="text" id="channels-agent-id" value="agent_1"
-                    disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="provision-channel-for-agent">
-        <fieldset>
-            <legend>Provision channel for agent</legend> 
-             <div class="field">
-                <label for="provision-channel-agent-id">
-                    Agent id</label>
-                <input type="text" id="provision-channel-agent-id" value="agent_1"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="provision-channel-channel-id">
-                    Channel id</label>
-                <input type="text" id="provision-channel-channel-id" value="contact:contactId"
-                    disabled="disabled" />
-            </div>          
-            <div class="submit">
-                <input type="submit" value="Update" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="provision-delete-channel-by-agentId">
-        <fieldset>
-            <legend>Delete a channel based on agent ID</legend> 
-             <div class="field">
-                <label for="provision-delete-channel-agent-id">
-                    Agent id</label>
-                <input type="text" id="provision-delete-channel-agent-id" value="agent_2"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="provision-delete-channel-channel-id">
-                    Channel ID</label>
-                <input type="text" id="provision-delete-channel-channel-id" value="chat-room:guid"
-                    disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Delete" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="request-provisioned-agent-metadata">
-        <fieldset>
-            <legend>Request provisioned agents meta<br />data</legend>
-            <div class="field">
-                <label for="metadata-agent-id">
-                    Agent ID</label>
-                <input type="text" id="metadata-agent-id" value="agent_1"
-                    disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="request-provisioned-agent-metadata-by-key">
-        <fieldset>
-            <legend>Request provisioned agents meta<br />data value by key</legend>
-            <div class="field">
-                <label for="metadata-key-agent-id">
-                    Agent ID</label>
-                <input type="text" id="metadata-key-agent-id" value="agent_1"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="metadata-key">
-                    Metadata key</label>
-                <input type="text" id="metadata-key" value="foo"
-                    disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Request" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="provision-metadata-for-agent">
-        <fieldset>
-            <legend>Provision metadata for agent</legend> 
-             <div class="field">
-                <label for="provision-metadata-agent-id">
-                    Agent id</label>
-                <input type="text" id="provision-metadata-agent-id" value="agent_1"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="provision-metadata-metadataList">
-                    Metadata list (e.g. key1:value1;key2:value2 etc.)</label>
-                <input type="text" id="provision-metadata-metadataList" value="key1:data1;key2:metadata2"
-                    disabled="disabled" />
-            </div>          
-            <div class="submit">
-                <input type="submit" value="Update" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="provision-update-metadata-for-agent">
-        <fieldset>
-            <legend>Update a metadata value</legend> 
-             <div class="field">
-                <label for="provision-metadata-update-agent-id">
-                    Agent id</label>
-                <input type="text" id="provision-metadata-update-agent-id" value="agent_1"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="provision-metadata-update-key">
-                    Metadata Key</label>
-                <input type="text" id="provision-metadata-update-key" value="key1"
-                    disabled="disabled" />
-            </div> 
-            <div class="field">
-                <label for="provision-metadata-update-value">
-                    New Metadata Value</label>
-                <input type="text" id="provision-metadata-update-value" value="woooooow"
-                    disabled="disabled" />
-            </div>          
-            <div class="submit">
-                <input type="submit" value="Update" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <form id="provision-delete-metadata-by-agentId">
-        <fieldset>
-            <legend>Delete a meta data key by agent ID</legend> 
-             <div class="field">
-                <label for="provision-delete-metadata-agent-id">
-                    Agent ID</label>
-                <input type="text" id="provision-delete-metadata-agent-id" value="agent_1"
-                    disabled="disabled" />
-            </div>
-            <div class="field">
-                <label for="provision-delete-metadata-metadataKey">
-                    Meta data key</label>
-                <input type="text" id="provision-delete-metadata-metadataKey" value="foo"
-                    disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Delete" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        <h2>Throttles</h2>
-        <form id="request-throttles">
-            <fieldset>
-                <legend>Request throttles</legend>
-                <div class="submit">
-                    <input type="submit" value="Request" disabled="disabled" />
-                </div>
-            </fieldset>
-        </form>
-        <form id="request-throttle-by-id">
-            <fieldset>
-                <legend>Request provisioned throttle by ID</legend>
-                <div class="field">
-                    <label for="throttle-id">Throttle ID</label>
-                    <input type="text" id="throttle-id" value="throttle_1" disabled="disabled"/>
-                </div>
-                <div class="submit">
-                    <input type="submit" value="Request" disabled="disabled" />
-                </div>
-            </fieldset>
-        </form>
-        <form id="update-throttle">
-            <fieldset>
-                <legend>Update/create a throttle</legend>
-                <div class="field">
-                    <label for="update-throttle-id">Throttle id</label>
-                    <input type="text" id="update-throttle-id" value="throttle_1" disabled="disabled" />
-                </div> 
-                <div class="field">
-                    <label for="update-throttle-type">Throttle type</label>
-                    <select id="update-throttle-type" disabled="disabled">
-                        <option value="0">Messages Per Minute</option>                    
-                        <option value="1">Targeted Messages Per Minute</option>
-                        <option value="2">Concurrent Transfers</option>
-                    </select>
-                </div>    
-                <div class="field">
-                    <label for="update-throttle-threshold">Throttle threshold</label>
-                    <input type="text" id="update-throttle-threshold" value="10" disabled="disabled" />
-                </div>        
-                <div class="field">
-                    <label for="update-throttle-agents">Agents (e.g. agent_1;agent_2 etc.)</label>
-                    <input type="text" id="update-throttle-agents" value="agent_1;agent_2" disabled="disabled" />
-                </div>            
-                <div class="submit">
-                    <input type="submit" value="Update" disabled="disabled" />
-                </div>
-            </fieldset>
-        </form>
-        <form id="delete-throttle-by-id">
-            <fieldset>
-                <legend>Delete a throttle by ID</legend> 
-                 <div class="field">
-                    <label for="delete-throttle-id">Throttle id</label>
-                    <input type="text" id="delete-throttle-id" value="throttle_1" disabled="disabled" />
-                </div>
-                <div class="submit">
-                    <input type="submit" value="Delete" disabled="disabled" />
-                </div>
-            </fieldset>
-        </form>
-        <h2>Channels</h2>
-        <form id="provision-find-channels">
-        <fieldset>
-            <legend>Find Channels</legend> 
-             <div class="field">
-                <label for="provision-find-channels-search-text">
-                    Search criteria</label>
-                <input type="text" id="provision-find-channels-search-text" value="test"
-                    disabled="disabled" />
-            </div>
-            <div class="submit">
-                <input type="submit" value="Search" disabled="disabled" />
-            </div>
-        </fieldset>
-        </form>
-        </div>
         </div>
     </div>
     <div id="log-panel">
@@ -726,4 +728,5 @@
         </ul>
     </div>
 </body>
+
 </html>
