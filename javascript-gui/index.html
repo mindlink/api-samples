@@ -466,6 +466,17 @@
                                 <option value="1">None</option>
                             </select>
                         </div>
+                        <div class="field">
+                            <label id="provisioning-mode-label" for="provision-create-agent-managementMode">
+                                Management Mode
+                                <li>Groups: The agent can manage its own groups</li>
+                                <li>None: The agent cannot manage channels</li>
+                            </label>
+                            <select id="provision-create-agent-managementMode" disabled="disabled">
+                                <option value="2">Groups</option>
+                                <option value="1">None</option>
+                            </select>
+                        </div>
                         <div class="submit">
                             <input type="submit" value="Create" disabled="disabled" />
                         </div>
@@ -714,7 +725,10 @@
                 <fieldset>
                     <legend>Manage</legend>
                     <div class="submit">
-                        <input type="submit" value="Test"/>
+                        <input type="submit" value="Test" id="manage-test" />
+                    </div>
+                    <div class="submit">
+                        <input type="submit" value="Get managed channels" id="manage-get-channels" />
                     </div>
                 </fieldset>
                 </form>                

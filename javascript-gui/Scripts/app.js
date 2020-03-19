@@ -556,7 +556,8 @@ $(document).ready(function () {
         var metaData = $('form#provision-create-agent input[id=provision-create-agent-metadata]').val();
         var users = $('form#provision-create-agent input[id=provision-create-agent-users]').val();
         var provisioningMode = $('form#provision-create-agent select[id=provision-create-agent-provisioningMode]').val();
-        bot.provisioning.createAgent(agentId, userName, channels, metaData, users, provisioningMode);
+        var managementMode = $('form#provision-create-agent select[id=provision-create-agent-managementMode]').val();
+        bot.provisioning.createAgent(agentId, userName, channels, metaData, users, provisioningMode, managementMode);
     });
 
     $('form#provision-delete-agent input[type=submit]').click(function (ev) {
@@ -631,10 +632,27 @@ $(document).ready(function () {
     });
 
         
-    $('form#manage input[type=submit]').click(function (ev) {
+    $('form#manage input[id=manage-test]').click(function (ev) {
         ev.preventDefault();
         bot.management.test();
     });
+
+    var privacies = {
+        0: "Open",
+        1: "Closed",
+        2: "Secret"
+    };
+
+    $('form#manage input[id=manage-get-channels]').click(function (ev) {
+        ev.preventDefault();
+        bot.management.getManagedChannels(function (channels) {
+            logMessage('Managed channels list received (' + channels.length + ' channels): ');
+            logMessage(listAsString(channels, channels.length, function (channel) {
+                return 'Id: ' + channel.Id + ' name: ' + channel.Name + ' privacy: ' + privacies[channel.Privacy]; 
+            }), '', true);
+        });
+    });
+
 
     var selectTab = function (name) {
         $('.tab').css('display', 'none');

@@ -455,7 +455,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     };
 
-    self.provisioning.createAgent = function(agentId, userName, channels, metaData, users, provisioningMode, callbackFn, errorFn) {
+    self.provisioning.createAgent = function(agentId, userName, channels, metaData, users, provisioningMode, managementMode, callbackFn, errorFn) {
         log('Creating new agent...');
         var meta = [];
         var rawMeta = metaData.split(';'); // key1:value1;key2:value2;.....
@@ -481,6 +481,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             Users: usrs,
             CanProvision: provisioningMode == '3' || provisioningMode == '2',
             ProvisioningMode: provisioningMode,
+            ManagementMode: managementMode,
             State: '0'
         }, function(result, status) {
             self.onCreateAgent(status);
@@ -533,6 +534,13 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         sendRequest('Management/V1/Test', 'GET', '', function(result) {
             self.onManagementTestResultReceived(result);
             if (callbackFn) callbackFn(results);
+        }, errorFn);
+    }
+
+    self.management.getManagedChannels = function(callbackFn, errorFn) {
+        log('Get channels I manage...');
+        sendRequest('Management/V1/Channels', 'GET', '', function(results) {
+            callbackFn(results);
         }, errorFn);
     }
 };
