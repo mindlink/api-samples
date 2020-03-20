@@ -721,17 +721,26 @@
                 </form>
             </div>
             <div class="tab" id="management">
-                <form id="manage">
-                <fieldset>
-                    <legend>Manage</legend>
-                    <div class="submit">
-                        <input type="submit" value="Test" id="manage-test" />
-                    </div>
-                    <div class="submit">
-                        <input type="submit" value="Get managed channels" id="manage-get-channels" />
-                    </div>
-                </fieldset>
-                </form>                
+                <form id="manage-get-channels">
+                    <fieldset>
+                        <legend>Get managed channels</legend>
+                        <div class="submit">
+                            <input type="submit" value="Get managed channels" id="manage-get-channels" />
+                        </div>
+                    </fieldset>
+                </form> 
+                <form id="manage-get-channel-members">
+                    <fieldset>
+                        <legend>Get channel members</legend>
+                        <div class="field">
+                            <label for="manage-get-channel-members-channel">Channel id</label>
+                            <input type="text" id="manage-get-channel-members-channel" value="" disabled="disabled" />
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Get members" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>               
             </div>
         </div>
     </div>

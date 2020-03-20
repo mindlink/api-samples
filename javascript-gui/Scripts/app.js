@@ -631,24 +631,32 @@ $(document).ready(function () {
         bot.streaming.stop();
     });
 
-        
-    $('form#manage input[id=manage-test]').click(function (ev) {
-        ev.preventDefault();
-        bot.management.test();
-    });
-
     var privacies = {
         0: "Open",
         1: "Closed",
         2: "Secret"
     };
 
-    $('form#manage input[id=manage-get-channels]').click(function (ev) {
+    $('form#manage-get-channels input[type=submit]').click(function (ev) {
         ev.preventDefault();
+        
         bot.management.getManagedChannels(function (channels) {
             logMessage('Managed channels list received (' + channels.length + ' channels): ');
             logMessage(listAsString(channels, channels.length, function (channel) {
                 return 'Id: ' + channel.Id + ' name: ' + channel.Name + ' privacy: ' + privacies[channel.Privacy]; 
+            }), '', true);
+        });
+    });
+
+    $('form#manage-get-channel-members input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+
+        var channel = $('form#manage-get-channel-members input[id=manage-get-channel-members-channel]').val();
+
+        bot.management.getManagedChannelMembers(channel, function (members) {
+            logMessage('Managed channel members list received (' + members.length + ' members) for channel' + channel + ': ');
+            logMessage(listAsString(members, members.length, function (member) {
+                return 'Id: ' + member; 
             }), '', true);
         });
     });
