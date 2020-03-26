@@ -740,6 +740,29 @@
                             <input type="submit" value="Get members" disabled="disabled" />
                         </div>
                     </fieldset>
+                </form>  
+                <form id="manage-set-channel-members">
+                    <fieldset>
+                        <legend>Set channel members</legend>
+                        <div class="field">
+                            <label for="manage-set-channel-members-channel">Channel id</label>
+                            <input type="text" id="manage-set-channel-members-channel" value="" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label id="manage-set-channel-members-members-label" for="manage-set-channel-members-members">
+                                Members
+                                <li>Line-separated list of members.</li>
+                                <li>Example for a user: "sip:user@domain.com"</li>
+                                <li>Example for a group: "resource:CN=My Group,OU=Groups,DC=domain,DC=com"</li>
+                                <li>Example for an OU: "resource:OU=Groups,DC=domain,DC=com"</li>
+                            </label>
+                            <textarea id="manage-set-channel-members-members" value="" disabled="disabled">
+                            </textarea>
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Set members" disabled="disabled" />
+                        </div>
+                    </fieldset>
                 </form>               
             </div>
         </div>

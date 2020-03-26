@@ -550,4 +550,12 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             callbackFn(results);
         }, errorFn);
     }
+
+    self.management.setManagedChannelMembers = function(channelId, members, callbackFn, errorFn) {
+        log('Set managed channel members for channel \'' + channelId + '\'.');
+
+        sendRequest('Management/V1/Channels/' + channelId + '/Members', 'PUT', members, function() {
+            callbackFn();
+        }, errorFn);
+    }
 };

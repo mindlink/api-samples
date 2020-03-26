@@ -147,3 +147,9 @@ form textarea {
     margin-left: 5px;
     color: #777;
 }
+
+#manage-set-channel-members-members-label li {
+    list-style: none;
+    margin-left: 5px;
+    color: #777;
+}

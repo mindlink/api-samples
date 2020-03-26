@@ -661,6 +661,17 @@ $(document).ready(function () {
         });
     });
 
+    $('form#manage-set-channel-members input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+
+        var channel = $('form#manage-set-channel-members input[id=manage-set-channel-members-channel]').val();
+        var members = $('form#manage-set-channel-members input[id=manage-set-channel-members-members]').val().split(/\n/).filter(v => !!v);
+
+        bot.management.setManagedChannelMembers(channel, members, function() {
+            logMessage('Successfully set members for channel' + channel);
+        });
+    });
+
 
     var selectTab = function (name) {
         $('.tab').css('display', 'none');
