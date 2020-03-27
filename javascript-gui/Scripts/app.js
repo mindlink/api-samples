@@ -637,6 +637,17 @@ $(document).ready(function () {
         2: "Secret"
     };
 
+    $('form#manage-get-categories input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+        
+        bot.management.getChannelCategories(function (categories) {
+            logMessage('Categories list received (' + categories.length + ' channels): ');
+            logMessage(listAsString(categories, categories.length, function (channel) {
+                return 'Id: ' + channel.Id + ' name: ' + channel.Name; 
+            }), '', true);
+        });
+    });
+
     $('form#manage-get-channels input[type=submit]').click(function (ev) {
         ev.preventDefault();
         

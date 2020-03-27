@@ -544,6 +544,14 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     }
 
+    
+    self.management.getChannelCategories = function(callbackFn, errorFn) {
+        log('Get channel categories...');
+        sendRequest('Management/V1/Categories', 'GET', '', function(results) {
+            callbackFn(results);
+        }, errorFn);
+    }
+
     self.management.getManagedChannelMembers = function(channelId, callbackFn, errorFn) {
         log('Get managed channel members for channel \'' + channelId + '\'.');
         sendRequest('Management/V1/Channels/' + channelId + '/Members', 'GET', '', function(results) {
