@@ -676,7 +676,10 @@ $(document).ready(function () {
         ev.preventDefault();
 
         var channel = $('form#manage-set-channel-members input[id=manage-set-channel-members-channel]').val();
-        var members = $('form#manage-set-channel-members input[id=manage-set-channel-members-members]').val().split(/\n/).filter(v => !!v);
+        var members = $.map($('form#manage-set-channel-members textarea[id=manage-set-channel-members-members]').val().split(/\n/).filter(function(v) {
+            return !!v;
+        }), $.trim);
+
 
         bot.management.setManagedChannelMembers(channel, members, function() {
             logMessage('Successfully set members for channel' + channel);
