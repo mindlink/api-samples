@@ -328,7 +328,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     self.provisioning.requestProvisionedAgentById = function(agentId, callbackFn, errorFn) {
         log('Requesting provisioned agents by ID...');
         sendRequest('Provisioning/V1/Agents/' + agentId, 'GET', '', function(result) {
-            self.onProvisionedAgent(result.ProvisioningMode, result.CanProvision, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
+            self.onProvisionedAgent(result.ProvisioningMode, result.CanProvision, result.ManagementMode, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
             if (callbackFn) callbackFn(result.ProvisioningMode, result.CanProvision, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
         }, errorFn);
     };
