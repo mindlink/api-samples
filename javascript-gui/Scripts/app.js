@@ -682,10 +682,19 @@ $(document).ready(function () {
 
 
         bot.management.setManagedChannelMembers(channel, members, function() {
-            logMessage('Successfully set members for channel' + channel);
+            logMessage('Successfully set members for channel ' + channel);
         });
     });
 
+    $('form#manage-delete-channel input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+
+        var channel = $('form#manage-delete-channel input[id=manage-delete-channel-channel]').val();
+
+        bot.management.deleteManagedChannel(channel, function() {
+            logMessage('Successfully deleted channel ' + channel);
+        });
+    });
 
     var selectTab = function (name) {
         $('.tab').css('display', 'none');

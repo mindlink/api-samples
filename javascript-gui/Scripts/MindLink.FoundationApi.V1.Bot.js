@@ -566,4 +566,12 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             callbackFn();
         }, errorFn);
     }
+
+    self.management.deleteManagedChannel = function(channelId, callbackFn, errorFn) {
+        log('Delete managed channel \'' + channelId + '\'.');
+
+        sendRequest('Management/V1/Channels/' + channelId, 'DELETE', function() {
+            callbackFn();
+        }, errorFn);
+    }
 };

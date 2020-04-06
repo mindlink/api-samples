@@ -47,6 +47,12 @@ form textarea {
     font-size: 1em;
 }
 
+form input.warn:not(:disabled) {
+    background-color: #e21944;
+    color: #fff;
+    border: 1px solid #520919;
+}
+
 #setup-panel {
     position: fixed;
     left: 0;
