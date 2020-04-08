@@ -574,4 +574,18 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             callbackFn();
         }, errorFn);
     }
+
+    self.management.createManagedChannel = function(name, categoryId, description, privacy, members, callbackFn, errorFn) {
+        log('Create managed channel \'' + name + '\', in category \'' + categoryId + '\'.');
+
+        sendRequest('Management/V1/Channels', 'POST', {
+            Name: name,
+            CategoryId: categoryId,
+            Description: description,
+            Privacy: privacy,
+            Members: members
+        }, function(result) {
+            callbackFn(result);
+        }, errorFn);
+    }
 };

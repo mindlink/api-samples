@@ -736,7 +736,50 @@
                             <input type="submit" value="Get managed channels" id="manage-get-channels" />
                         </div>
                     </fieldset>
-                </form> 
+                </form>
+                <form id="manage-create-channel">
+                    <fieldset>
+                        <legend>Create channel</legend>
+                        <div class="field">
+                            <label for="manage-create-channel-name">Channel name</label>
+                            <input type="text" id="manage-create-channel-name" value="" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="manage-create-channel-category">Category ID</label>
+                            <input type="text" id="manage-create-channel-category" value="" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="manage-create-channel-description">Channel description</label>
+                            <input type="text" id="manage-create-channel-description" value="" disabled="disabled" />
+                        </div>
+                        <div class="field">
+                            <label for="manage-create-channel-privacy">
+                                Privacy
+                                <li>Open: All members of the category are allowed to join</li>
+                                <li>Closed: Only explicit channel members are allowed to join</li>
+                                <li>Secret: Only explicit channel members are allowed to search for and join</li>
+                            </label>
+                            <select id="manage-create-channel-privacy" disabled="disabled">
+                                <option value="0">Open</option>
+                                <option value="1">Closed</option>
+                                <option value="2">Secret</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label id="manage-create-channel-members-label" for="manage-create-channel-members">
+                                Members
+                                <li>Line-separated list of members.</li>
+                                <li>Example for a user: "sip:user@domain.com"</li>
+                                <li>Example for a group: "resource:CN=My Group,OU=Groups,DC=domain,DC=com"</li>
+                                <li>Example for an OU: "resource:OU=Groups,DC=domain,DC=com"</li>
+                            </label>
+                            <textarea id="manage-create-channel-members" value="" disabled="disabled"></textarea>
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Create" disabled="disabled" />
+                        </div>
+                    </fieldset>
+                </form>
                 <form id="manage-delete-channel">
                     <fieldset>
                         <legend>Delete channel</legend>
@@ -776,8 +819,7 @@
                                 <li>Example for a group: "resource:CN=My Group,OU=Groups,DC=domain,DC=com"</li>
                                 <li>Example for an OU: "resource:OU=Groups,DC=domain,DC=com"</li>
                             </label>
-                            <textarea id="manage-set-channel-members-members" value="" disabled="disabled">
-                            </textarea>
+                            <textarea id="manage-set-channel-members-members" value="" disabled="disabled"></textarea>
                         </div>
                         <div class="submit">
                             <input type="submit" value="Set members" disabled="disabled" />

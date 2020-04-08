@@ -665,7 +665,7 @@ $(document).ready(function () {
         var channel = $('form#manage-get-channel-members input[id=manage-get-channel-members-channel]').val();
 
         bot.management.getManagedChannelMembers(channel, function (members) {
-            logMessage('Managed channel members list received (' + members.length + ' members) for channel' + channel + ': ');
+            logMessage('Managed channel members list received (' + members.length + ' members) for channel ' + channel + ': ');
             logMessage(listAsString(members, members.length, function (member) {
                 return 'Id: ' + member; 
             }), '', true);
@@ -693,6 +693,22 @@ $(document).ready(function () {
 
         bot.management.deleteManagedChannel(channel, function() {
             logMessage('Successfully deleted channel ' + channel);
+        });
+    });
+
+    $('form#manage-create-channel input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+
+        var name = $('form#manage-create-channel input[id=manage-create-channel-name]').val();
+        var categoryId = $('form#manage-create-channel input[id=manage-create-channel-category]').val();
+        var description = $('form#manage-create-channel input[id=manage-create-channel-description]').val();
+        var members = $.map($('form#manage-create-channel textarea[id=manage-create-channel-members]').val().split(/\n/).filter(function(v) {
+            return !!v;
+        }), $.trim);
+        var privacy = $('form#manage-create-channel select[id=manage-create-channel-privacy]').val();
+
+        bot.management.createManagedChannel(name, categoryId, description, privacy, members, function(channelId) {
+            logMessage('Successfully created channel with name \'' + name + '\' as \'' + channelId + '\'');
         });
     });
 
