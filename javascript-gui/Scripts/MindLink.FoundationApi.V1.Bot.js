@@ -120,7 +120,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
                         self.onChannelStateChanged(ev.EventId, ev.Time, ev.ChannelId, ev.Active);
                         break;
                     case 'MessageEvent':
-                        self.onMessageReceived(ev.EventId, ev.Time, ev.ChannelId, ev.Sender, ev.Content, ev.MessageParts);
+                        self.onMessageReceived(ev.EventId, ev.Time, ev.ChannelId, ev.Token, ev.Sender, ev.Content, ev.MessageParts);
                         break;
                     case 'MetaDataEvent':
                         self.onMetaDataUpdated(ev.EventId, ev.Time, ev.Key, ev.Value);
@@ -183,10 +183,13 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         self.onStreamingStopped();
     };
 
-    self.collaboration.requestChannelHistory = function(channelId, limit, callbackFn, errorFn) {
+    self.collaboration.requestChannelHistory = function(channelId, limit, token, callbackFn, errorFn) {
         limit = limit || 50; // default
         log('Requesting channel history for \'' + channelId + '\'...');
-        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages?take=' + limit, 'GET', '', function(result) {
+
+        var beforeTokenParam = token ? ('&before=' + token) : '';
+
+        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages?take=' + limit + beforeTokenParam, 'GET', '', function(result) {
             self.onChannelHistory(channelId, result);
             if (callbackFn) callbackFn(channelId, result);
         }, errorFn);
@@ -223,8 +226,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             Text: text
         };
         sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
-            self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Text);
-            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Text);
+            self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
+            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
         }, errorFn);
     };
 
@@ -236,8 +239,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         };
 
         sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
-            self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Text);
-            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Text);
+            self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
+            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
         }, errorFn);
     };
     
@@ -249,8 +252,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             Text: content
         };
         sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
-            self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Subject, result.Text);
-            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Subject, result.Text);
+            self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
+            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
         }, errorFn);
     };
     
@@ -263,8 +266,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         };
 
         sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
-            self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Subject, result.Text);
-            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Subject, result.Text);
+            self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
+            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
         }, errorFn);
     };
     

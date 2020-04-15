@@ -57,7 +57,11 @@ var setupBot = function(sipAddress, username, password) {
         onChannelHistory: function(channelId, messages) {
             logMessage('Chat history received for ' + channelId + '. Contains ' + messages.length + ' message(s).');
             // display the messages
-            logMessage(listAsString(messages, messages.length, function(message) { return formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + '\n'; }), '', true);
+            logMessage(listAsString(messages, messages.length, function(message) {
+                var token = message.Token ? ('[token = ' + message.Token + '] ') : '';
+
+                return token + formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + '\n';
+            }), '', true);
 
             if (console && console.log) {
                 console.log('Chat history for ' + channelId + ':');
@@ -74,7 +78,11 @@ var setupBot = function(sipAddress, username, password) {
 
             logMessage('Chat history search results received for ' + channelResults.ChannelId + '. Contains ' + channelResults.Count + ' message(s).');
             // display the messages
-            logMessage(listAsString(channelResults.Messages, channelResults.Messages.length, function(message) { return formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + ' \n'; }), '', true);
+            logMessage(listAsString(channelResults.Messages, channelResults.Messages.length, function(message) {
+                var token = message.Token ? ('[token = ' + message.Token + '] ') : '';
+
+                return token + formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + ' \n';
+            }), '', true);
 
             if (console && console.log) {
                 console.log('Chat history for ' + channelResults.ChannelId + ':');
@@ -84,11 +92,11 @@ var setupBot = function(sipAddress, username, password) {
         onChannelInfo: function(channelId, name, subject, description, displayName, emailAddress, canAcceptFiles, isReadOnly, maxMessageLength, maxStoryLength) {
             logMessage('Channel info received for ' + channelId + '. Name: \'' + name + '\' Subject: \'' + subject + '\', Description: \'' + description + '\', Display Name: \'' + displayName + '\', Email Address: \'' + emailAddress + '\', Files: \'' + canAcceptFiles + '\', Read Only: \'' + isReadOnly + '\', Max Message Length: \'' + maxMessageLength + '\', Max Story Length: \'' + maxStoryLength + '\'.');
         },
-        onChannelMessage: function(channelId, senderId, alert, timestamp, message) {
-            logMessage(senderId + ' sent a' + (alert ? 'n alert' : '') + ' message to \'' + channelId + '\' at ' + formatTime(timestamp) + ': \'' + message + '\'.');
+        onChannelMessage: function(channelId, senderId, alert, timestamp, token, message) {
+            logMessage(senderId + ' sent a' + (alert ? 'n alert' : '') + ' message to \'' + channelId + '\' with token \'' + token + '\' at ' + formatTime(timestamp) + ': \'' + message + '\'.');
         },
-        onChannelStory: function(channelId, senderId, alert, timestamp, subject, content) {
-            logMessage(senderId + ' sent a' + (alert ? 'n alert' : '') + ' story with subject \'' + subject + '\' to ' + channelId + '\' at ' + formatTime(timestamp) + '.');
+        onChannelStory: function(channelId, senderId, alert, timestamp, token, subject, content) {
+            logMessage(senderId + ' sent a' + (alert ? 'n alert' : '') + ' story with subject \'' + subject + '\' to ' + channelId + '\' with token \'' + token + '\' at ' + formatTime(timestamp) + '.');
         },
         onChannelUpload: function(channelId, fileName, fileSize) {
             logMessage('Uploaded file ' + fileName + ' of size ' + fileSize + ' to channel ' + channelId);
@@ -218,8 +226,8 @@ var setupBot = function(sipAddress, username, password) {
             $('form#streaming input[id=start-streaming]').attr('disabled', false);
             $('form#streaming input[id=stop-streaming]').attr('disabled', true);
         },
-        onMessageReceived: function(eventId, time, channelId, sender, content, messageParts) {
-            logMessage('Message received to channel \'' + channelId + '\' from \'' + sender + '\', text: \'' + content + '\' and message parts: \'' + JSON.stringify(messageParts) + '\'.', 'streaming');
+        onMessageReceived: function(eventId, time, channelId, token, sender, content, messageParts) {
+            logMessage('Message received to channel \'' + channelId + '\' with token \'' + token + '\' from \'' + sender + '\', text: \'' + content + '\' and message parts: \'' + JSON.stringify(messageParts) + '\'.', 'streaming');
         },
         onChannelStateChanged: function(eventId, time, channelId, active) {
             logMessage('Channel state changed for channel \'' + channelId + '\': ' + (active ? 'active' : 'inactive'), 'streaming');
@@ -444,7 +452,9 @@ $(document).ready(function () {
         ev.preventDefault();
         var channelId = $('form#channel-history input[id=history-channel-id]').val();
         var limit = $('form#channel-history select[id=history-limit]').val();
-        bot.collaboration.requestChannelHistory(channelId, limit);
+        var token = $('form#channel-history input[id=history-token]').val();
+
+        bot.collaboration.requestChannelHistory(channelId, limit, token);
     });
 
     $('form#channel-state input[type=submit]').click(function (ev) {
