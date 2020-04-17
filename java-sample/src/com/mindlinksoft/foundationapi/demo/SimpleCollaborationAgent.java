@@ -267,16 +267,19 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
      *
      * @param channelId The ID of the channel to retrieve history for
      * @param number The maximum number of messages to retrieve
+     * @param beforeToken The token from which to begin the history, or {@code null} to get the latest history.
      * @return A list of most recent {@link Message}s in the channel
      * @throws IOException If the request could not be completed or the response
      * not parsed
      */
     public List<Message> getChannelHistory(final String channelId,
-            final int number) throws IOException {
+            final int number, final String beforeToken) throws IOException {
         try {
+            final String beforeParam = beforeToken == null ? "" : "&before=" + beforeToken;
             final JSONArray response = new JSONArray(getResponse(
                     "/Collaboration/v1/Channels/" + channelId
-                    + "/Messages?take=" + number,
+                    + "/Messages?take=" + number
+                    + beforeParam,
                     "GET", null));
             return getMessages(response);
         } catch (JSONException ex) {
@@ -352,7 +355,8 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
                 object.optString("Subject"),
                 object.getString("Text"),
                 object.optString("MessageParts"),
-                object.getLong("Timestamp"));
+                object.getLong("Timestamp"),
+                object.optString("Token"));
     }
 
     /**

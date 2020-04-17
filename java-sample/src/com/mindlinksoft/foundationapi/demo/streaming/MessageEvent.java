@@ -10,13 +10,14 @@ public class MessageEvent extends Event {
     private final String subject;
     private final String content;
     private final String messageParts;
+    private final String token;
 
     /**
      * Creates a new instance of {@link MessageEvent}.
      */
     public MessageEvent(final long eventId, final long time,
             final String channelId, final String senderId, final String subject,
-            final String content, final String messageParts) {
+            final String content, final String messageParts, final String token) {
         super(eventId, time);
 
         this.channelId = channelId;
@@ -24,6 +25,7 @@ public class MessageEvent extends Event {
         this.subject = subject;
         this.content = content;
         this.messageParts = messageParts;
+        this.token = token;
     }
 
     /**
@@ -72,12 +74,21 @@ public class MessageEvent extends Event {
         return subject;
     }
 
+    /**
+     * Gets the message token.
+     *
+     * @return The message token, or {@code null} if there is no token.
+     */
+    public String getToken() {
+        return token;
+    }
+
     /** {@inheritDoc} */
     @Override
     public String toString() {
         return "MessageEvent{super=" + super.toString() + ", channelId="
                 + channelId + ", senderId=" + senderId + ", subject=" + subject
-                + ", content=" + content + ", messageParts=" + messageParts + '}';
+                + ", content=" + content + ", messageParts=" + messageParts + ", token=" + token + "}";
     }
 
 }

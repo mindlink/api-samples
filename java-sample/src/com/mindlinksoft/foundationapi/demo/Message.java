@@ -13,13 +13,14 @@ public class Message {
     private final String text;
     private final String messageParts;
     private final long timestamp;
+    private final String token;
 
     /**
      * Creates a new instance of {@link Message}.
      */
     protected Message(final String id, final boolean isAlert,
             final String senderId, final String channelId, final String subject,
-            final String text, final String messageParts, final long timestamp) {
+            final String text, final String messageParts, final long timestamp, final String token) {
         this.id = id;
         this.isAlert = isAlert;
         this.senderId = senderId;
@@ -28,6 +29,7 @@ public class Message {
         this.text = text;
         this.messageParts = messageParts;
         this.timestamp = timestamp;
+        this.token = token;
     }
 
     /**
@@ -106,13 +108,18 @@ public class Message {
         return timestamp;
     }
 
+    public String getToken() {
+        return token;
+    }
+
     /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Message{id=" + id + ", isAlert=" + isAlert + ", senderId="
                 + senderId + ", channelId=" + channelId + ", subject="
                 + subject + ", text=" + text + ", messageParts=" + messageParts
-                + ", timestamp=" + timestamp + '}';
+                + ", timestamp=" + timestamp
+                + ", token=" + token + "}";
     }
 
 }

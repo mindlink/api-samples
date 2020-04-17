@@ -343,10 +343,13 @@ public class DemoBot {
         final String channelId = reader.readLine();
         System.out.print("Number of messages: ");
         final String messageCountString = reader.readLine();
+
+        System.out.print("Get messages before token (blank for latest messages): ");
+        final String beforeToken = reader.readLine();
         
         final int messageCount = Integer.parseInt(messageCountString);
 
-        final List<Message> historyMessages = agent.getChannelHistory(channelId, messageCount);
+        final List<Message> historyMessages = agent.getChannelHistory(channelId, messageCount, beforeToken);
         
         System.out.println();
         System.out.println("Received Messages");
