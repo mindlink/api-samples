@@ -3,9 +3,15 @@ package com.mindlinksoft.foundationapi.demo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.mindlinksoft.foundationapi.demo.management.ChannelPrivacy;
+import com.mindlinksoft.foundationapi.demo.management.ManagedCategory;
+import com.mindlinksoft.foundationapi.demo.management.ManagedChannel;
+import com.mindlinksoft.foundationapi.demo.management.ManagementAgent;
 import com.mindlinksoft.foundationapi.demo.provisioning.ProvisionedChannel;
 import com.mindlinksoft.foundationapi.demo.provisioning.ProvisioningAgent;
 import com.mindlinksoft.foundationapi.demo.streaming.Event;
@@ -65,10 +71,12 @@ public class DemoBot {
                 = new StreamingCollaborationAgent(url, user, password, agent);
         final ProvisioningAgent provAgent
                 = new ProvisioningAgent(url, user, password, agent);
+        final ManagementAgent managementAgent
+                = new ManagementAgent(url, user, password, agent);
 
         while (true) {
             System.out.println();
-            System.out.println("Functions: channels, send, history, events, exit");
+            System.out.println("Functions: channels, send, history, events, manage, exit");
             System.out.print("Select option: ");
 
             final String option = bufferedReader.readLine().toLowerCase();
@@ -80,11 +88,141 @@ public class DemoBot {
             } else if ("history".equals(option)) {
             	doHistory(collabAgent, bufferedReader);
             } else if ("events".equals(option)) {
-            	doEvents(collabAgent, bufferedReader);
+                doEvents(collabAgent, bufferedReader);
+            } else if ("manage".equals(option)) {
+                doManage(managementAgent, bufferedReader);
             } else if ("exit".equals(option)) {
                 break;
             } else {
                 System.out.println("Unrecognised option");
+            }
+        }
+    }
+
+    private static void doManage(final ManagementAgent mAgent, final BufferedReader reader) throws IOException {
+        System.out.println();
+
+        while (true) {
+            System.out.println("Management functions: categories, channels, members, exit");
+            System.out.print("Select option: ");
+            final String option = reader.readLine().toLowerCase();
+
+            if ("categories".equals(option)) {
+                System.out.println();
+
+                for (final ManagedCategory category : mAgent.getCategories()) {
+                    System.out.println(category.getName());
+                    System.out.println("\t         ID: " + category.getId());
+                    System.out.println();
+                }
+            } else if ("channels".equals(option)) {
+                doManageChannels(mAgent, reader);
+            } else if ("members".equals(option)) {
+                doManageMembers(mAgent, reader);
+            } else if ("exit".equals(option)) {
+                break;
+            }
+        }
+    }
+
+    private static void doManageChannels(final ManagementAgent mAgent, final BufferedReader reader) throws IOException {
+        System.out.println();
+
+        while (true) {
+            System.out.println("Channel management functions: get, create, delete, exit");
+            System.out.print("Select option: ");
+            final String option = reader.readLine().toLowerCase();
+
+            if ("get".equals(option)) {
+                System.out.println();
+
+                for (final ManagedChannel channel : mAgent.getManagedChannels()) {
+                    System.out.println(channel.getName());
+                    System.out.println("\t         ID: " + channel.getId());
+                    System.out.println("\t         Privacy: " + channel.getPrivacy());
+                    System.out.println();
+                }
+            } else if ("create".equals(option)) {
+                System.out.print("Enter channel name: ");
+                final String name = reader.readLine();
+
+                System.out.print("Enter category ID: ");
+                final String categoryId = reader.readLine();
+
+                System.out.print("Enter channel description: ");
+                final String description = reader.readLine();
+
+                System.out.print("Enter privacy (Open, Closed, Secret): ");
+                final ChannelPrivacy privacy = toEnum(
+                    ChannelPrivacy.class, reader.readLine(), ChannelPrivacy.Open);
+
+                final LinkedList<String> members = new LinkedList<>();
+
+                if (privacy != ChannelPrivacy.Open) {
+                    System.out.println("Enter members (enter blank line when done):");
+                    String next = reader.readLine();
+                    
+                    while (next != null && next.length() > 0) {
+                        members.add(next);
+
+                        next = reader.readLine();
+                    }
+                }
+
+                final String channelId = mAgent.addManagedChannel(name, categoryId, description, privacy, members);
+
+                System.out.println("Created channel with ID: " + channelId);
+            } else if ("delete".equals(option)) {
+                System.out.print("Enter channel ID: ");
+                final String id = reader.readLine();
+
+                mAgent.deleteManagedChannel(id);
+                System.out.println("Deleted channel with ID: " + id);
+            } else if ("exit".equals(option)) {
+                break;
+            }
+        }
+    }
+
+    private static void doManageMembers(final ManagementAgent mAgent, final BufferedReader reader) throws IOException {
+        System.out.println();
+
+        while (true) {
+            System.out.println("Channel member management functions: get, set, exit");
+            System.out.print("Select option: ");
+            final String option = reader.readLine().toLowerCase();
+
+            if ("get".equals(option)) {
+                System.out.print("Enter channel ID: ");
+                final String id = reader.readLine();
+                System.out.println();
+
+                final Collection<String> members = mAgent.getChannelMembers(id);
+
+                System.out.println("Members:");
+                for (final String member : members) {
+                    System.out.println(member);
+                    System.out.println();
+                }
+            } else if ("set".equals(option)) {
+                System.out.print("Enter channel ID: ");
+                final String id = reader.readLine();
+
+                final LinkedList<String> members = new LinkedList<>();
+                System.out.println("Enter members (enter blank line when done):");
+                String next = reader.readLine();
+                
+                while (next != null && next.length() > 0) {
+                    members.add(next);
+
+                    next = reader.readLine();
+                }
+
+                mAgent.setChannelMembers(id, members);
+
+                System.out.println("Updated members of channel with ID: " + id);
+            } else if ("exit".equals(option)) {
+                break;
             }
         }
     }
@@ -102,7 +240,7 @@ public class DemoBot {
         if ("list".equals(option)) {
             System.out.println();
 
-            for (Channel channel : cAgent.getChannels()) {
+            for (final Channel channel : cAgent.getChannels()) {
                 System.out.println(channel.getDisplayName());
                 System.out.println("\t         ID: " + channel.getId());
                 System.out.println("\t    Subject: " + channel.getSubject());
@@ -115,7 +253,7 @@ public class DemoBot {
             final String terms = reader.readLine();
             System.out.println();
 
-            for (Map.Entry<String, String> entry : pAgent.findChannels(terms).entrySet()) {
+            for (final Map.Entry<String, String> entry : pAgent.findChannels(terms).entrySet()) {
                 System.out.println(entry.getKey());
                 System.out.println("\t" + entry.getValue());
                 System.out.println();
@@ -208,13 +346,13 @@ public class DemoBot {
         
         final int messageCount = Integer.parseInt(messageCountString);
 
-        List<Message> historyMessages = agent.getChannelHistory(channelId, messageCount);
+        final List<Message> historyMessages = agent.getChannelHistory(channelId, messageCount);
         
         System.out.println();
         System.out.println("Received Messages");
         System.out.println("------------------");
         
-        for (Message message : historyMessages) {
+        for (final Message message : historyMessages) {
         	System.out.println(message);
         }
     }
@@ -227,12 +365,12 @@ public class DemoBot {
         System.out.println("Waiting for events... (Press Enter to stop)");
 
         class ChannelEventListener implements EventListener {
-        	public void eventReceived(StreamingCollaborationAgent agent, Event event) {
+        	public void eventReceived(final StreamingCollaborationAgent agent, final Event event) {
         		System.out.println(event);
         	}
         }
         
-        EventListener channelEventListener = new ChannelEventListener();
+        final EventListener channelEventListener = new ChannelEventListener();
         
         System.out.println();
         System.out.println("Received Events");
@@ -245,6 +383,15 @@ public class DemoBot {
         
         agent.removeEventListener(channelEventListener);
         agent.stopStreaming();
+    }
+
+    private static <T extends Enum<?>> T toEnum(Class<T> enumeration, String search, T d) {
+        for (T each : enumeration.getEnumConstants()) {
+            if (each.name().compareToIgnoreCase(search) == 0) {
+                return each;
+            }
+        }
+        return d;
     }
 }
 
