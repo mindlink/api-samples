@@ -62,8 +62,9 @@ var setupBot = function(sipAddress, username, password) {
                     messages,
                     messages.length,
                     function(message) {
+                        var token = message.Token ? ('[token = ' + message.Token + '] ') : '';
                         var messageSenderAlias = message.SenderAlias ? ' (' + message.SenderAlias + ')' : '';
-                        return formatTime(message.Timestamp) + ' ' + message.SenderId + messageSenderAlias + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + '\n'; 
+                        return token + formatTime(message.Timestamp) + ' ' + message.SenderId + messageSenderAlias + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + '\n'; 
                     }),
                 '',
                 true);
@@ -88,11 +89,13 @@ var setupBot = function(sipAddress, username, password) {
                     channelResults.Messages,
                     channelResults.Messages.length,
                     function(message) {
+                        var token = message.Token ? ('[token = ' + message.Token + '] ') : '';
                         var messageSenderAlias = message.SenderAlias ? ' (' + message.SenderAlias + ')' : '';
-                        return formatTime(message.Timestamp) + ' ' + message.SenderId + messageSenderAlias + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + ' \n';
+                        return token + formatTime(message.Timestamp) + ' ' + message.SenderId + messageSenderAlias + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + ' \n';
                     }),
                 '',
                 true);
+
 
             if (console && console.log) {
                 console.log('Chat history for ' + channelResults.ChannelId + ':');
@@ -102,11 +105,11 @@ var setupBot = function(sipAddress, username, password) {
         onChannelInfo: function(channelId, name, subject, description, displayName, emailAddress, canAcceptFiles, isReadOnly, maxMessageLength, maxStoryLength) {
             logMessage('Channel info received for ' + channelId + '. Name: \'' + name + '\' Subject: \'' + subject + '\', Description: \'' + description + '\', Display Name: \'' + displayName + '\', Email Address: \'' + emailAddress + '\', Files: \'' + canAcceptFiles + '\', Read Only: \'' + isReadOnly + '\', Max Message Length: \'' + maxMessageLength + '\', Max Story Length: \'' + maxStoryLength + '\'.');
         },
-        onChannelMessage: function(channelId, senderId, alert, timestamp, message) {
-            logMessage(senderId + ' sent a' + (alert ? 'n alert' : '') + ' message to \'' + channelId + '\' at ' + formatTime(timestamp) + ': \'' + message + '\'.');
+        onChannelMessage: function(channelId, senderId, alert, timestamp, token, message) {
+            logMessage(senderId + ' sent a' + (alert ? 'n alert' : '') + ' message to \'' + channelId + '\' with token \'' + token + '\' at ' + formatTime(timestamp) + ': \'' + message + '\'.');
         },
-        onChannelStory: function(channelId, senderId, alert, timestamp, subject, content) {
-            logMessage(senderId + ' sent a' + (alert ? 'n alert' : '') + ' story with subject \'' + subject + '\' to ' + channelId + '\' at ' + formatTime(timestamp) + '.');
+        onChannelStory: function(channelId, senderId, alert, timestamp, token, subject, content) {
+            logMessage(senderId + ' sent a' + (alert ? 'n alert' : '') + ' story with subject \'' + subject + '\' to ' + channelId + '\' with token \'' + token + '\' at ' + formatTime(timestamp) + '.');
         },
         onChannelUpload: function(channelId, fileName, fileSize) {
             logMessage('Uploaded file ' + fileName + ' of size ' + fileSize + ' to channel ' + channelId);
@@ -139,8 +142,8 @@ var setupBot = function(sipAddress, username, password) {
                 return 'Id: ' + agent.Id + ' state: ' + agent.State; 
             }), '', true);               
         },
-        onProvisionedAgent: function (provisioningMode, canProvision, channels, id, metaData, state, userName, users) {
-            logMessage('Agent returned. ID: ' + id + ', user name: ' + userName + ', provisioning mode: ' + provisioningMode + ', can provision: ' + canProvision + ', state: ' + state);
+        onProvisionedAgent: function (provisioningMode, canProvision, managementMode, channels, id, metaData, state, userName, users) {
+            logMessage('Agent returned. ID: ' + id + ', user name: ' + userName + ', provisioning mode: ' + provisioningMode + ', can provision: ' + canProvision + ', management mode: ' + managementMode + ', state: ' + state);
             logMessage(' - Channels:')
             logMessage(listAsString(channels, channels.length, function (channel) {
                 return '    - Id: ' + channel.Id + ', state: ' + channel.State; 
@@ -236,16 +239,19 @@ var setupBot = function(sipAddress, username, password) {
             $('form#streaming input[id=start-streaming]').attr('disabled', false);
             $('form#streaming input[id=stop-streaming]').attr('disabled', true);
         },
-        onMessageReceived: function(eventId, time, channelId, sender, senderAlias, content, messageParts) {
+        onMessageReceived: function(eventId, time, channelId, token, sender, senderAlias, content, messageParts) {
             var aliasText = senderAlias ? ' with alias \'' + senderAlias + '\'' : '';
-            logMessage('Message received to channel \'' + channelId + '\' from \'' + sender + '\'' + aliasText + ', text: \'' + content + '\' and message parts: \'' + JSON.stringify(messageParts) + '\'.', 'streaming');
+            logMessage('Message received to channel \'' + channelId + '\' with token \'' + token + '\' from \'' + sender + '\'' + aliasText + ', text: \'' + content + '\' and message parts: \'' + JSON.stringify(messageParts) + '\'.', 'streaming');
         },
         onChannelStateChanged: function(eventId, time, channelId, active) {
             logMessage('Channel state changed for channel \'' + channelId + '\': ' + (active ? 'active' : 'inactive'), 'streaming');
         },
         onMetaDataUpdated: function(eventId, time, key, value) {
             logMessage('Meta data key changed: \'' + key + '\' -> \'' + value + '\'.', 'streaming');
-        }
+        },
+        onManagementTestResultReceived: function (result) {
+            logMessage('Management test result OK');
+        },
     });
 };
 
@@ -460,7 +466,9 @@ $(document).ready(function () {
         ev.preventDefault();
         var channelId = $('form#channel-history input[id=history-channel-id]').val();
         var limit = $('form#channel-history select[id=history-limit]').val();
-        bot.collaboration.requestChannelHistory(channelId, limit);
+        var token = $('form#channel-history input[id=history-token]').val();
+
+        bot.collaboration.requestChannelHistory(channelId, limit, token);
     });
 
     $('form#channel-state input[type=submit]').click(function (ev) {
@@ -586,7 +594,8 @@ $(document).ready(function () {
         var metaData = $('form#provision-create-agent input[id=provision-create-agent-metadata]').val();
         var users = $('form#provision-create-agent input[id=provision-create-agent-users]').val();
         var provisioningMode = $('form#provision-create-agent select[id=provision-create-agent-provisioningMode]').val();
-        bot.provisioning.createAgent(agentId, userName, channels, metaData, users, provisioningMode);
+        var managementMode = $('form#provision-create-agent select[id=provision-create-agent-managementMode]').val();
+        bot.provisioning.createAgent(agentId, userName, channels, metaData, users, provisioningMode, managementMode);
     });
 
     $('form#provision-delete-agent input[type=submit]').click(function (ev) {
@@ -660,6 +669,87 @@ $(document).ready(function () {
         bot.streaming.stop();
     });
 
+    var privacies = {
+        0: "Open",
+        1: "Closed",
+        2: "Secret"
+    };
+
+    $('form#manage-get-categories input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+        
+        bot.management.getChannelCategories(function (categories) {
+            logMessage('Categories list received (' + categories.length + ' channels): ');
+            logMessage(listAsString(categories, categories.length, function (channel) {
+                return 'Id: ' + channel.Id + ' name: ' + channel.Name; 
+            }), '', true);
+        });
+    });
+
+    $('form#manage-get-channels input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+        
+        bot.management.getManagedChannels(function (channels) {
+            logMessage('Managed channels list received (' + channels.length + ' channels): ');
+            logMessage(listAsString(channels, channels.length, function (channel) {
+                return 'Id: ' + channel.Id + ' name: ' + channel.Name + ' privacy: ' + privacies[channel.Privacy]; 
+            }), '', true);
+        });
+    });
+
+    $('form#manage-get-channel-members input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+
+        var channel = $('form#manage-get-channel-members input[id=manage-get-channel-members-channel]').val();
+
+        bot.management.getManagedChannelMembers(channel, function (members) {
+            logMessage('Managed channel members list received (' + members.length + ' members) for channel ' + channel + ': ');
+            logMessage(listAsString(members, members.length, function (member) {
+                return 'Id: ' + member; 
+            }), '', true);
+        });
+    });
+
+    $('form#manage-set-channel-members input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+
+        var channel = $('form#manage-set-channel-members input[id=manage-set-channel-members-channel]').val();
+        var members = $.map($('form#manage-set-channel-members textarea[id=manage-set-channel-members-members]').val().split(/\n/).filter(function(v) {
+            return !!v;
+        }), $.trim);
+
+
+        bot.management.setManagedChannelMembers(channel, members, function() {
+            logMessage('Successfully set members for channel ' + channel);
+        });
+    });
+
+    $('form#manage-delete-channel input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+
+        var channel = $('form#manage-delete-channel input[id=manage-delete-channel-channel]').val();
+
+        bot.management.deleteManagedChannel(channel, function() {
+            logMessage('Successfully deleted channel ' + channel);
+        });
+    });
+
+    $('form#manage-create-channel input[type=submit]').click(function (ev) {
+        ev.preventDefault();
+
+        var name = $('form#manage-create-channel input[id=manage-create-channel-name]').val();
+        var categoryId = $('form#manage-create-channel input[id=manage-create-channel-category]').val();
+        var description = $('form#manage-create-channel input[id=manage-create-channel-description]').val();
+        var members = $.map($('form#manage-create-channel textarea[id=manage-create-channel-members]').val().split(/\n/).filter(function(v) {
+            return !!v;
+        }), $.trim);
+        var privacy = $('form#manage-create-channel select[id=manage-create-channel-privacy]').val();
+
+        bot.management.createManagedChannel(name, categoryId, description, privacy, members, function(channelId) {
+            logMessage('Successfully created channel with name \'' + name + '\' as \'' + channelId + '\'');
+        });
+    });
+
     var selectTab = function (name) {
         $('.tab').css('display', 'none');
         $('#' + name).css('display', 'block');
@@ -681,6 +771,10 @@ $(document).ready(function () {
 
     $('#provisioning-tab').click(function (ev) {
         selectTab('provisioning');
+    });
+
+    $('#management-tab').click(function (ev) {
+        selectTab('management');
     });
 
     selectTab('configuration');

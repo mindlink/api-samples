@@ -20,6 +20,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     self.collaboration = {};
     self.provisioning = {};
     self.streaming = {};
+    self.management = {};
 
     // Event handlers
     self.onLogMessage = jQuery.noop; // message
@@ -61,6 +62,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     self.onMessageReceived = jQuery.noop; // event id, time, channel id, sender, content
     self.onChannelStateChanged = jQuery.noop; // event id, time, channel id, active
     self.onMetaDataUpdated = jQuery.noop; // event id, time, key, value
+    self.onManagementTestResultReceived = jQuery.noop // result
 
     var log = function(message) {
         self.onLogMessage(message);
@@ -126,7 +128,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
                         self.onChannelStateChanged(ev.EventId, ev.Time, ev.ChannelId, ev.Active);
                         break;
                     case 'MessageEvent':
-                        self.onMessageReceived(ev.EventId, ev.Time, ev.ChannelId, ev.Sender, ev.SenderAlias, ev.Content, ev.MessageParts);
+                        self.onMessageReceived(ev.EventId, ev.Time, ev.ChannelId, ev.Token, ev.Sender, ev.SenderAlias, ev.Content, ev.MessageParts);
                         break;
                     case 'MetaDataEvent':
                         self.onMetaDataUpdated(ev.EventId, ev.Time, ev.Key, ev.Value);
@@ -204,10 +206,13 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     }
 
-    self.collaboration.requestChannelHistory = function(channelId, limit, callbackFn, errorFn) {
+    self.collaboration.requestChannelHistory = function(channelId, limit, token, callbackFn, errorFn) {
         limit = limit || 50; // default
         log('Requesting channel history for \'' + channelId + '\'...');
-        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages?take=' + limit, 'GET', '', function(result) {
+
+        var beforeTokenParam = token ? ('&before=' + token) : '';
+
+        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages?take=' + limit + beforeTokenParam, 'GET', '', function(result) {
             self.onChannelHistory(channelId, result);
             if (callbackFn) callbackFn(channelId, result);
         }, errorFn);
@@ -244,8 +249,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             Text: text
         };
         sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
-            self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Text);
-            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Text);
+            self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
+            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
         }, errorFn);
     };
 
@@ -257,8 +262,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         };
 
         sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
-            self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Text);
-            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Text);
+            self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
+            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
         }, errorFn);
     };
     
@@ -270,8 +275,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             Text: content
         };
         sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
-            self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Subject, result.Text);
-            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Subject, result.Text);
+            self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
+            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
         }, errorFn);
     };
     
@@ -284,8 +289,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         };
 
         sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
-            self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Subject, result.Text);
-            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Subject, result.Text);
+            self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
+            if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
         }, errorFn);
     };
     
@@ -349,7 +354,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     self.provisioning.requestProvisionedAgentById = function(agentId, callbackFn, errorFn) {
         log('Requesting provisioned agents by ID...');
         sendRequest('Provisioning/V1/Agents/' + agentId, 'GET', '', function(result) {
-            self.onProvisionedAgent(result.ProvisioningMode, result.CanProvision, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
+            self.onProvisionedAgent(result.ProvisioningMode, result.CanProvision, result.ManagementMode, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
             if (callbackFn) callbackFn(result.ProvisioningMode, result.CanProvision, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
         }, errorFn);
     };
@@ -476,7 +481,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     };
 
-    self.provisioning.createAgent = function(agentId, userName, channels, metaData, users, provisioningMode, callbackFn, errorFn) {
+    self.provisioning.createAgent = function(agentId, userName, channels, metaData, users, provisioningMode, managementMode, callbackFn, errorFn) {
         log('Creating new agent...');
         var meta = [];
         var rawMeta = metaData.split(';'); // key1:value1;key2:value2;.....
@@ -502,6 +507,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             Users: usrs,
             CanProvision: provisioningMode == '3' || provisioningMode == '2',
             ProvisioningMode: provisioningMode,
+            ManagementMode: managementMode,
             State: '0'
         }, function(result, status) {
             self.onCreateAgent(status);
@@ -548,4 +554,64 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             if (callbackFn) callbackFn(results);
         }, errorFn);
     };
+
+    self.management.test = function(callbackFn, errorFn) {
+        log('Test management API...')
+        sendRequest('Management/V1/Test', 'GET', '', function(result) {
+            self.onManagementTestResultReceived(result);
+            if (callbackFn) callbackFn(results);
+        }, errorFn);
+    }
+
+    self.management.getManagedChannels = function(callbackFn, errorFn) {
+        log('Get channels I manage...');
+        sendRequest('Management/V1/Channels', 'GET', '', function(results) {
+            callbackFn(results);
+        }, errorFn);
+    }
+
+    
+    self.management.getChannelCategories = function(callbackFn, errorFn) {
+        log('Get channel categories...');
+        sendRequest('Management/V1/Categories', 'GET', '', function(results) {
+            callbackFn(results);
+        }, errorFn);
+    }
+
+    self.management.getManagedChannelMembers = function(channelId, callbackFn, errorFn) {
+        log('Get managed channel members for channel \'' + channelId + '\'.');
+        sendRequest('Management/V1/Channels/' + channelId + '/Members', 'GET', '', function(results) {
+            callbackFn(results);
+        }, errorFn);
+    }
+
+    self.management.setManagedChannelMembers = function(channelId, members, callbackFn, errorFn) {
+        log('Set managed channel members for channel \'' + channelId + '\'.');
+
+        sendRequest('Management/V1/Channels/' + channelId + '/Members', 'PUT', members, function() {
+            callbackFn();
+        }, errorFn);
+    }
+
+    self.management.deleteManagedChannel = function(channelId, callbackFn, errorFn) {
+        log('Delete managed channel \'' + channelId + '\'.');
+
+        sendRequest('Management/V1/Channels/' + channelId, 'DELETE', function() {
+            callbackFn();
+        }, errorFn);
+    }
+
+    self.management.createManagedChannel = function(name, categoryId, description, privacy, members, callbackFn, errorFn) {
+        log('Create managed channel \'' + name + '\', in category \'' + categoryId + '\'.');
+
+        sendRequest('Management/V1/Channels', 'POST', {
+            Name: name,
+            CategoryId: categoryId,
+            Description: description,
+            Privacy: privacy,
+            Members: members
+        }, function(result) {
+            callbackFn(result);
+        }, errorFn);
+    }
 };

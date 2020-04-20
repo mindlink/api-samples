@@ -22,11 +22,9 @@
     <target name="jar" depends="compile,-init-jar">
        <jar destfile="${dist.dir}/foundationapi.jar" basedir="${build.dir}">
           <manifest>
-             <section name="com.mindlinksoft.foundationapi.demo">
 				<attribute name="Main-Class" value="com.mindlinksoft.foundationapi.demo.DemoBot"/>
-                <attribute name="Implementation-Title" value="Foundation API example bot"/>
-                <attribute name="Implementation-Version" value="1.0"/>
-             </section>
+            <attribute name="Implementation-Title" value="Foundation API example bot"/>
+            <attribute name="Implementation-Version" value="1.0"/>
           </manifest>
        </jar>
     </target>
