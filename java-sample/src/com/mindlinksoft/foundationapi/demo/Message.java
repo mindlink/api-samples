@@ -8,6 +8,7 @@ public class Message {
     private final String id;
     private final boolean isAlert;
     private final String senderId;
+    private final String senderAlias;
     private final String channelId;
     private final String subject;
     private final String text;
@@ -19,11 +20,12 @@ public class Message {
      * Creates a new instance of {@link Message}.
      */
     protected Message(final String id, final boolean isAlert,
-            final String senderId, final String channelId, final String subject,
+            final String senderId, final String senderAlias, final String channelId, final String subject,
             final String text, final String messageParts, final long timestamp, final String token) {
         this.id = id;
         this.isAlert = isAlert;
         this.senderId = senderId;
+        this.senderAlias = senderAlias;
         this.channelId = channelId;
         this.subject = subject;
         this.text = text;
@@ -72,6 +74,15 @@ public class Message {
     }
 
     /**
+     * Gets the alias of the sender of the message.
+     *
+     * @return The message sender's alias.
+     */
+    public String getSenderAlias() {
+        return senderAlias;
+    }
+    
+    /**
      * Gets the subject of the message (if it has been sent as a "story").
      *
      * @return The message's subject, or <code>null</code> for non-story
@@ -116,7 +127,7 @@ public class Message {
     @Override
     public String toString() {
         return "Message{id=" + id + ", isAlert=" + isAlert + ", senderId="
-                + senderId + ", channelId=" + channelId + ", subject="
+                + senderId + ", senderAlias=" + senderAlias + ", channelId=" + channelId + ", subject="
                 + subject + ", text=" + text + ", messageParts=" + messageParts
                 + ", timestamp=" + timestamp
                 + ", token=" + token + "}";

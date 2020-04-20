@@ -57,11 +57,17 @@ var setupBot = function(sipAddress, username, password) {
         onChannelHistory: function(channelId, messages) {
             logMessage('Chat history received for ' + channelId + '. Contains ' + messages.length + ' message(s).');
             // display the messages
-            logMessage(listAsString(messages, messages.length, function(message) {
-                var token = message.Token ? ('[token = ' + message.Token + '] ') : '';
-
-                return token + formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + '\n';
-            }), '', true);
+            logMessage(
+                listAsString(
+                    messages,
+                    messages.length,
+                    function(message) {
+                        var token = message.Token ? ('[token = ' + message.Token + '] ') : '';
+                        var messageSenderAlias = message.SenderAlias ? ' (' + message.SenderAlias + ')' : '';
+                        return token + formatTime(message.Timestamp) + ' ' + message.SenderId + messageSenderAlias + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + '\n'; 
+                    }),
+                '',
+                true);
 
             if (console && console.log) {
                 console.log('Chat history for ' + channelId + ':');
@@ -78,11 +84,18 @@ var setupBot = function(sipAddress, username, password) {
 
             logMessage('Chat history search results received for ' + channelResults.ChannelId + '. Contains ' + channelResults.Count + ' message(s).');
             // display the messages
-            logMessage(listAsString(channelResults.Messages, channelResults.Messages.length, function(message) {
-                var token = message.Token ? ('[token = ' + message.Token + '] ') : '';
+            logMessage(
+                listAsString(
+                    channelResults.Messages,
+                    channelResults.Messages.length,
+                    function(message) {
+                        var token = message.Token ? ('[token = ' + message.Token + '] ') : '';
+                        var messageSenderAlias = message.SenderAlias ? ' (' + message.SenderAlias + ')' : '';
+                        return token + formatTime(message.Timestamp) + ' ' + message.SenderId + messageSenderAlias + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + ' \n';
+                    }),
+                '',
+                true);
 
-                return token + formatTime(message.Timestamp) + ' ' + message.SenderId + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + ' \n';
-            }), '', true);
 
             if (console && console.log) {
                 console.log('Chat history for ' + channelResults.ChannelId + ':');
@@ -226,8 +239,9 @@ var setupBot = function(sipAddress, username, password) {
             $('form#streaming input[id=start-streaming]').attr('disabled', false);
             $('form#streaming input[id=stop-streaming]').attr('disabled', true);
         },
-        onMessageReceived: function(eventId, time, channelId, token, sender, content, messageParts) {
-            logMessage('Message received to channel \'' + channelId + '\' with token \'' + token + '\' from \'' + sender + '\', text: \'' + content + '\' and message parts: \'' + JSON.stringify(messageParts) + '\'.', 'streaming');
+        onMessageReceived: function(eventId, time, channelId, token, sender, senderAlias, content, messageParts) {
+            var aliasText = senderAlias ? ' with alias \'' + senderAlias + '\'' : '';
+            logMessage('Message received to channel \'' + channelId + '\' with token \'' + token + '\' from \'' + sender + '\'' + aliasText + ', text: \'' + content + '\' and message parts: \'' + JSON.stringify(messageParts) + '\'.', 'streaming');
         },
         onChannelStateChanged: function(eventId, time, channelId, active) {
             logMessage('Channel state changed for channel \'' + channelId + '\': ' + (active ? 'active' : 'inactive'), 'streaming');
@@ -486,6 +500,20 @@ $(document).ready(function () {
         }
 
         bot.collaboration.searchChatHistory(searchtext, matchcase, matchexact, false, null, null, 0, onDateValue, parseInt(limit), channelIds);
+    });
+
+    $('form#channel-agent-state input[id=start-composing]').click(function (ev) {
+        ev.preventDefault();
+
+        var channelid = $('form#channel-agent-state input[id=channel-agent-state-channel-id]').val();
+        bot.collaboration.updateChannelAgentState(channelid, true);
+    });
+
+    $('form#channel-agent-state input[id=stop-composing]').click(function (ev) {
+        ev.preventDefault();
+
+        var channelid = $('form#channel-agent-state input[id=channel-agent-state-channel-id]').val();
+        bot.collaboration.updateChannelAgentState(channelid, false);
     });
 
     $('form#request-provisioned-agents input[type=submit]').click(function (ev) {

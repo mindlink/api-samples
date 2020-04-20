@@ -89,6 +89,45 @@ class ApiConnection:
         if response.status_code != 200:
             print ('Something went wrong while sending a message to a channel!', channel_id, response.status_code, response.reason)
 
+    def send_message_parts(self, channel_id, messageParts, is_alert):
+        if self.token == '':
+            self.authenticate()        
+
+        request_url = '{}/Collaboration/V1/Channels/{}/Messages'.format(self.host, channel_id)
+
+        response = requests.post(
+            request_url,
+            json = {
+                'MessageParts': messageParts,
+                'IsAlert': is_alert
+            },
+            headers = {
+                'Accept' : 'application/json',
+                'Authorization': 'FCF {}'.format(self.token)}
+            )
+
+        if response.status_code != 200:
+            print ('Something went wrong while sending a message-part message to a channel!', channel_id, response.status_code, response.reason)
+
+    def update_channel_agent_state(self, channel_id, is_composing):
+        if self.token == '':
+            self.authenticate()        
+
+        request_url = '{}/Collaboration/V1/Channels/{}/Me'.format(self.host, channel_id)
+
+        response = requests.post(
+            request_url,
+            json = {
+                'IsComposing': is_composing
+            },
+            headers = {
+                'Accept' : 'application/json',
+                'Authorization': 'FCF {}'.format(self.token)}
+            )
+
+        if response.status_code != 200:
+            print ('Something went wrong while updating channel agent state!', channel_id, response.status_code, response.reason)
+
 
     def get_events(self, channel_id, callback):
         if self.token == '':

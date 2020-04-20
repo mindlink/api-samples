@@ -13,6 +13,9 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     var getEventsJqXhr = null;
     var streaming = false;
 
+    // Credentials
+
+
     // Namespaces
     self.collaboration = {};
     self.provisioning = {};
@@ -79,7 +82,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             data: JSON.stringify(data),
             dataType: 'json',
             cache: false,
-            timeout: 20000,
+            timeout: 200000,
             processData: false,
             headers: headers,
             error: function(xhr, status, error) {
@@ -107,20 +110,25 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }
     };
 
-    var getEvents = function(lastEventId, eventTypes, channels, regex) {
-        var url = 'Collaboration/V1/Events?last-event=' + lastEventId;
+    var getEvents = function(instanceId, lastEventId, eventTypes, channels, regex) {
+        var instance = instanceId ? "&instance=" + instanceId : "";
+        var url = 'Collaboration/V1/Events?last-event=' + lastEventId + instance;
         if (eventTypes) url += '&types=' + eventTypes;
         if (channels) url += '&channels=' + channels;
         if (regex) url += '&regex=' + regex;
         getEventsJqXhr = sendRequest(url, 'GET', '', function(result) {
+            var nextInstanceId;
             for (var i = 0; i < result.length; i++) {
-                var ev = result[i];
+                var ev = result[i]; 
+                if (!nextInstanceId) {
+                    nextInstanceId = ev.InstanceId;
+                }               
                 switch (ev.__type.split(':')[0]) {
                     case 'ChannelStateEvent':
                         self.onChannelStateChanged(ev.EventId, ev.Time, ev.ChannelId, ev.Active);
                         break;
                     case 'MessageEvent':
-                        self.onMessageReceived(ev.EventId, ev.Time, ev.ChannelId, ev.Token, ev.Sender, ev.Content, ev.MessageParts);
+                        self.onMessageReceived(ev.EventId, ev.Time, ev.ChannelId, ev.Token, ev.Sender, ev.SenderAlias, ev.Content, ev.MessageParts);
                         break;
                     case 'MetaDataEvent':
                         self.onMetaDataUpdated(ev.EventId, ev.Time, ev.Key, ev.Value);
@@ -130,11 +138,14 @@ MindLink.FoundationApi.V1.Bot = function(config) {
                 }
                 lastEventId = ev.EventId;
             }
-            getEvents(lastEventId, eventTypes, channels, regex);
+            getEvents(nextInstanceId, lastEventId, eventTypes, channels, regex);
         }, function(errorCode, message) {
-            if (streaming) {
+            if (errorCode === 410) {
+                log('Error while listening for events. The API service has been restarted (' + errorCode + '). Re-initializing event stream...');
+                getEvents(null, 0, eventTypes, channels, regex);
+            } else if (streaming) {
                 log('Error while listening for events: (' + errorCode + ') \'' + message + '\'. Event polling will begin again in five seconds...');
-                setTimeout(function() { getEvents(lastEventId); }, 5000);
+                setTimeout(function() { getEvents(instanceId, lastEventId, eventTypes, channels, regex); }, 5000);
             } else {
                 log('Streaming stopped.');
             }
@@ -173,7 +184,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         log('Starting streaming...');
         stopGetEvents();
         streaming = true;
-        getEvents(0, eventTypes, channels, regex);
+        getEvents(null, 0, eventTypes, channels, regex);
         self.onStreamingStarted();
     };
 
@@ -182,6 +193,18 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         stopGetEvents();
         self.onStreamingStopped();
     };
+
+    self.collaboration.updateChannelAgentState = function(channelId, isComposing, callbackFn, errorFn) {
+        log('Updating channel agent state [IsComposing=' + isComposing + '] in channel \'' + channelId + '\'...');
+        var body = {
+            IsComposing: isComposing
+        };
+
+        sendRequest('Collaboration/V1/Channels/' + channelId + '/Me', 'POST', body, function(result) {
+            log('Successfully updated channel agent state in channel \'' + channelId + '\'...');
+            if (callbackFn) callbackFn(channelId, isComposing);
+        }, errorFn);
+    }
 
     self.collaboration.requestChannelHistory = function(channelId, limit, token, callbackFn, errorFn) {
         limit = limit || 50; // default
@@ -215,7 +238,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         log('Requesting state for \'' + channelId + '\'...');
         sendRequest('Collaboration/V1/Channels/' + channelId + '/State', 'GET', '', function(result) {
             self.onChannelState(channelId, result.Subject, result.PresenceState, result.PresenceText);
-            if (callbackFn) callbackFn(channelId, result.Subject, result.Presence, result.PresenceText);
+            if (callbackFn) callbackFn(channelId, result.Subject, result.PresenceState, result.PresenceText);
         }, errorFn);
     };
 

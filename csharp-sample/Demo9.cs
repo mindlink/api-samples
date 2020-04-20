@@ -2,11 +2,12 @@
 {
     using System;
     using System.Net;
+    using System.Threading;
 
     /// <summary>
-    /// Demonstrates streaming events.
+    /// Demonstrates changing composing state.
     /// </summary>
-    internal class Demo7 : Demo6
+    class Demo9 : Demo8
     {
         /// <summary>
         /// Runs the demo.
@@ -23,7 +24,7 @@
         /// <param name="agentId">
         /// The agent ID to use.
         /// </param>
-        public static void RunDemo7(string baseUri, string user, string pass, string agentId)
+        public static void RunDemo9(string baseUri, string user, string pass, string agentId)
         {
             var token = string.Empty;
             var lastEvent = 0L;
@@ -43,15 +44,15 @@
                     {
                         lastEvent = Math.Max(lastEvent, (long)evt.EventId);
                         Console.WriteLine();
-                        Console.WriteLine("Channel: {0}", evt.ChannelId);
-                        Console.WriteLine(" Sender: {0}", evt.Sender);
-                        Console.WriteLine("  Alias: {0}", evt.SenderAlias);
-                        Console.WriteLine("Content: {0}", evt.Content);
+                        Console.WriteLine("Received message from channel: {0}", evt.ChannelId);
+                        Console.WriteLine("Starting composing...");
 
-                        if (!evt.Content.ToString().StartsWith("You said: "))
-                        {
-                            GetResponse(baseUri + "/Collaboration/v1/Channels/" + evt.ChannelId + "/Messages", token, new { IsAlert = false, Text = "You said: " + evt.Content });
-                        }
+                        GetResponse(baseUri + "/Collaboration/V1/Channels/" + evt.ChannelId + "/Me", token, new { IsComposing = true });
+
+                        Thread.Sleep(3000);
+
+                        Console.WriteLine("Stopping composing...");
+                        GetResponse(baseUri + "/Collaboration/v1/Channels/" + evt.ChannelId + "/Me", token, new { IsComposing = false });
                     }
                 }
                 catch (WebException ex)
