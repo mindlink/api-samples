@@ -258,13 +258,6 @@ var setupBot = function(sipAddress, username, password) {
 $(document).ready(function () {
     jQuery.support.cors = true;
 
-    var rememberedServerAddress = safeGetStorageValue("server-address");
-
-    if (rememberedServerAddress)
-    {
-        $('form#configure input[id=server-address]').val(rememberedServerAddress);
-    }
-
     $('form#configure input[id=server-address]').bind('keyup change', function() {
         var newServerAddress = $('form#configure input[id=server-address]').val();
         bot.setBaseUrl(newServerAddress);
@@ -790,9 +783,18 @@ $(document).ready(function () {
     selectTab('configuration');
 
     logMessage('If JS not hosted run this page in IE or as a Chrome extension for it to work.');
-    logMessage('Test bot ready.');
 
     setupBot('', '', '');
+
+    var rememberedServerAddress = safeGetStorageValue("server-address");
+
+    if (rememberedServerAddress)
+    {
+        $('form#configure input[id=server-address]').val(rememberedServerAddress);
+        bot.setBaseUrl(rememberedServerAddress);
+    }
+
+    logMessage('Test bot ready.');
 });
 
 function safeSetStorageValue(key, value) {
