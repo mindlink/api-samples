@@ -82,7 +82,7 @@ var setupBot = function(sipAddress, username, password) {
             
             var channelResults = results[0];
 
-            logMessage('Chat history search results received for ' + channelResults.ChannelId + '. Contains ' + channelResults.Count + ' message(s).');
+            logMessage('Chat history search results received for ' + channelResults.ChannelId + '. Contains ' + channelResults.Messages.length + ' message(s).');
             // display the messages
             logMessage(
                 listAsString(
@@ -116,7 +116,7 @@ var setupBot = function(sipAddress, username, password) {
         },
         onChannelsList: function(channels, searchCriteria, limited) {
             logMessage('Chat rooms list received (' + channels.length + ' channels): ');
-            logMessage(listAsString(channels, 8, function(channel) { return channel.DisplayName; }), '', true);
+            logMessage(listAsString(channels, 8, function(channel) { return channel.DisplayName + ' (' + channel.Id + ')'; }), '', true);
         },
         onError: function(errorCode, message) {
             logMessage('An error was received: ' + errorCode + ': ' + message, 'error');
@@ -258,8 +258,18 @@ var setupBot = function(sipAddress, username, password) {
 $(document).ready(function () {
     jQuery.support.cors = true;
 
+    var rememberedServerAddress = safeGetStorageValue("server-address");
+
+    if (rememberedServerAddress)
+    {
+        $('form#configure input[id=server-address]').val(rememberedServerAddress);
+    }
+
     $('form#configure input[id=server-address]').bind('keyup change', function() {
-        bot.setBaseUrl($('form#configure input[id=server-address]').val());
+        var newServerAddress = $('form#configure input[id=server-address]').val();
+        bot.setBaseUrl(newServerAddress);
+
+        safeSetStorageValue("server-address", newServerAddress);
     });
     
     $('form#authenticate input[type=submit]').click(function (ev) {
@@ -784,3 +794,31 @@ $(document).ready(function () {
 
     setupBot('', '', '');
 });
+
+function safeSetStorageValue(key, value) {
+    try {
+        var storage = window.localStorage;
+
+        if (!storage) {
+            return;
+        }
+
+        storage.setItem(key, value);
+    } catch(e) {
+    }
+}
+
+function safeGetStorageValue(key) {
+    try {
+        var storage = window.localStorage;
+
+        if (!storage) {
+            return null;
+        }
+
+        return storage.getItem(key);
+    } catch(e) {
+    }
+
+    return null;
+}
