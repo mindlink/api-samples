@@ -82,7 +82,7 @@ var setupBot = function(sipAddress, username, password) {
             
             var channelResults = results[0];
 
-            logMessage('Chat history search results received for ' + channelResults.ChannelId + '. Contains ' + channelResults.Count + ' message(s).');
+            logMessage('Chat history search results received for ' + channelResults.ChannelId + '. Contains ' + channelResults.Messages.length + ' message(s).');
             // display the messages
             logMessage(
                 listAsString(
@@ -116,7 +116,7 @@ var setupBot = function(sipAddress, username, password) {
         },
         onChannelsList: function(channels, searchCriteria, limited) {
             logMessage('Chat rooms list received (' + channels.length + ' channels): ');
-            logMessage(listAsString(channels, 8, function(channel) { return channel.DisplayName; }), '', true);
+            logMessage(listAsString(channels, 8, function(channel) { return channel.DisplayName + ' (' + channel.Id + ')'; }), '', true);
         },
         onError: function(errorCode, message) {
             logMessage('An error was received: ' + errorCode + ': ' + message, 'error');
@@ -259,7 +259,10 @@ $(document).ready(function () {
     jQuery.support.cors = true;
 
     $('form#configure input[id=server-address]').bind('keyup change', function() {
-        bot.setBaseUrl($('form#configure input[id=server-address]').val());
+        var newServerAddress = $('form#configure input[id=server-address]').val();
+        bot.setBaseUrl(newServerAddress);
+
+        safeSetStorageValue("server-address", newServerAddress);
     });
     
     $('form#authenticate input[type=submit]').click(function (ev) {
@@ -780,7 +783,44 @@ $(document).ready(function () {
     selectTab('configuration');
 
     logMessage('If JS not hosted run this page in IE or as a Chrome extension for it to work.');
-    logMessage('Test bot ready.');
 
     setupBot('', '', '');
+
+    var rememberedServerAddress = safeGetStorageValue("server-address");
+
+    if (rememberedServerAddress)
+    {
+        $('form#configure input[id=server-address]').val(rememberedServerAddress);
+        bot.setBaseUrl(rememberedServerAddress);
+    }
+
+    logMessage('Test bot ready.');
 });
+
+function safeSetStorageValue(key, value) {
+    try {
+        var storage = window.localStorage;
+
+        if (!storage) {
+            return;
+        }
+
+        storage.setItem(key, value);
+    } catch(e) {
+    }
+}
+
+function safeGetStorageValue(key) {
+    try {
+        var storage = window.localStorage;
+
+        if (!storage) {
+            return null;
+        }
+
+        return storage.getItem(key);
+    } catch(e) {
+    }
+
+    return null;
+}
