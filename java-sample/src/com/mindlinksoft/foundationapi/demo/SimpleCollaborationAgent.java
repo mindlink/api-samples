@@ -99,11 +99,16 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
             final JSONOrderedObject hashtagMessagePart = new JSONOrderedObject();
             hashtagMessagePart.put("__type", "HashtagMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
             hashtagMessagePart.put("Hashtag", "#hashtag");
-            
+
+            final JSONOrderedObject codeBlockMessagePart = new JSONOrderedObject();
+            codeBlockMessagePart.put("__type", "CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
+            codeBlockMessagePart.put("CodeBlock", "System.out.println(\"Hello World!\")");
+
             messageParts.put(plainTextMessagePart);
             messageParts.put(hyperlinkMessagePart);
             messageParts.put(channelLinkMessagePart);
             messageParts.put(hashtagMessagePart);
+            messageParts.put(codeBlockMessagePart);
 
             final JSONObject payload = new JSONObject();
             payload.put("MessageParts", messageParts);

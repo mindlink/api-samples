@@ -45,7 +45,12 @@ hashtagMessagePart = {
     'Hashtag': '#hashtag'
 }
 
-message_parts = [plainTextMessagePart, hyperlinkMessagePart, channelLinkMessagePart, hashtagMessagePart]
+codeBlockMessagePart = {
+    '__type': 'CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration',
+    'CodeBlock': 'print(\'Hello World!\')'
+}
+
+message_parts = [plainTextMessagePart, hyperlinkMessagePart, channelLinkMessagePart, hashtagMessagePart, codeBlockMessagePart]
 
 connection = ApiConnection(host, user_name, password, agent)
 

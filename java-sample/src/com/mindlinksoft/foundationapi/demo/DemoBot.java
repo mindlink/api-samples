@@ -156,7 +156,7 @@ public class DemoBot {
                 final ChannelPrivacy privacy = toEnum(
                     ChannelPrivacy.class, reader.readLine(), ChannelPrivacy.Open);
 
-                final LinkedList<String> members = new LinkedList<>();
+                final LinkedList<String> members = new LinkedList<String>();
 
                 if (privacy != ChannelPrivacy.Open) {
                     System.out.println("Enter members (enter blank line when done):");
@@ -208,7 +208,7 @@ public class DemoBot {
                 System.out.print("Enter channel ID: ");
                 final String id = reader.readLine();
 
-                final LinkedList<String> members = new LinkedList<>();
+                final LinkedList<String> members = new LinkedList<String>();
                 System.out.println("Enter members (enter blank line when done):");
                 String next = reader.readLine();
                 
