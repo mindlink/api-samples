@@ -358,6 +358,19 @@ $(document).ready(function () {
         }
         $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
     });
+
+    $('form#send-message-parts input[id=message-part-emoji]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
+        if (existingParts.indexOf('[') == 0 && existingParts.indexOf(']', this.length - 1) !== -1) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"EmojiMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","Text":"😀"}';
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
+    });
     
     $('form#send-message-parts input[id=message-part-clear]').click(function (ev) {
         ev.preventDefault();
@@ -454,6 +467,19 @@ $(document).ready(function () {
             existingParts = existingParts.substring(1, existingParts.length - 1);
         }
         var newPart = '{"__type":"CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","CodeBlock":"alert(\\\"Hello World!\\\");"}';
+        if (existingParts.length !== 0) {
+            newPart = ',' + newPart;
+        }
+        $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
+    });
+
+    $('form#send-story-parts input[id=message-part-emoji]').click(function (ev) {
+        ev.preventDefault();
+        var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
+        if (existingParts.indexOf('[') == 0 && existingParts.indexOf(']', this.length - 1) !== -1) {
+            existingParts = existingParts.substring(1, existingParts.length - 1);
+        }
+        var newPart = '{"__type":"EmojiMessagePart:http://schemas.fcg.im/foundation/v1/collaboration", "Text":"😀"}';
         if (existingParts.length !== 0) {
             newPart = ',' + newPart;
         }
