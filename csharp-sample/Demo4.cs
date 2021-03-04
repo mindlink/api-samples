@@ -1,3 +1,5 @@
+using System.Web;
+
 namespace FoundationApiDemo
 {
     using System;
@@ -42,14 +44,14 @@ namespace FoundationApiDemo
         public static void RunDemo4(string baseUrl, string user, string password, string provisionedUserId, string provisionedUser, string agentId, string agentUserName, string channelId)
         {
             var token = GetToken(baseUrl, user, password);
-            var response = PutUser(baseUrl + "/Provisioning/V1/Users/" + provisionedUserId, token, provisionedUserId, provisionedUser);
+            var response = PutUser(baseUrl + "/Provisioning/V1/Users/" + HttpUtility.UrlEncode(provisionedUserId), token, provisionedUserId, provisionedUser);
 
             if (response)
             {
                 Console.WriteLine("Successfully added user {0} with ID: {1}", provisionedUser, provisionedUserId);
             }
 
-            response = PutAgent(baseUrl + "/Provisioning/V1/Agents/" + agentId, token, provisionedUserId, agentId, agentUserName, channelId);
+            response = PutAgent(baseUrl + "/Provisioning/V1/Agents/" + HttpUtility.UrlEncode(agentId), token, provisionedUserId, agentId, agentUserName, channelId);
 
             if (response)
             {

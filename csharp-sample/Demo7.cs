@@ -1,4 +1,6 @@
-﻿namespace FoundationApiDemo
+﻿using System.Web;
+
+namespace FoundationApiDemo
 {
     using System;
     using System.Net;
@@ -50,7 +52,7 @@
 
                         if (!evt.Content.ToString().StartsWith("You said: "))
                         {
-                            GetResponse(baseUri + "/Collaboration/v1/Channels/" + evt.ChannelId + "/Messages", token, new { IsAlert = false, Text = "You said: " + evt.Content });
+                            GetResponse(baseUri + "/Collaboration/v1/Channels/" + HttpUtility.UrlEncode(evt.ChannelId) + "/Messages", token, new { IsAlert = false, Text = "You said: " + evt.Content });
                         }
                     }
                 }

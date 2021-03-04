@@ -1,4 +1,6 @@
-﻿namespace FoundationApiDemo
+﻿using System.Web;
+
+namespace FoundationApiDemo
 {
     using System;
 
@@ -40,7 +42,7 @@
                 messageIndex++;
                 var messageParts = new dynamic[] { plainTextMessagePart, hyperlinkMessagePart, channelLinkMessagePart, hashtagMessagePart, codeBlockMessagePart };
 
-                GetResponse(baseUrl + "/Collaboration/v1/Channels/" + channelId + "/Messages", token, new { IsAlert = false, MessageParts = messageParts });
+                GetResponse(baseUrl + "/Collaboration/v1/Channels/" + HttpUtility.UrlEncode(channelId) + "/Messages", token, new { IsAlert = false, MessageParts = messageParts });
 
                 Console.WriteLine("Successfully sent message in channel: {0}.", channelId);
 

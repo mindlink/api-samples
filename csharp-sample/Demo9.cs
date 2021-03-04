@@ -1,4 +1,6 @@
-﻿namespace FoundationApiDemo
+﻿using System.Web;
+
+namespace FoundationApiDemo
 {
     using System;
     using System.Net;
@@ -47,12 +49,12 @@
                         Console.WriteLine("Received message from channel: {0}", evt.ChannelId);
                         Console.WriteLine("Starting composing...");
 
-                        GetResponse(baseUri + "/Collaboration/V1/Channels/" + evt.ChannelId + "/Me", token, new { IsComposing = true });
+                        GetResponse(baseUri + "/Collaboration/V1/Channels/" + HttpUtility.UrlEncode(evt.ChannelId.ToString()) + "/Me", token, new { IsComposing = true });
 
                         Thread.Sleep(3000);
 
                         Console.WriteLine("Stopping composing...");
-                        GetResponse(baseUri + "/Collaboration/v1/Channels/" + evt.ChannelId + "/Me", token, new { IsComposing = false });
+                        GetResponse(baseUri + "/Collaboration/v1/Channels/" + HttpUtility.UrlEncode(evt.ChannelId.ToString()) + "/Me", token, new { IsComposing = false });
                     }
                 }
                 catch (WebException ex)
