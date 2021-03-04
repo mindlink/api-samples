@@ -1,8 +1,7 @@
-﻿using System.Web;
-
-namespace FoundationApiDemo
+﻿namespace FoundationApiDemo
 {
     using System;
+    using System.Web;
 
     /// <summary>
     /// Demonstrates sending and receiving message parts.

@@ -1,9 +1,8 @@
-﻿using System.Web;
-
-namespace FoundationApiDemo
+﻿namespace FoundationApiDemo
 {
     using System;
     using System.Net;
+    using System.Web;
 
     /// <summary>
     /// Demonstrates streaming events.

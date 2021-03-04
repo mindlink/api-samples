@@ -1,10 +1,9 @@
-﻿using System.Web;
-
-namespace FoundationApiDemo
+﻿namespace FoundationApiDemo
 {
     using System;
     using System.Net;
     using System.Threading;
+    using System.Web;
 
     /// <summary>
     /// Demonstrates changing composing state.
