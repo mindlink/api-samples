@@ -112,10 +112,10 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     var getEvents = function(instanceId, lastEventId, eventTypes, channels, regex) {
         var instance = instanceId ? "&instance=" + instanceId : "";
-        var url = 'Collaboration/V1/Events?last-event=' + lastEventId + instance;
-        if (eventTypes) url += '&types=' + eventTypes;
-        if (channels) url += '&channels=' + channels;
-        if (regex) url += '&regex=' + regex;
+        var url = 'Collaboration/V1/Events?last-event=' + encodeURIComponent(lastEventId) + encodeURIComponent(instance);
+        if (eventTypes) url += '&types=' + encodeURIComponent(eventTypes);
+        if (channels) url += '&channels=' + encodeURIComponent(channels);
+        if (regex) url += '&regex=' + encodeURIComponent(regex);
         getEventsJqXhr = sendRequest(url, 'GET', '', function(result) {
             var nextInstanceId;
             for (var i = 0; i < result.length; i++) {
@@ -169,7 +169,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.getToken = function(callbackFn, errorFn) {
         log('Getting token...');
-        sendRequest('Authentication/V1/Tokens/' + self.token, 'GET', '', function(result) {
+        sendRequest('Authentication/V1/Tokens/' + encodeURIComponent(self.token), 'GET', '', function(result) {
             var expires = new Date(result.ExpiresTimestamp);
             self.onToken(self.token, result.Username, result.AgentId, expires);
             if (callbackFn) callbackFn(self.token, result.Username, result.AgentId, expires);
@@ -200,7 +200,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             IsComposing: isComposing
         };
 
-        sendRequest('Collaboration/V1/Channels/' + channelId + '/Me', 'POST', body, function(result) {
+        sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Me', 'POST', body, function(result) {
             log('Successfully updated channel agent state in channel \'' + channelId + '\'...');
             if (callbackFn) callbackFn(channelId, isComposing);
         }, errorFn);
@@ -210,9 +210,9 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         limit = limit || 50; // default
         log('Requesting channel history for \'' + channelId + '\'...');
 
-        var beforeTokenParam = token ? ('&before=' + token) : '';
+        var beforeTokenParam = token ? ('&before=' + encodeURIComponent(token)) : '';
 
-        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages?take=' + limit + beforeTokenParam, 'GET', '', function(result) {
+        sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages?take=' + encodeURIComponent(limit) + beforeTokenParam, 'GET', '', function(result) {
             self.onChannelHistory(channelId, result);
             if (callbackFn) callbackFn(channelId, result);
         }, errorFn);
@@ -228,7 +228,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.collaboration.requestChannelInfo = function(channelId, callbackFn, errorFn) {
         log('Requesting channel info for \'' + channelId + '\'...');
-        sendRequest('Collaboration/V1/Channels/' + channelId, 'GET', '', function(result) {
+        sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId), 'GET', '', function(result) {
             self.onChannelInfo(channelId, result.DisplayName, result.Subject, result.Description, result.DisplayName, result.EmailAddress, result.CanAcceptFiles, result.IsReadOnly, result.MaxMessageLength, result.MaxStoryLength);
             if (callbackFn) callbackFn(channelId, result.DisplayName, result.Subject, result.Description, result.DisplayName, result.EmailAddress, result.CanAcceptFiles, result.IsReadOnly);
         }, errorFn);
@@ -236,7 +236,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.collaboration.requestChannelState = function(channelId, callbackFn, errorFn) {
         log('Requesting state for \'' + channelId + '\'...');
-        sendRequest('Collaboration/V1/Channels/' + channelId + '/State', 'GET', '', function(result) {
+        sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/State', 'GET', '', function(result) {
             self.onChannelState(channelId, result.Subject, result.PresenceState, result.PresenceText);
             if (callbackFn) callbackFn(channelId, result.Subject, result.PresenceState, result.PresenceText);
         }, errorFn);
@@ -248,7 +248,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             IsAlert: alert,
             Text: text
         };
-        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
+        sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {
             self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
             if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
         }, errorFn);
@@ -261,7 +261,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             MessageParts: messageParts
         };
 
-        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
+        sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {
             self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
             if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
         }, errorFn);
@@ -274,7 +274,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             Subject: subject,
             Text: content
         };
-        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
+        sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {
             self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
             if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
         }, errorFn);
@@ -288,7 +288,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             MessageParts: messageParts
         };
 
-        sendRequest('Collaboration/V1/Channels/' + channelId + '/Messages', 'POST', body, function(result) {
+        sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {
             self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
             if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
         }, errorFn);
@@ -298,7 +298,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         log('Uploading file name with content size \'' + content.size + '\' to channel \'' + channelId + '\'');
         
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', baseUrl + '/Collaboration/V1/Channels/' + channelId + '/File/' + fileName, true);
+        xhr.open('POST', baseUrl + '/Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/File/' + encodeURIComponent(fileName), true);
 
         if (self.token) {
             xhr.setRequestHeader('Authorization', 'FCF ' + self.token);
@@ -353,7 +353,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.requestProvisionedAgentById = function(agentId, callbackFn, errorFn) {
         log('Requesting provisioned agents by ID...');
-        sendRequest('Provisioning/V1/Agents/' + agentId, 'GET', '', function(result) {
+        sendRequest('Provisioning/V1/Agents/' + encodeURIComponent(agentId), 'GET', '', function(result) {
             self.onProvisionedAgent(result.ProvisioningMode, result.CanProvision, result.ManagementMode, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
             if (callbackFn) callbackFn(result.ProvisioningMode, result.CanProvision, result.Channels, result.Id, result.MetaData, result.State, result.UserName, result.Users);
         }, errorFn);
@@ -361,7 +361,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.requestProvisionedAgentChannels = function(agentId, callbackFn, errorFn) {
         log('Requesting provisioned agents channels...');
-        sendRequest('Provisioning/V1/Agents/' + agentId + '/Channels', 'GET', '', function(results) {
+        sendRequest('Provisioning/V1/Agents/' + encodeURIComponent(agentId) + '/Channels', 'GET', '', function(results) {
             self.onProvisionedAgentChannelsList(results);
             if (callbackFn) callbackFn(results);
         }, errorFn);
@@ -369,7 +369,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.requestProvisionedAgentMetaData = function(agentId, callbackFn, errorFn) {
         log('Requesting provisioned agent\'s meta data...');
-        sendRequest('Provisioning/V1/Agents/' + agentId + '/Metadata', 'GET', '', function(results) {
+        sendRequest('Provisioning/V1/Agents/' + encodeURIComponent(agentId) + '/Metadata', 'GET', '', function(results) {
             self.onProvisionedAgentMetadataList(results);
             if (callbackFn) callbackFn(results);
         }, errorFn);
@@ -377,7 +377,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.requestProvisionedAgentMetaDataByKey = function(agentId, key, callbackFn, errorFn) {
         log('Requesting agent meta data by key...');
-        sendRequest('Provisioning/V1/Agents/' + agentId + '/Metadata/' + key, 'GET', '', function(result) {
+        sendRequest('Provisioning/V1/Agents/' + encodeURIComponent(agentId) + '/Metadata/' + encodeURIComponent(key), 'GET', '', function(result) {
             self.onProvisionedAgentMetadataKeyValue(result);
             if (callbackFn) callbackFn(result);
         }, errorFn);
@@ -401,7 +401,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     
     self.provisioning.requestThrottleById = function(throttleId, callbackFn, errorFn) {
         log('Requesting provisioned throttle by ID...');
-        sendRequest('Provisioning/V1/Throttles/' + throttleId, 'GET', '', function(result) {
+        sendRequest('Provisioning/V1/Throttles/' + encodeURIComponent(throttleId), 'GET', '', function(result) {
             self.onProvisionedThrottle(result.Id, result.Type, result.Threshold, result.Agents);
             if (callbackFn) callbackFn(result.Id, result.Type, result.Threshold, result.Agents);
         }, errorFn);
@@ -411,7 +411,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         log('Creating/updating throttle...');
         var agents = agents.split(';');
 
-        sendRequest('Provisioning/V1/Throttles/' + throttleId, 'PUT', {
+        sendRequest('Provisioning/V1/Throttles/' + encodeURIComponent(throttleId), 'PUT', {
             Id: throttleId,
             Type: type,
             Threshold: threshold,
@@ -424,7 +424,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     
     self.provisioning.deleteThrottleById = function(throttleId, callbackFn, errorFn) {
         log('Deleting throttle by ID...');
-        sendRequest('Provisioning/V1/Throttles/' + throttleId, 'DELETE', '', function(result, status) {
+        sendRequest('Provisioning/V1/Throttles/' + encodeURIComponent(throttleId), 'DELETE', '', function(result, status) {
             self.onDeleteThrottleById(status);
             if (callbackFn) callbackFn(status);
         }, errorFn);
@@ -432,7 +432,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.requestUsersById = function(userId, callbackFn, errorFn) {
         log('Requesting provisioned users by ID...');
-        sendRequest('Provisioning/V1/Users/' + userId, 'GET', '', function(result) {
+        sendRequest('Provisioning/V1/Users/' + encodeURIComponent(userId), 'GET', '', function(result) {
             self.onUser(result.UserId, result.Username);
             if (callbackFn) callbackFn(result.UserId, result.Username);
         }, errorFn);
@@ -440,7 +440,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.provisionChannelForAgent = function(agentId, channelId, callbackFn, errorFn) {
         log('Provisioning channel for agent...');
-        sendRequest('Provisioning/V1/Agents/' + agentId + '/Channels/' + channelId, 'PUT', '', function(result, status) {
+        sendRequest('Provisioning/V1/Agents/' + encodeURIComponent(agentId) + '/Channels/' + encodeURIComponent(channelId), 'PUT', '', function(result, status) {
             self.onProvisionedChannelForAgent(status);
             if (callbackFn) callbackFn(status);
         }, errorFn);
@@ -456,7 +456,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
                 meta[i] = { Key: keyValuePair[0], Value: keyValuePair[1] };
             }
         }
-        sendRequest('Provisioning/V1/Agents/' + agentId + '/MetaData', 'PUT', meta, function(result, status) {
+        sendRequest('Provisioning/V1/Agents/' + encodeURIComponent(agentId) + '/MetaData', 'PUT', meta, function(result, status) {
             self.onProvisionedMetadataForAgent(status);
             if (callbackFn) callbackFn(status);
         }, errorFn);
@@ -464,7 +464,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.provisionChangeSingleMetadataForAgent = function(agentId, metadataKey, value, callbackFn, errorFn) {
         log('Updating value of existing meta data for agent...');
-        sendRequest('Provisioning/V1/Agents/' + agentId + '/MetaData/' + metadataKey, 'PUT', value, function(result, status) {
+        sendRequest('Provisioning/V1/Agents/' + encodeURIComponent(agentId) + '/MetaData/' + encodeURIComponent(metadataKey), 'PUT', value, function(result, status) {
             self.onprovisionChangedSingleMetadataForAgent(status);
             if (callbackFn) callbackFn(status);
         }, errorFn);
@@ -472,7 +472,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.provisionChangeUser = function(userId, username, callbackFn, errorFn) {
         log('Adding/updating user...');
-        sendRequest('Provisioning/V1/Users/' + userId, 'PUT', {
+        sendRequest('Provisioning/V1/Users/' + encodeURIComponent(userId), 'PUT', {
             UserId: userId,
             Username: username
         }, function(result, status) {
@@ -499,7 +499,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             }
         }
         var usrs = users.split(';');
-        sendRequest('Provisioning/V1/Agents/' + agentId, 'PUT', {
+        sendRequest('Provisioning/V1/Agents/' + encodeURIComponent(agentId), 'PUT', {
             Id: agentId,
             UserName: userName,
             Channels: chnls,
@@ -517,7 +517,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.deleteAgent = function(agentId, userId, username, callbackFn, errorFn) {
         log('Deleting agent by ID...');
-        sendRequest('Provisioning/V1/Agents/' + agentId, 'DELETE', '', function(result, status) {
+        sendRequest('Provisioning/V1/Agents/' + encodeURIComponent(agentId), 'DELETE', '', function(result, status) {
             self.onDeleteAgentById(status);
             if (callbackFn) callbackFn(status);
         }, errorFn);
@@ -525,7 +525,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.deleteChannelByAgentId = function(agentId, channelId, callbackFn, errorFn) {
         log('Deleting channel by agent ID...');
-        sendRequest('Provisioning/V1/Agents/' + agentId + '/Channels/' + channelId, 'DELETE', '', function(result, status) {
+        sendRequest('Provisioning/V1/Agents/' + encodeURIComponent(agentId) + '/Channels/' + encodeURIComponent(channelId), 'DELETE', '', function(result, status) {
             self.onDeleteChannelByAgentId(status);
             if (callbackFn) callbackFn(status);
         }, errorFn);
@@ -533,7 +533,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.deleteMetadataKeyByAgentId = function(agentId, metadataKey, callbackFn, errorFn) {
         log('Deleting channel by agent ID...');
-        sendRequest('Provisioning/V1/Agents/' + agentId + '/MetaData/' + metadataKey, 'DELETE', '', function(result, status) {
+        sendRequest('Provisioning/V1/Agents/' + encodeURIComponent(agentId) + '/MetaData/' + encodeURIComponent(metadataKey), 'DELETE', '', function(result, status) {
             self.onDeleteMatadataKeyByAgentId(status);
             if (callbackFn) callbackFn(status);
         }, errorFn);
@@ -541,7 +541,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.deleteUserById = function(userId, callbackFn, errorFn) {
         log('Deleting user by ID...');
-        sendRequest('Provisioning/V1/Users/' + userId, 'DELETE', '', function(result, status) {
+        sendRequest('Provisioning/V1/Users/' + encodeURIComponent(userId), 'DELETE', '', function(result, status) {
             self.onDeleteUserById(status);
             if (callbackFn) callbackFn(status);
         }, errorFn);
@@ -549,7 +549,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.provisioning.findChannels = function(searchTerm, callbackFn, errorFn) {
         log('Find channels by criteria...');
-        sendRequest('Provisioning/V1/Channels?query=' + searchTerm, 'Get', '', function(results) {
+        sendRequest('Provisioning/V1/Channels?query=' + encodeURIComponent(searchTerm), 'Get', '', function(results) {
             self.onFindChannelsComplete(results);
             if (callbackFn) callbackFn(results);
         }, errorFn);
@@ -580,7 +580,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
 
     self.management.getManagedChannelMembers = function(channelId, callbackFn, errorFn) {
         log('Get managed channel members for channel \'' + channelId + '\'.');
-        sendRequest('Management/V1/Channels/' + channelId + '/Members', 'GET', '', function(results) {
+        sendRequest('Management/V1/Channels/' + encodeURIComponent(channelId) + '/Members', 'GET', '', function(results) {
             callbackFn(results);
         }, errorFn);
     }
@@ -588,7 +588,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     self.management.setManagedChannelMembers = function(channelId, members, callbackFn, errorFn) {
         log('Set managed channel members for channel \'' + channelId + '\'.');
 
-        sendRequest('Management/V1/Channels/' + channelId + '/Members', 'PUT', members, function() {
+        sendRequest('Management/V1/Channels/' + encodeURIComponent(channelId) + '/Members', 'PUT', members, function() {
             callbackFn();
         }, errorFn);
     }
@@ -596,7 +596,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     self.management.deleteManagedChannel = function(channelId, callbackFn, errorFn) {
         log('Delete managed channel \'' + channelId + '\'.');
 
-        sendRequest('Management/V1/Channels/' + channelId, 'DELETE', function() {
+        sendRequest('Management/V1/Channels/' + encodeURIComponent(channelId), 'DELETE', function() {
             callbackFn();
         }, errorFn);
     }
