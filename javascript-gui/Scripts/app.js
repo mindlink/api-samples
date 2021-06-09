@@ -283,15 +283,27 @@ $(document).ready(function () {
         var channelId = $('form#send-message input[id=message-channel-id]').val();
         var message = $('form#send-message textarea[id=message-content]').val();
         var alert = $('form#send-message input[id=message-alert]').is(':checked');
-        bot.collaboration.sendChannelMessage(channelId, message, alert);
+        var classification = $('form#send-message input[id=message-classification]').val();
+        var securityContext = $('form#send-message input[id=message-security-context]').val();
+
+        classification = classification ? JSON.parse(classification) : null;
+        securityContext = securityContext ? JSON.parse(securityContext) : null;
+
+        bot.collaboration.sendChannelMessage(channelId, message, alert, classification, securityContext);
     });
-    
+
     $('form#send-message-parts input[type=submit]').click(function (ev) {
         ev.preventDefault();
         var channelId = $('form#send-message-parts input[id=message-channel-id]').val();
         var partsAsText = $('form#send-message-parts textarea[id=message-content]').val();
         var alert = $('form#send-message-parts input[id=message-alert]').is(':checked');
-        bot.collaboration.sendChannelMessageAsParts(channelId, JSON.parse(partsAsText), alert);
+        var classification = $('form#send-message-parts input[id=message-classification]').val();
+        var securityContext = $('form#send-message-parts input[id=message-security-context]').val();
+
+        classification = classification ? JSON.parse(classification) : null;
+        securityContext = securityContext ? JSON.parse(securityContext) : null;
+
+        bot.collaboration.sendChannelMessageAsParts(channelId, JSON.parse(partsAsText), alert, classification, securityContext);
     });
     
     $('form#send-message-parts input[id=message-part-plaintext]').click(function (ev) {
@@ -383,16 +395,28 @@ $(document).ready(function () {
         var subject = $('form#send-story input[id=story-subject]').val();
         var content = $('form#send-story textarea[id=story-content]').val();
         var alert = $('form#send-story input[id=story-alert]').is(':checked');
-        bot.collaboration.sendChannelStory(channelId, subject, content, alert);
+        var classification = $('form#send-story input[id=message-classification]').val();
+        var securityContext = $('form#send-story input[id=message-security-context]').val();
+
+        classification = classification ? JSON.parse(classification) : null;
+        securityContext = securityContext ? JSON.parse(securityContext) : null;
+
+        bot.collaboration.sendChannelStory(channelId, subject, content, alert, classification, securityContext);
     });
-    
+
     $('form#send-story-parts input[type=submit]').click(function (ev) {
         ev.preventDefault();
         var channelId = $('form#send-story-parts input[id=story-channel-id]').val();
         var subject = $('form#send-story-parts input[id=story-subject]').val();
         var partsAsText = $('form#send-story-parts textarea[id=story-content]').val();
         var alert = $('form#send-story-parts input[id=story-alert]').is(':checked');
-        bot.collaboration.sendChannelStoryAsParts(channelId, subject, JSON.parse(partsAsText), alert);
+        var classification = $('form#send-story-parts input[id=message-classification]').val();
+        var securityContext = $('form#send-story-parts input[id=message-security-context]').val();
+
+        classification = classification ? JSON.parse(classification) : null;
+        securityContext = securityContext ? JSON.parse(securityContext) : null;
+
+        bot.collaboration.sendChannelStoryAsParts(channelId, subject, JSON.parse(partsAsText), alert, classification, securityContext);
     });
     
     $('form#send-story-parts input[id=message-part-plaintext]').click(function (ev) {

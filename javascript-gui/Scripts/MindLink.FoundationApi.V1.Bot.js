@@ -242,23 +242,28 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     };
 
-    self.collaboration.sendChannelMessage = function(channelId, text, alert, callbackFn, errorFn) {
-        log('Sending ' + (alert ? 'alert ' : '') + 'message to channel \'' + channelId + '\'...');
+    self.collaboration.sendChannelMessage = function(channelId, text, alert, classification, securityContext, callbackFn, errorFn) {
+        log('Sending ' + (alert ? 'alert ' : '') + 'message to channel \'' + channelId + '\' ...');
         var body = {
             IsAlert: alert,
-            Text: text
+            Text: text,
+            Classification: classification,
+            SecurityContext: securityContext
         };
+
         sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {
             self.onChannelMessage(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
             if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
         }, errorFn);
     };
 
-    self.collaboration.sendChannelMessageAsParts = function(channelId, messageParts, alert, callbackFn, errorFn) {
+    self.collaboration.sendChannelMessageAsParts = function(channelId, messageParts, alert, classification, securityContext, callbackFn, errorFn) {
         log('Sending ' + (alert ? 'alert ' : '') + 'message as parts to channel \'' + channelId + '\'...');
         var body = {
             IsAlert: alert,
-            MessageParts: messageParts
+            MessageParts: messageParts,
+            Classification: classification,
+            SecurityContext: securityContext
         };
 
         sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {
@@ -266,26 +271,30 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Text);
         }, errorFn);
     };
-    
-    self.collaboration.sendChannelStory = function(channelId, subject, content, alert, callbackFn, errorFn) {
+
+    self.collaboration.sendChannelStory = function(channelId, subject, content, alert, classification, securityContext, callbackFn, errorFn) {
         log('Sending ' + (alert ? 'alert ' : '') + 'story (with subject \'' + subject + '\') to channel \'' + channelId + '\'...');
         var body = {
             IsAlert: alert,
             Subject: subject,
-            Text: content
+            Text: content,
+            Classification: classification,
+            SecurityContext: securityContext
         };
         sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {
             self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
             if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
         }, errorFn);
     };
-    
-    self.collaboration.sendChannelStoryAsParts = function(channelId, subject, messageParts, alert, callbackFn, errorFn) {
+
+    self.collaboration.sendChannelStoryAsParts = function(channelId, subject, messageParts, alert, classification, securityContext, callbackFn, errorFn) {
         log('Sending ' + (alert ? 'alert ' : '') + 'story (with subject \'' + subject + '\') to channel \'' + channelId + '\'...');
         var body = {
             IsAlert: alert,
             Subject: subject,
-            MessageParts: messageParts
+            MessageParts: messageParts,
+            Classification: classification,
+            SecurityContext: securityContext
         };
 
         sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {
