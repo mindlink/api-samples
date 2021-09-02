@@ -3,7 +3,6 @@ package com.mindlinksoft.foundationapi.demo;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +42,23 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
      */
     public void sendMessage(final String channelId, final String message)
             throws IOException {
-        sendMessage(channelId, null, message, false);
+        sendMessage(channelId, null, message, false, false, false);
+    }
+
+    /**
+     * Sends a message with the specified metadata to the specified channel.
+     *
+     * @param channelId The ID of the channel to send a message to
+     * @param message The content of the message to send
+     * @param hasClassification A value indicating whether or not the message has a classification
+     * @param hasSecurityContext A value indicating whether or not the message has a security context
+     */
+    public void sendMessageWithMetadata(
+            final String channelId,
+            final String message,
+            final boolean hasClassification,
+            final boolean hasSecurityContext) throws IOException {
+        sendMessage(channelId, null, message, false, hasClassification, hasSecurityContext);
     }
 
     /**
@@ -55,7 +70,7 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
      */
     public void sendAlert(final String channelId, final String message)
             throws IOException {
-        sendMessage(channelId, null, message, true);
+        sendMessage(channelId, null, message, true, false, false);
     }
 
     /**
@@ -67,14 +82,14 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
      */
     public void sendStory(final String channelId, final String subject,
             final String body) throws IOException {
-        sendMessage(channelId, subject, body, false);
+        sendMessage(channelId, subject, body, false, false, false);
     }
 
     /**
      * Sends a selection of predefined message parts to the specified channel.
-     * 
-     * Note: This feature only applies to API v18.6 and above. 
-     * 
+     *
+     * Note: This feature only applies to API v18.6 and above.
+     *
      * @param channelId The ID of the channel to send a message to
      * @throws IOException If the request can't be constructed or transmitted
      */
@@ -85,17 +100,17 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
             final JSONOrderedObject plainTextMessagePart = new JSONOrderedObject();
             plainTextMessagePart.put("__type", "PlainTextMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
             plainTextMessagePart.put("Text", "This is a test message");
-            
+
             final JSONOrderedObject hyperlinkMessagePart = new JSONOrderedObject();
             hyperlinkMessagePart.put("__type", "HyperlinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
             hyperlinkMessagePart.put("Text", "A Hyperlink");
             hyperlinkMessagePart.put("Url", "http://www.example.com");
-            
+
             final JSONOrderedObject channelLinkMessagePart = new JSONOrderedObject();
             channelLinkMessagePart.put("__type", "ChannelLinkMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
             channelLinkMessagePart.put("ChannelName", "Channel Name");
             channelLinkMessagePart.put("ChannelId", channelId);
-            
+
             final JSONOrderedObject hashtagMessagePart = new JSONOrderedObject();
             hashtagMessagePart.put("__type", "HashtagMessagePart:http://schemas.fcg.im/foundation/v1/collaboration");
             hashtagMessagePart.put("Hashtag", "#hashtag");
@@ -118,7 +133,7 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
             throw new IOException("Unable to construct JSON payload", ex);
         }
     }
-    
+
     /**
      * Sends a message to the specified channel.
      *
@@ -127,16 +142,35 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
      * story message
      * @param message The content of the message to send
      * @param alert Whether to send the message as an alert or not
+     * @param hasClassification A value indicating whether or not the message has a classification
+     * @param hasSecurityContext A value indicating whether or not the message has a security context
      * @throws IOException If the request can't be constructed or transmitted
      */
     protected void sendMessage(final String channelId,
             final String subject, final String message,
-            final boolean alert) throws IOException {
+            final boolean alert, boolean hasClassification,
+            boolean hasSecurityContext) throws IOException {
         try {
             final JSONObject payload = new JSONObject();
             payload.put("IsAlert", alert);
             payload.put("Subject", subject);
             payload.put("Text", message);
+
+            if (hasClassification) {
+                final JSONOrderedObject classification = new JSONOrderedObject();
+                classification.put("__type", "Classification:http://schemas.fcg.im/foundation/v1/collaboration");
+                classification.put("Token", "primary.us.confidential,disseminations.display,disseminations.display.identity-can");
+
+                payload.put("Classification", classification);
+            }
+
+            if (hasSecurityContext) {
+                final JSONOrderedObject securityContext = new JSONOrderedObject();
+                securityContext.put("__type", "SecurityContext:http://schemas.fcg.im/foundation/v1/collaboration");
+                securityContext.put("Id", "coi2");
+
+                payload.put("SecurityContext", securityContext);
+            }
 
             getResponse("/Collaboration/v1/Channels/" + channelId + "/Messages",
                     "POST", payload.toString());
@@ -301,11 +335,11 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
     	try {
         	JSONOrderedObject channelAgentState = new JSONOrderedObject();
         	channelAgentState.put("IsComposing", isComposing.toString());
-        	
+
         	getResponse(
                     "/Collaboration/v1/Channels/" + channelId
                     + "/Me",
-                    "POST", channelAgentState.toString());	
+                    "POST", channelAgentState.toString());
         } catch (JSONException ex) {
             throw new IOException("Unable to construct JSON payload", ex);
         }
@@ -381,7 +415,10 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
                 object.getString("Text"),
                 object.optString("MessageParts"),
                 object.getLong("Timestamp"),
-                object.optString("Token"));
+                object.optString("Token"),
+                object.optString("Classification"),
+                object.optString("SecurityContext"),
+                object.optString("DataAttributes"));
     }
 
     /**

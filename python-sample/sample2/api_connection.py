@@ -69,9 +69,9 @@ class ApiConnection:
         print ('Something went wrong while getting messages!', response.status_code, response.reason)
 
 
-    def send_message(self, channel_id, content, is_alert):
+    def send_message(self, channel_id, content, is_alert, classification, security_context):
         if self.token == '':
-            self.authenticate()        
+            self.authenticate()
 
         request_url = '{}/Collaboration/V1/Channels/{}/Messages'.format(self.host, channel_id)
 
@@ -79,7 +79,9 @@ class ApiConnection:
             request_url,
             json = {
                 'Text': content,
-                'IsAlert': is_alert
+                'IsAlert': is_alert,
+                'Classification': classification,
+                'SecurityContext': security_context
             },
             headers = {
                 'Accept' : 'application/json',
@@ -89,9 +91,9 @@ class ApiConnection:
         if response.status_code != 200:
             print ('Something went wrong while sending a message to a channel!', channel_id, response.status_code, response.reason)
 
-    def send_message_parts(self, channel_id, messageParts, is_alert):
+    def send_message_parts(self, channel_id, messageParts, is_alert, classification, security_context):
         if self.token == '':
-            self.authenticate()        
+            self.authenticate()
 
         request_url = '{}/Collaboration/V1/Channels/{}/Messages'.format(self.host, channel_id)
 
@@ -99,7 +101,9 @@ class ApiConnection:
             request_url,
             json = {
                 'MessageParts': messageParts,
-                'IsAlert': is_alert
+                'IsAlert': is_alert,
+                'Classification': classification,
+                'SecurityContext': security_context
             },
             headers = {
                 'Accept' : 'application/json',
@@ -111,7 +115,7 @@ class ApiConnection:
 
     def update_channel_agent_state(self, channel_id, is_composing):
         if self.token == '':
-            self.authenticate()        
+            self.authenticate()
 
         request_url = '{}/Collaboration/V1/Channels/{}/Me'.format(self.host, channel_id)
 
@@ -162,8 +166,8 @@ class ApiConnection:
                 eventId = event['EventId']
 
                 if eventId > self.last_event:
-                    self.last_event = eventId                
-                
+                    self.last_event = eventId
+
                 callback(event)
 
     def start_streaming(self, channel_id, callback):

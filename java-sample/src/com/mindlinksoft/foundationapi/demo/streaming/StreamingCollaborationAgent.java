@@ -167,7 +167,10 @@ public class StreamingCollaborationAgent extends SimpleCollaborationAgent {
                     object.optString("Subject"),
                     object.optString("Content"),
                     object.optString("MessageParts"),
-                    object.optString("Token"));
+                    object.optString("Token"),
+                    object.optString("Classification"),
+                    object.optString("SecurityContext"),
+                    object.optString("DataAttributes"));
         } else if ("MetaDataEvent".equals(niceType)) {
             return new MetaDataEvent(eventId, timestamp,
                     object.getString("Key"),

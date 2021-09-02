@@ -65,7 +65,7 @@ for message in messages:
     print('message ID: ', message['Id'], ' Alert? ', message['IsAlert'], ' Sender ', message['SenderId'], ' Alias ', message['SenderAlias'], ' Text ', message['Text'], flush=True)
 
 print('sending a message', flush=True)
-connection.send_message(chat, message_content, True)
+connection.send_message(chat, message_content, True, None, None)
 
 print('starting composing', flush=True)
 connection.update_channel_agent_state(chat, True)
@@ -76,7 +76,18 @@ print('stopping composing')
 connection.update_channel_agent_state(chat, False)
 
 print('sending a message-part message')
-connection.send_message_parts(chat, message_parts, False)
+connection.send_message_parts(chat, message_parts, False, None, None)
+
+print('sending a message with metadata')
+classification = {
+    '__type': 'Classification:http://schemas.fcg.im/foundation/v1/collaboration',
+    'Token': 'primary.us.confidential,disseminations.display,disseminations.display.identity-can'
+}
+security_context = {
+    '__type': 'SecurityContext:http://schemas.fcg.im/foundation/v1/collaboration',
+    'Id': 'coi2'
+}
+connection.send_message(chat, message_content, True, classification, security_context)
 
 print('starting to stream')
 connection.start_streaming(chat, on_message_received)

@@ -45,7 +45,7 @@ public class DemoBot {
             System.err.println("Password may be specified as '-' to read from "
                     + "standard input.");
             System.err.println();
-            System.err.println("If agent is omitted a superuser account must be"
+            System.err.println("If agent is omitted a superuser account must be "
                     + "used, and some functions will");
             System.err.println("be unavailable.");
             System.err.println();
@@ -161,7 +161,7 @@ public class DemoBot {
                 if (privacy != ChannelPrivacy.Open) {
                     System.out.println("Enter members (enter blank line when done):");
                     String next = reader.readLine();
-                    
+
                     while (next != null && next.length() > 0) {
                         members.add(next);
 
@@ -211,7 +211,7 @@ public class DemoBot {
                 final LinkedList<String> members = new LinkedList<String>();
                 System.out.println("Enter members (enter blank line when done):");
                 String next = reader.readLine();
-                
+
                 while (next != null && next.length() > 0) {
                     members.add(next);
 
@@ -280,7 +280,7 @@ public class DemoBot {
     private static void doSend(final SimpleCollaborationAgent agent,
             final BufferedReader reader) throws IOException {
         System.out.println();
-        System.out.println("Send functions: message, messageparts, alert, story, composing");
+        System.out.println("Send functions: message, metadata, messageparts, alert, story, composing");
         System.out.print("Select option: ");
 
         final String option = reader.readLine().toLowerCase();
@@ -294,6 +294,22 @@ public class DemoBot {
             agent.sendMessage(channel, message);
             System.out.println();
             System.out.println("Sent");
+        } else if ("metadata".equals(option)) {
+            System.out.print("Enter channel ID: ");
+            final String channel = reader.readLine();
+            System.out.print("Enter message: ");
+            final String message = reader.readLine();
+            System.out.print("Message has classification (y/n): ");
+            final String hasClassificationString = reader.readLine();
+            System.out.print("Message has security context (y/n): ");
+            final String hasSecurityContextString = reader.readLine();
+
+            boolean hasClassification = "y".equals(hasClassificationString);
+            boolean hasSecurityContext = "y".equals(hasSecurityContextString);
+
+            agent.sendMessageWithMetadata(channel, message, hasClassification, hasSecurityContext);
+            System.out.println();
+            System.out.println("Sent");
         } else if ("messageparts".equals(option)) {
         	System.out.println();
         	System.out.println("(Note: This feature only applies to API v18.6 and above)");
@@ -302,7 +318,7 @@ public class DemoBot {
 
             agent.sendMessageParts(channel);
             System.out.println();
-            System.out.println("Sent");            
+            System.out.println("Sent");
         } else if ("alert".equals(option)) {
             System.out.print("Enter channel ID: ");
             final String channel = reader.readLine();
@@ -343,13 +359,13 @@ public class DemoBot {
             	System.out.print("Unrecognized input - Please type either 'true' or 'false'");
             	return;
             }
-            
+
             agent.updateChannelAgentState(channel, message.equals("true") ? true : false);
             System.out.println();
             System.out.println("Sent");
         }
     }
-    
+
     private static void doHistory(final SimpleCollaborationAgent agent,
             final BufferedReader reader) throws IOException, NumberFormatException {
         System.out.println();
@@ -360,15 +376,15 @@ public class DemoBot {
 
         System.out.print("Get messages before token (blank for latest messages): ");
         final String beforeToken = reader.readLine();
-        
+
         final int messageCount = Integer.parseInt(messageCountString);
 
         final List<Message> historyMessages = agent.getChannelHistory(channelId, messageCount, beforeToken);
-        
+
         System.out.println();
         System.out.println("Received Messages");
         System.out.println("------------------");
-        
+
         for (final Message message : historyMessages) {
         	System.out.println(message);
         }
@@ -386,18 +402,18 @@ public class DemoBot {
         		System.out.println(event);
         	}
         }
-        
+
         final EventListener channelEventListener = new ChannelEventListener();
-        
+
         System.out.println();
         System.out.println("Received Events");
         System.out.println("---------------");
-        
+
         agent.addEventListener(channelEventListener);
         agent.startStreaming(new String[] { channelId }, null, new EventType[] { EventType.MESSAGE });
-        
+
         reader.readLine();
-        
+
         agent.removeEventListener(channelEventListener);
         agent.stopStreaming();
     }

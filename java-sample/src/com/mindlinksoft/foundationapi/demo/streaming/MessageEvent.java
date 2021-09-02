@@ -12,13 +12,17 @@ public class MessageEvent extends Event {
     private final String content;
     private final String messageParts;
     private final String token;
+    private final String classification;
+    private final String securityContext;
+    private final String dataAttributes;
 
     /**
      * Creates a new instance of {@link MessageEvent}.
      */
     public MessageEvent(final long eventId, final long time,
             final String channelId, final String senderId, final String senderAlias, final String subject,
-            final String content, final String messageParts, final String token) {
+            final String content, final String messageParts, final String token,
+            final String classification, final String securityContext, final String dataAttributes) {
         super(eventId, time);
 
         this.channelId = channelId;
@@ -28,6 +32,9 @@ public class MessageEvent extends Event {
         this.content = content;
         this.messageParts = messageParts;
         this.token = token;
+        this.classification = classification;
+        this.securityContext = securityContext;
+        this.dataAttributes = dataAttributes;
     }
 
     /**
@@ -74,7 +81,7 @@ public class MessageEvent extends Event {
     public String getSenderAlias() {
         return senderAlias;
     }
-    
+
     /**
      * Gets the subject of the message, if it was sent as a 'story'.
      *
@@ -94,12 +101,39 @@ public class MessageEvent extends Event {
         return token;
     }
 
+    /**
+     * Gets the message classification.
+     * @return The message classification.
+     */
+    public String getClassification() {
+        return classification;
+    }
+
+    /**
+     * Gets the message securityContext.
+     * @return The message security context.
+     */
+    public String getSecurityContext() {
+        return securityContext;
+    }
+
+    /**
+     * Gets the message data attributes.
+     * @return The message data attributes.
+     */
+    public String getDataAttributes() {
+        return dataAttributes;
+    }
+
     /** {@inheritDoc} */
     @Override
     public String toString() {
         return "MessageEvent{super=" + super.toString() + ", channelId="
                 + channelId + ", senderId=" + senderId + ", senderAlias=" + senderAlias + ", subject=" + subject
-                + ", content=" + content + ", messageParts=" + messageParts + ", token=" + token + "}";
+                + ", content=" + content + ", messageParts=" + messageParts + ", token=" + token
+                + ", classification=" + classification
+                + ", securityContext=" + securityContext
+                + ", dataAttributes=" + dataAttributes + "}";
     }
 
 }

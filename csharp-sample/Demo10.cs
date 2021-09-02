@@ -43,10 +43,7 @@
                 var metadata = new
                 {
                     __type = "Classification:http://schemas.fcg.im/foundation/v1/collaboration",
-                    Token = "primary.us.confidential,disseminations.display,disseminations.display.identity-can",
-                    DisplayText = "C//DISPLAY ONLY CAN",
-                    ForegroundColor = "#000000",
-                    BackgroundColor = "#46AFFF"
+                    Token = "primary.us.confidential,disseminations.display,disseminations.display.identity-can"
                 };
 
                 GetResponse(baseUrl + "/Collaboration/v1/Channels/" + HttpUtility.UrlEncode(channelId) + "/Messages", token, new { IsAlert = false, MessageParts = messageParts, Classification = metadata });

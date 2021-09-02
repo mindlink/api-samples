@@ -15,13 +15,17 @@ public class Message {
     private final String messageParts;
     private final long timestamp;
     private final String token;
+    private final String classification;
+    private final String securityContext;
+    private final String dataAttributes;
 
     /**
      * Creates a new instance of {@link Message}.
      */
     protected Message(final String id, final boolean isAlert,
             final String senderId, final String senderAlias, final String channelId, final String subject,
-            final String text, final String messageParts, final long timestamp, final String token) {
+            final String text, final String messageParts, final long timestamp, final String token,
+            final String classification, final String securityContext, final String dataAttributes) {
         this.id = id;
         this.isAlert = isAlert;
         this.senderId = senderId;
@@ -32,6 +36,9 @@ public class Message {
         this.messageParts = messageParts;
         this.timestamp = timestamp;
         this.token = token;
+        this.classification = classification;
+        this.securityContext = securityContext;
+        this.dataAttributes = dataAttributes;
     }
 
     /**
@@ -81,7 +88,7 @@ public class Message {
     public String getSenderAlias() {
         return senderAlias;
     }
-    
+
     /**
      * Gets the subject of the message (if it has been sent as a "story").
      *
@@ -109,7 +116,7 @@ public class Message {
     public String getMessageParts() {
     	return this.messageParts;
     }
-    
+
     /**
      * Gets the unix timestamp at which the story was sent.
      *
@@ -123,6 +130,30 @@ public class Message {
         return token;
     }
 
+    /**
+     * Gets the message classification.
+     * @return The message classification.
+     */
+    public String getClassification() {
+        return classification;
+    }
+
+    /**
+     * Gets the message securityContext.
+     * @return The message security context.
+     */
+    public String getSecurityContext() {
+        return securityContext;
+    }
+
+    /**
+     * Gets the message data attributes.
+     * @return The message data attributes.
+     */
+    public String getDataAttributes() {
+        return dataAttributes;
+    }
+
     /** {@inheritDoc} */
     @Override
     public String toString() {
@@ -130,7 +161,10 @@ public class Message {
                 + senderId + ", senderAlias=" + senderAlias + ", channelId=" + channelId + ", subject="
                 + subject + ", text=" + text + ", messageParts=" + messageParts
                 + ", timestamp=" + timestamp
-                + ", token=" + token + "}";
+                + ", token=" + token
+                + ", classification=" + classification
+                + ", securityContext=" + securityContext
+                + ", dataAttributes=" + dataAttributes + "}";
     }
 
 }

@@ -43,11 +43,7 @@
                 var metadata = new
                 {
                     __type = "SecurityContext:http://schemas.fcg.im/foundation/v1/collaboration",
-                    Id = "coi2",
-                    DisplayText = "COI 2",
-                    Description = "This is the COI 2",
-                    ForegroundColor = "#000000",
-                    BackgroundColor = "#FF7E77"
+                    Id = "coi2"
                 };
 
                 GetResponse(baseUrl + "/Collaboration/v1/Channels/" + HttpUtility.UrlEncode(channelId) + "/Messages", token, new { IsAlert = false, MessageParts = messageParts, SecurityContext = metadata });
