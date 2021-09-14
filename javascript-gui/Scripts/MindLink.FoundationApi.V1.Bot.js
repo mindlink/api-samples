@@ -111,8 +111,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     };
 
     var getEvents = function(instanceId, lastEventId, eventTypes, channels, regex) {
-        var instance = instanceId ? "&instance=" + instanceId : "";
-        var url = 'Collaboration/V1/Events?last-event=' + encodeURIComponent(lastEventId) + encodeURIComponent(instance);
+        var instance = instanceId ? "&instance=" + encodeURIComponent(instanceId) : "";
+        var url = 'Collaboration/V1/Events?last-event=' + encodeURIComponent(lastEventId) + instance;
         if (eventTypes) url += '&types=' + encodeURIComponent(eventTypes);
         if (channels) url += '&channels=' + encodeURIComponent(channels);
         if (regex) url += '&regex=' + encodeURIComponent(regex);
