@@ -4,13 +4,13 @@ var bot;
 
 var logMessage = function(message, cls, dontEncode) {
     var li = $('<li></li>');
-    
+
     if (dontEncode) {
         li.html(message);
     } else {
         li.text(message);
     }
-    
+
     if (cls) {
         li.addClass(cls);
     }
@@ -64,7 +64,7 @@ var setupBot = function(sipAddress, username, password) {
                     function(message) {
                         var token = message.Token ? ('[token = ' + message.Token + '] ') : '';
                         var messageSenderAlias = message.SenderAlias ? ' (' + message.SenderAlias + ')' : '';
-                        return token + formatTime(message.Timestamp) + ' ' + message.SenderId + messageSenderAlias + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + '\n'; 
+                        return token + formatTime(message.Timestamp) + ' ' + message.SenderId + messageSenderAlias + ' ' + message.Text + ' ' + JSON.stringify(message.MessageParts) + '\n';
                     }),
                 '',
                 true);
@@ -79,7 +79,7 @@ var setupBot = function(sipAddress, username, password) {
                 logMessage('Search completed with empty results.');
                 return;
             }
-            
+
             var channelResults = results[0];
 
             logMessage('Chat history search results received for ' + channelResults.ChannelId + '. Contains ' + channelResults.Messages.length + ' message(s).');
@@ -139,34 +139,34 @@ var setupBot = function(sipAddress, username, password) {
         onProvisionedAgentsList: function (agents) {
             logMessage('Agents list received (' + agents.length + ' agents): ');
             logMessage(listAsString(agents, agents.length, function (agent) {
-                return 'Id: ' + agent.Id + ' state: ' + agent.State; 
-            }), '', true);               
+                return 'Id: ' + agent.Id + ' state: ' + agent.State;
+            }), '', true);
         },
         onProvisionedAgent: function (provisioningMode, canProvision, managementMode, channels, id, metaData, state, userName, users) {
             logMessage('Agent returned. ID: ' + id + ', user name: ' + userName + ', provisioning mode: ' + provisioningMode + ', can provision: ' + canProvision + ', management mode: ' + managementMode + ', state: ' + state);
             logMessage(' - Channels:')
             logMessage(listAsString(channels, channels.length, function (channel) {
-                return '    - Id: ' + channel.Id + ', state: ' + channel.State; 
+                return '    - Id: ' + channel.Id + ', state: ' + channel.State;
             }), '', true);
             logMessage(' - Meta data:')
             logMessage(listAsString(metaData, metaData.length, function (data) {
-                return '    - Key: ' + data.Key + ', value: ' + data.Value; 
+                return '    - Key: ' + data.Key + ', value: ' + data.Value;
             }), '', true);
             logMessage(' - Users:')
             logMessage(listAsString(users, users.length, function (user) {
-                return '    - ' + user; 
+                return '    - ' + user;
             }), '', true);
         },
         onProvisionedAgentChannelsList: function (channels) {
             logMessage('Channels list received for agent (' + channels.length + ' channels): ');
             logMessage(listAsString(channels, channels.length, function (channel) {
-                return 'Id: ' + channel.Id + ' state: ' + channel.State; 
+                return 'Id: ' + channel.Id + ' state: ' + channel.State;
             }), '', true);
         },
         onProvisionedAgentMetadataList: function (metadata) {
             logMessage('Metadata list received for agent (' + metadata.length + ' metadata): ');
             logMessage(listAsString(metadata, metadata.length, function (data) {
-                return 'Key: ' + data.Key + ' value: ' + data.Value; 
+                return 'Key: ' + data.Key + ' value: ' + data.Value;
             }), '', true);
         },
         onProvisionedAgentMetadataKeyValue: function (value) {
@@ -218,7 +218,7 @@ var setupBot = function(sipAddress, username, password) {
             logMessage('Throttle returned. ID: ' + id + ', type: ' + type + ', threshold: ' + threshold);
             logMessage(' - Agents:')
             logMessage(listAsString(agents, agents.length, function (agent) {
-                return '    - Id: ' + agent; 
+                return '    - Id: ' + agent;
             }), '', true);
         },
         onUpdateThrottle: function (status) {
@@ -264,7 +264,7 @@ $(document).ready(function () {
 
         safeSetStorageValue("server-address", newServerAddress);
     });
-    
+
     $('form#authenticate input[type=submit]').click(function (ev) {
         ev.preventDefault();
         var username = $('form#authenticate input[id=authenticate-username]').val();
@@ -305,7 +305,7 @@ $(document).ready(function () {
 
         bot.collaboration.sendChannelMessageAsParts(channelId, JSON.parse(partsAsText), alert, classification, securityContext);
     });
-    
+
     $('form#send-message-parts input[id=message-part-plaintext]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
@@ -318,7 +318,7 @@ $(document).ready(function () {
         }
         $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
     });
-    
+
     $('form#send-message-parts input[id=message-part-hyperlink]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
@@ -331,7 +331,7 @@ $(document).ready(function () {
         }
         $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
     });
-    
+
     $('form#send-message-parts input[id=message-part-channellink]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
@@ -344,7 +344,7 @@ $(document).ready(function () {
         }
         $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
     });
-    
+
     $('form#send-message-parts input[id=message-part-hashtag]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
@@ -357,14 +357,14 @@ $(document).ready(function () {
         }
         $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
     });
-    
+
     $('form#send-message-parts input[id=message-part-codeblock]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-message-parts textarea[id=message-content]').val();
         if (existingParts.indexOf('[') == 0 && existingParts.indexOf(']', this.length - 1) !== -1) {
             existingParts = existingParts.substring(1, existingParts.length - 1);
         }
-        var newPart = '{"__type":"CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","CodeBlock":"alert(\\\"Hello World!\\\");"}';
+        var newPart = '{"__type":"CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","CodeBlock":"alert(\\\"Hello World!\\\");","Language":"JavaScript","CodeBlockDisplayMode":"Inline"}';
         if (existingParts.length !== 0) {
             newPart = ',' + newPart;
         }
@@ -383,7 +383,7 @@ $(document).ready(function () {
         }
         $('form#send-message-parts textarea[id=message-content]').val('[' + existingParts + newPart + ']');
     });
-    
+
     $('form#send-message-parts input[id=message-part-clear]').click(function (ev) {
         ev.preventDefault();
         $('form#send-message-parts textarea[id=message-content]').val('[]');
@@ -418,7 +418,7 @@ $(document).ready(function () {
 
         bot.collaboration.sendChannelStoryAsParts(channelId, subject, JSON.parse(partsAsText), alert, classification, securityContext);
     });
-    
+
     $('form#send-story-parts input[id=message-part-plaintext]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
@@ -431,7 +431,7 @@ $(document).ready(function () {
         }
         $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
     });
-    
+
     $('form#send-story-parts input[id=message-part-hyperlink]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
@@ -444,7 +444,7 @@ $(document).ready(function () {
         }
         $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
     });
-    
+
     $('form#send-story-parts input[id=message-part-userlink]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
@@ -457,7 +457,7 @@ $(document).ready(function () {
         }
         $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
     });
-    
+
     $('form#send-story-parts input[id=message-part-channellink]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
@@ -470,7 +470,7 @@ $(document).ready(function () {
         }
         $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
     });
-    
+
     $('form#send-story-parts input[id=message-part-hashtag]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
@@ -483,14 +483,14 @@ $(document).ready(function () {
         }
         $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
     });
-    
+
     $('form#send-story-parts input[id=message-part-codeblock]').click(function (ev) {
         ev.preventDefault();
         var existingParts = $('form#send-story-parts textarea[id=story-content]').val();
         if (existingParts.indexOf('[') == 0 && existingParts.indexOf(']', this.length - 1) !== -1) {
             existingParts = existingParts.substring(1, existingParts.length - 1);
         }
-        var newPart = '{"__type":"CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","CodeBlock":"alert(\\\"Hello World!\\\");"}';
+        var newPart = '{"__type":"CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","CodeBlock":"alert(\\\"Hello World!\\\");,"Language":"JavaScript","CodeBlockDisplayMode":"Inline""}';
         if (existingParts.length !== 0) {
             newPart = ',' + newPart;
         }
@@ -509,13 +509,13 @@ $(document).ready(function () {
         }
         $('form#send-story-parts textarea[id=story-content]').val('[' + existingParts + newPart + ']');
     });
-    
+
     $('form#send-story-parts input[id=message-part-clear]').click(function (ev) {
         ev.preventDefault();
         $('form#send-story-parts textarea[id=story-content]').val('[]');
     });
 
-    
+
     $('form#upload-file input[type=submit]').click(function (ev) {
         ev.preventDefault();
         var channelId = $('form#upload-file input[id=upload-file-channel-id]').val();
@@ -526,7 +526,7 @@ $(document).ready(function () {
             logMessage('Cannot upload file as no file is selected.');
             return;
         }
-        
+
         bot.collaboration.uploadFile(channelId, fileName, contents);
     });
 
@@ -702,18 +702,18 @@ $(document).ready(function () {
         var userId = $('form#provision-delete-user-by-Id input[id=provision-delete-user-id]').val();
         bot.provisioning.deleteUserById(userId);
     });
-    
+
     $('form#request-throttles input[type=submit]').click(function (ev) {
         ev.preventDefault();
         bot.provisioning.requestAllThrottles();
     });
-    
+
     $('form#request-throttle-by-id input[type=submit]').click(function (ev) {
         ev.preventDefault();
         var throttleId = $('form#request-throttle-by-id input[id=throttle-id]').val();
         bot.provisioning.requestThrottleById(throttleId);
     });
-    
+
     $('form#update-throttle input[type=submit]').click(function (ev) {
         ev.preventDefault();
         var throttleId = $('form#update-throttle input[id=update-throttle-id]').val();
@@ -728,7 +728,7 @@ $(document).ready(function () {
         var throttleId = $('form#delete-throttle-by-id input[id=delete-throttle-id]').val();
         bot.provisioning.deleteThrottleById(throttleId);
     });
-    
+
     $('form#provision-find-channels input[type=submit]').click(function (ev) {
         ev.preventDefault();
         var searchTerm = $('form#provision-find-channels input[id=provision-find-channels-search-text]').val();
@@ -756,22 +756,22 @@ $(document).ready(function () {
 
     $('form#manage-get-categories input[type=submit]').click(function (ev) {
         ev.preventDefault();
-        
+
         bot.management.getChannelCategories(function (categories) {
             logMessage('Categories list received (' + categories.length + ' channels): ');
             logMessage(listAsString(categories, categories.length, function (channel) {
-                return 'Id: ' + channel.Id + ' name: ' + channel.Name; 
+                return 'Id: ' + channel.Id + ' name: ' + channel.Name;
             }), '', true);
         });
     });
 
     $('form#manage-get-channels input[type=submit]').click(function (ev) {
         ev.preventDefault();
-        
+
         bot.management.getManagedChannels(function (channels) {
             logMessage('Managed channels list received (' + channels.length + ' channels): ');
             logMessage(listAsString(channels, channels.length, function (channel) {
-                return 'Id: ' + channel.Id + ' name: ' + channel.Name + ' privacy: ' + privacies[channel.Privacy]; 
+                return 'Id: ' + channel.Id + ' name: ' + channel.Name + ' privacy: ' + privacies[channel.Privacy];
             }), '', true);
         });
     });
@@ -784,7 +784,7 @@ $(document).ready(function () {
         bot.management.getManagedChannelMembers(channel, function (members) {
             logMessage('Managed channel members list received (' + members.length + ' members) for channel ' + channel + ': ');
             logMessage(listAsString(members, members.length, function (member) {
-                return 'Id: ' + member; 
+                return 'Id: ' + member;
             }), '', true);
         });
     });
@@ -839,7 +839,7 @@ $(document).ready(function () {
     $('#configuration-tab').click(function (ev) {
         selectTab('configuration');
     });
-    
+
     $('#authentication-tab').click(function (ev) {
         selectTab('authentication');
     });
