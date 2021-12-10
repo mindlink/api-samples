@@ -102,8 +102,23 @@ var setupBot = function(sipAddress, username, password) {
                 console.log(channelResults.Messages);
             }
         },
-        onChannelInfo: function(channelId, name, subject, description, displayName, emailAddress, canAcceptFiles, isReadOnly, maxMessageLength, maxStoryLength) {
-            logMessage('Channel info received for ' + channelId + '. Name: \'' + name + '\' Subject: \'' + subject + '\', Description: \'' + description + '\', Display Name: \'' + displayName + '\', Email Address: \'' + emailAddress + '\', Files: \'' + canAcceptFiles + '\', Read Only: \'' + isReadOnly + '\', Max Message Length: \'' + maxMessageLength + '\', Max Story Length: \'' + maxStoryLength + '\'.');
+        onChannelInfo: function(channelId, name, subject, description, displayName, emailAddress, canAcceptFiles, isReadOnly, maxMessageLength, maxStoryLength, classification, securityContexts) {
+            logMessage('Channel info received for '+ channelId + '...', '', true);
+            logMessage('    - Name: \'' + name + '\',', '', true);
+            logMessage('    - Subject: \'' + subject + '\',', '', true);
+            logMessage('    - Description: \'' + description + '\',', '', true);
+            logMessage('    - Display Name: \'' + displayName + '\',', '', true);
+            logMessage('    - Email Address: \'' + emailAddress + '\',', '', true);
+            logMessage('    - Files: \'' + canAcceptFiles + '\',', '', true);
+            logMessage('    - Read Only: \'' + isReadOnly + '\',', '', true);
+            logMessage('    - Max Message Length: \'' + maxMessageLength + '\',', '', true);
+            logMessage('    - Max Story Length: \'' + maxStoryLength + '\',', '', true);
+            logMessage('    - Maximum Classification: \'' + (classification ? classification.Token : 'null') + '\',', '', true);
+            logMessage('    - Security Contexts: ' + (securityContexts ? '' : '\'null\''));
+
+            if (securityContexts) {
+                logMessage(listAsString(securityContexts, 10, sc => '        - \'' + sc.DisplayText + '\''), '', true);
+            }
         },
         onChannelMessage: function(channelId, senderId, alert, timestamp, token, message) {
             logMessage(senderId + ' sent a' + (alert ? 'n alert' : '') + ' message to \'' + channelId + '\' with token \'' + token + '\' at ' + formatTime(timestamp) + ': \'' + message + '\'.');
@@ -116,7 +131,7 @@ var setupBot = function(sipAddress, username, password) {
         },
         onChannelsList: function(channels, searchCriteria, limited) {
             logMessage('Chat rooms list received (' + channels.length + ' channels): ');
-            logMessage(listAsString(channels, 8, function(channel) { return channel.DisplayName + ' (' + channel.Id + ')'; }), '', true);
+            logMessage(listAsString(channels, 8, channel => '    - ' + channel.DisplayName + ' (' + channel.Id + ')'), '', true);
         },
         onError: function(errorCode, message) {
             logMessage('An error was received: ' + errorCode + ': ' + message, 'error');

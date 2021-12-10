@@ -8,7 +8,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     var self = this;
 
     var baseUrl = config.baseUrl;
-    
+
     // The XHR request for getting events
     var getEventsJqXhr = null;
     var streaming = false;
@@ -87,8 +87,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             headers: headers,
             error: function(xhr, status, error) {
                 if (xhr.status === 200 && status === 'parsererror') {
-                   successFn(null, 'success');                                                     
-                } else {   
+                   successFn(null, 'success');
+                } else {
                     handleError(xhr.status, error, errorFn);
                 }
             },
@@ -101,7 +101,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             }
         }, ajaxOptions));
     };
-    
+
     var stopGetEvents = function() {
         streaming = false;
         if (getEventsJqXhr) {
@@ -119,10 +119,10 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         getEventsJqXhr = sendRequest(url, 'GET', '', function(result) {
             var nextInstanceId;
             for (var i = 0; i < result.length; i++) {
-                var ev = result[i]; 
+                var ev = result[i];
                 if (!nextInstanceId) {
                     nextInstanceId = ev.InstanceId;
-                }               
+                }
                 switch (ev.__type.split(':')[0]) {
                     case 'ChannelStateEvent':
                         self.onChannelStateChanged(ev.EventId, ev.Time, ev.ChannelId, ev.Active);
@@ -153,7 +153,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             timeout: 40000
         });
     };
-    
+
     self.authenticate = function(username, password, agentId, callbackFn, errorFn) {
         log('Authenticating user \'' + username + '\'...');
         sendRequest('Authentication/V1/Tokens', 'POST', {
@@ -179,7 +179,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     self.setBaseUrl = function(newBaseUrl) {
         baseUrl = newBaseUrl;
     },
-    
+
     self.streaming.start = function(eventTypes, channels, regex) {
         log('Starting streaming...');
         stopGetEvents();
@@ -229,8 +229,8 @@ MindLink.FoundationApi.V1.Bot = function(config) {
     self.collaboration.requestChannelInfo = function(channelId, callbackFn, errorFn) {
         log('Requesting channel info for \'' + channelId + '\'...');
         sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId), 'GET', '', function(result) {
-            self.onChannelInfo(channelId, result.DisplayName, result.Subject, result.Description, result.DisplayName, result.EmailAddress, result.CanAcceptFiles, result.IsReadOnly, result.MaxMessageLength, result.MaxStoryLength);
-            if (callbackFn) callbackFn(channelId, result.DisplayName, result.Subject, result.Description, result.DisplayName, result.EmailAddress, result.CanAcceptFiles, result.IsReadOnly);
+            self.onChannelInfo(channelId, result.DisplayName, result.Subject, result.Description, result.DisplayName, result.EmailAddress, result.CanAcceptFiles, result.IsReadOnly, result.MaxMessageLength, result.MaxStoryLength, result.Classification, result.SecurityContexts);
+            if (callbackFn) callbackFn(channelId, result.DisplayName, result.Subject, result.Description, result.DisplayName, result.EmailAddress, result.CanAcceptFiles, result.IsReadOnly, result.Classification, result.SecurityContexts);
         }, errorFn);
     };
 
@@ -302,17 +302,17 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             if (callbackFn) callbackFn(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
         }, errorFn);
     };
-    
+
     self.collaboration.uploadFile = function(channelId, fileName, content, errorFn) {
         log('Uploading file name with content size \'' + content.size + '\' to channel \'' + channelId + '\'');
-        
+
         var xhr = new XMLHttpRequest();
         xhr.open('POST', baseUrl + '/Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/File/' + encodeURIComponent(fileName), true);
 
         if (self.token) {
             xhr.setRequestHeader('Authorization', 'FCF ' + self.token);
         }
-        
+
         xhr.onload = function(e) {
             if (!(xhr.status === 200 || xhr.status === 204)) {
                 handleError(xhr.status, xhr.statusText, errorFn);
@@ -399,7 +399,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             if (callbackFn) callbackFn(results);
         }, errorFn);
     };
-    
+
     self.provisioning.requestAllThrottles = function(callbackFn, errorFn) {
         log('Requesting provisioned throttles...');
         sendRequest('Provisioning/V1/Throttles', 'GET', '', function(results) {
@@ -407,7 +407,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             if (callbackFn) callbackFn(results);
         }, errorFn);
     };
-    
+
     self.provisioning.requestThrottleById = function(throttleId, callbackFn, errorFn) {
         log('Requesting provisioned throttle by ID...');
         sendRequest('Provisioning/V1/Throttles/' + encodeURIComponent(throttleId), 'GET', '', function(result) {
@@ -415,7 +415,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             if (callbackFn) callbackFn(result.Id, result.Type, result.Threshold, result.Agents);
         }, errorFn);
     };
-    
+
     self.provisioning.updateThrottle = function(throttleId, type, threshold, agents,  callbackFn, errorFn) {
         log('Creating/updating throttle...');
         var agents = agents.split(';');
@@ -430,7 +430,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
             if (callbackFn) callbackFn(status);
         }, errorFn);
     };
-    
+
     self.provisioning.deleteThrottleById = function(throttleId, callbackFn, errorFn) {
         log('Deleting throttle by ID...');
         sendRequest('Provisioning/V1/Throttles/' + encodeURIComponent(throttleId), 'DELETE', '', function(result, status) {
@@ -579,7 +579,7 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     }
 
-    
+
     self.management.getChannelCategories = function(callbackFn, errorFn) {
         log('Get channel categories...');
         sendRequest('Management/V1/Categories', 'GET', '', function(results) {

@@ -130,6 +130,8 @@ form input.warn:not(:disabled) {
 #log-panel ul li {
     border-top: 1px solid #EEE;
     padding: 1px;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
 }
 
 #log-panel ul li.debug {

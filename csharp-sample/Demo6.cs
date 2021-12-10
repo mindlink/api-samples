@@ -34,6 +34,8 @@ namespace FoundationApiDemo
                 Console.WriteLine("\t     Description: {0}", channel.Desciption);
                 Console.WriteLine("\t     Display name: {0}", channel.DisplayName);
                 Console.WriteLine("\t     Subject: {0}", channel.Subject);
+                Console.WriteLine("\t     Maximum classification: {0}", channel.Classification);
+                Console.WriteLine("\t     Security contexts: {0}", channel.SecurityContexts);
 
                 Console.WriteLine();
             }
