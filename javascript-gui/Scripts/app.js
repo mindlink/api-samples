@@ -117,7 +117,7 @@ var setupBot = function(sipAddress, username, password) {
             logMessage('    - Security Contexts: ' + (securityContexts ? '' : '\'null\''));
 
             if (securityContexts) {
-                logMessage(listAsString(securityContexts, 10, sc => '        - \'' + sc.DisplayText + '\''), '', true);
+                logMessage(listAsString(channels, 8, function (channel) { return channel.DisplayName + ' (' + channel.Id + ')'; }), '', true);
             }
         },
         onChannelMessage: function(channelId, senderId, alert, timestamp, token, message) {
@@ -131,7 +131,7 @@ var setupBot = function(sipAddress, username, password) {
         },
         onChannelsList: function(channels, searchCriteria, limited) {
             logMessage('Chat rooms list received (' + channels.length + ' channels): ');
-            logMessage(listAsString(channels, 8, channel => '    - ' + channel.DisplayName + ' (' + channel.Id + ')'), '', true);
+            logMessage(listAsString(channels, 8, function (channel) { return channel.DisplayName + ' (' + channel.Id + ')'; }), '', true);
         },
         onError: function(errorCode, message) {
             logMessage('An error was received: ' + errorCode + ': ' + message, 'error');
