@@ -117,7 +117,7 @@ var setupBot = function(sipAddress, username, password) {
             logMessage('    - Security Contexts: ' + (securityContexts ? '' : '\'null\''));
 
             if (securityContexts) {
-                logMessage(listAsString(channels, 8, function (channel) { return channel.DisplayName + ' (' + channel.Id + ')'; }), '', true);
+                logMessage(listAsString(securityContexts, 8, function (securityContext) { return securityContext.DisplayText + ' (' + securityContext.Id + ')'; }), '', true);
             }
         },
         onChannelMessage: function(channelId, senderId, alert, timestamp, token, message) {
