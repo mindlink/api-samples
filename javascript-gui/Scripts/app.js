@@ -379,7 +379,7 @@ $(document).ready(function () {
         if (existingParts.indexOf('[') == 0 && existingParts.indexOf(']', this.length - 1) !== -1) {
             existingParts = existingParts.substring(1, existingParts.length - 1);
         }
-        var newPart = '{"__type":"CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","CodeBlock":"alert(\\\"Hello World!\\\");","Language":"JavaScript","CodeBlockDisplayMode":"Inline"}';
+        var newPart = '{"__type":"CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","CodeBlock":"alert(\\\"Hello World!\\\");","Language":"javascript","DisplayMode":"Block"}';
         if (existingParts.length !== 0) {
             newPart = ',' + newPart;
         }
@@ -505,7 +505,7 @@ $(document).ready(function () {
         if (existingParts.indexOf('[') == 0 && existingParts.indexOf(']', this.length - 1) !== -1) {
             existingParts = existingParts.substring(1, existingParts.length - 1);
         }
-        var newPart = '{"__type":"CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","CodeBlock":"alert(\\\"Hello World!\\\");,"Language":"JavaScript","CodeBlockDisplayMode":"Inline""}';
+        var newPart = '{"__type":"CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration","CodeBlock":"alert(\\\"Hello World!\\\");,"Language":"javascript","DisplayMode":"Block""}';
         if (existingParts.length !== 0) {
             newPart = ',' + newPart;
         }
