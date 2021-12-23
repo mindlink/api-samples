@@ -58,7 +58,7 @@
                     __type = "CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration",
                     CodeBlock = "Console.WriteLine(\"Hello World!\");",
                     Language = "javascript",
-                    DisplayMode = "Block"
+                    DisplayMode = 1
                 };
                 messageIndex++;
                 var messageParts = new dynamic[] { plainTextMessagePart, hyperlinkMessagePart, channelLinkMessagePart, hashtagMessagePart, codeBlockMessagePart };
