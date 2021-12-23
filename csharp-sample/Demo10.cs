@@ -58,7 +58,7 @@
                     __type = "CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration",
                     CodeBlock = "Console.WriteLine(\"Hello World!\");",
                     Language = "javascript",
-                    DisplayMode = "Inline"
+                    DisplayMode = "Block"
                 };
                 messageIndex++;
                 var messageParts = new dynamic[] { plainTextMessagePart, hyperlinkMessagePart, channelLinkMessagePart, hashtagMessagePart, codeBlockMessagePart };
@@ -68,11 +68,19 @@
                     __type = "Classification:http://schemas.fcg.im/foundation/v1/collaboration",
                     Token = "primary.us.unclassified,disseminations.govorgs-gva,disseminations.govorgs-gvb"
                 };
-                var securityContext = new
-                {
-                    __type = "SecurityContext:http://schemas.fcg.im/foundation/v1/collaboration",
-                    Id = "coi1"
 
+                var securityContexts = new dynamic[]
+                {
+                    new
+                    {
+                        __type = "SecurityContext:http://schemas.fcg.im/foundation/v1/collaboration",
+                        Id = "ODD"
+                    },
+                    new
+                    {
+                        __type = "SecurityContext:http://schemas.fcg.im/foundation/v1/collaboration",
+                        Id = "coi1"
+                    }
                 };
 
                 GetResponse(baseUrl + "/Collaboration/v1/Channels/" + HttpUtility.UrlEncode(channelId) + "/Messages",
@@ -82,7 +90,7 @@
                         IsAlert = false,
                         MessageParts = messageParts,
                         Classification = classification,
-                        SecurityContext = securityContext
+                        SecurityContexts = securityContexts
                     });
 
                 Console.WriteLine("Successfully sent message in channel: {0}.", channelId);

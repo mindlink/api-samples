@@ -242,13 +242,13 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     };
 
-    self.collaboration.sendChannelMessage = function(channelId, text, alert, classification, securityContext, callbackFn, errorFn) {
+    self.collaboration.sendChannelMessage = function(channelId, text, alert, classification, securityContexts, callbackFn, errorFn) {
         log('Sending ' + (alert ? 'alert ' : '') + 'message to channel \'' + channelId + '\' ...');
         var body = {
             IsAlert: alert,
             Text: text,
             Classification: classification,
-            SecurityContext: securityContext
+            SecurityContexts: securityContexts
         };
 
         sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {
@@ -257,13 +257,13 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     };
 
-    self.collaboration.sendChannelMessageAsParts = function(channelId, messageParts, alert, classification, securityContext, callbackFn, errorFn) {
+    self.collaboration.sendChannelMessageAsParts = function(channelId, messageParts, alert, classification, securityContexts, callbackFn, errorFn) {
         log('Sending ' + (alert ? 'alert ' : '') + 'message as parts to channel \'' + channelId + '\'...');
         var body = {
             IsAlert: alert,
             MessageParts: messageParts,
             Classification: classification,
-            SecurityContext: securityContext
+            SecurityContexts: securityContexts
         };
 
         sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {
@@ -272,14 +272,14 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     };
 
-    self.collaboration.sendChannelStory = function(channelId, subject, content, alert, classification, securityContext, callbackFn, errorFn) {
+    self.collaboration.sendChannelStory = function(channelId, subject, content, alert, classification, securityContexts, callbackFn, errorFn) {
         log('Sending ' + (alert ? 'alert ' : '') + 'story (with subject \'' + subject + '\') to channel \'' + channelId + '\'...');
         var body = {
             IsAlert: alert,
             Subject: subject,
             Text: content,
             Classification: classification,
-            SecurityContext: securityContext
+            SecurityContexts: securityContexts
         };
         sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {
             self.onChannelStory(result.ChannelId, result.SenderId, result.IsAlert, result.Timestamp, result.Token, result.Subject, result.Text);
@@ -287,14 +287,14 @@ MindLink.FoundationApi.V1.Bot = function(config) {
         }, errorFn);
     };
 
-    self.collaboration.sendChannelStoryAsParts = function(channelId, subject, messageParts, alert, classification, securityContext, callbackFn, errorFn) {
+    self.collaboration.sendChannelStoryAsParts = function(channelId, subject, messageParts, alert, classification, securityContexts, callbackFn, errorFn) {
         log('Sending ' + (alert ? 'alert ' : '') + 'story (with subject \'' + subject + '\') to channel \'' + channelId + '\'...');
         var body = {
             IsAlert: alert,
             Subject: subject,
             MessageParts: messageParts,
             Classification: classification,
-            SecurityContext: securityContext
+            SecurityContexts: securityContexts
         };
 
         sendRequest('Collaboration/V1/Channels/' + encodeURIComponent(channelId) + '/Messages', 'POST', body, function(result) {

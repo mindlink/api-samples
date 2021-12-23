@@ -40,13 +40,16 @@
                 var codeBlockMessagePart = new { __type = "CodeBlockMessagePart:http://schemas.fcg.im/foundation/v1/collaboration", CodeBlock = "Console.WriteLine(\"Hello World!\");" };
                 messageIndex++;
                 var messageParts = new dynamic[] { plainTextMessagePart, hyperlinkMessagePart, channelLinkMessagePart, hashtagMessagePart, codeBlockMessagePart };
-                var metadata = new
+                var securityContexts = new dynamic[]
                 {
-                    __type = "SecurityContext:http://schemas.fcg.im/foundation/v1/collaboration",
-                    Id = "coi2"
+                    new
+                    {
+                        __type = "SecurityContext:http://schemas.fcg.im/foundation/v1/collaboration",
+                        Id = "coi2"
+                    }
                 };
 
-                GetResponse(baseUrl + "/Collaboration/v1/Channels/" + HttpUtility.UrlEncode(channelId) + "/Messages", token, new { IsAlert = false, MessageParts = messageParts, SecurityContext = metadata });
+                GetResponse(baseUrl + "/Collaboration/v1/Channels/" + HttpUtility.UrlEncode(channelId) + "/Messages", token, new { IsAlert = false, MessageParts = messageParts, SecurityContexts = securityContexts });
 
                 Console.WriteLine("Successfully sent message in channel: {0}.", channelId);
 
