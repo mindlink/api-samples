@@ -81,7 +81,7 @@ class ApiConnection:
                 'Text': content,
                 'IsAlert': is_alert,
                 'Classification': classification,
-                'SecurityContext': security_context
+                'SecurityContexts': security_context
             },
             headers = {
                 'Accept' : 'application/json',
@@ -103,7 +103,7 @@ class ApiConnection:
                 'MessageParts': messageParts,
                 'IsAlert': is_alert,
                 'Classification': classification,
-                'SecurityContext': security_context
+                'SecurityContexts': security_context
             },
             headers = {
                 'Accept' : 'application/json',

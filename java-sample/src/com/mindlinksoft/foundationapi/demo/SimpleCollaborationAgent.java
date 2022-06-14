@@ -169,7 +169,9 @@ public class SimpleCollaborationAgent extends AuthenticatingAgent {
                 securityContext.put("__type", "SecurityContext:http://schemas.fcg.im/foundation/v1/collaboration");
                 securityContext.put("Id", "coi2");
 
-                payload.put("SecurityContext", securityContext);
+                final JSONOrderedObject[] securityContexts = { securityContext };
+
+                payload.put("SecurityContexts", securityContexts);
             }
 
             getResponse("/Collaboration/v1/Channels/" + channelId + "/Messages",
