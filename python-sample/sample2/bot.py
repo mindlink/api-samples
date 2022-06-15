@@ -83,11 +83,11 @@ classification = {
     '__type': 'Classification:http://schemas.fcg.im/foundation/v1/collaboration',
     'Token': 'primary.us.confidential,disseminations.display,disseminations.display.identity-can'
 }
-security_context = {
+security_contexts = [{
     '__type': 'SecurityContext:http://schemas.fcg.im/foundation/v1/collaboration',
     'Id': 'coi2'
-}
-connection.send_message(chat, message_content, True, classification, security_context)
+}]
+connection.send_message(chat, message_content, True, classification, security_contexts)
 
 print('starting to stream')
 connection.start_streaming(chat, on_message_received)
